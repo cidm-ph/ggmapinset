@@ -16,7 +16,7 @@ Description: Helper to add insets based on ggplot's geom_sf
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-GB
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Roxygen: list(markdown = TRUE)
 Depends: 
     R (>= 2.10),

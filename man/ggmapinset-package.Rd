@@ -8,12 +8,20 @@
 \description{
 This package helps with making zoomed map insets. See \code{\link[=geom_sf_inset]{geom_sf_inset()}}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://cidm-ph.github.io/ggmapinset/}
+  \item Report bugs at \url{https://github.com/cidm-ph/ggmapinset/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Carl Suster \email{Carl.Suster@health.nsw.gov.au} (\href{https://orcid.org/0000-0001-7021-9380}{ORCID})
 
 Other contributors:
 \itemize{
-  \item NSW Health [copyright holder]
+  \item Western Sydney Local Health District, NSW Health [copyright holder]
 }
 
 }
