@@ -17,18 +17,21 @@ library(sf, quietly = TRUE)
 # ggmapinset
 
 <!-- badges: start -->
-
+[![ggmapinset status badge](https://cidm-ph.r-universe.dev/badges/ggmapinset)](https://cidm-ph.r-universe.dev)
 <!-- badges: end -->
 
 Add zoomed inset panels to your ggplot maps.
 
 ## Installation
 
-You can install the development version of ggmapinset like so:
+You can install ggmapinset like so:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("cidm-ph/ggmapinset")
+options(repos = c(
+  cidmph = 'https://cidm-ph.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+  
+install.packages('ggmapinset')
 ```
 
 ## Example
