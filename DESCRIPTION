@@ -29,5 +29,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://github.com/cidm-ph/ggmapinset
+URL: https://cidm-ph.github.io/ggmapinset/
 BugReports: https://github.com/cidm-ph/ggmapinset/issues
