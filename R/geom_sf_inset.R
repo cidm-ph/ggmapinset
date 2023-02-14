@@ -10,7 +10,6 @@
 #' After specifying all your usual geoms, use [geom_inset_frame()] to add a frame
 #' around the inset that connects it to the main map.
 #'
-#' @section Details:
 #' Internally this works by inserting duplicates of the \code{geom_sf()} layers
 #' where the duplicates have been transformed and cropped to fit into the inset.
 #' The way that this copying works can be controlled with the \code{inset_copy}
@@ -24,7 +23,7 @@
 #'     # aesthetics for main map only:
 #'     geom_sf(aes(...), ...)
 #'     # aesthetics for inset map only:
-#'     geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE,...)
+#'     geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE, ...)
 #'
 #' @param inset Inset configuration; see [configure_inset()].
 #' @param inset_copy Draw both the base layers and the inset layers using the same

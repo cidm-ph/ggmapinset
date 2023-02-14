@@ -41,8 +41,6 @@ parameter.
 
 After specifying all your usual geoms, use \code{\link[=geom_inset_frame]{geom_inset_frame()}} to add a frame
 around the inset that connects it to the main map.
-}
-\section{Details}{
 
 Internally this works by inserting duplicates of the \code{geom_sf()} layers
 where the duplicates have been transformed and cropped to fit into the inset.
@@ -58,8 +56,7 @@ but this version specifies them separately:
 \if{html}{\out{<div class="sourceCode">}}\preformatted{# aesthetics for main map only:
 geom_sf(aes(...), ...)
 # aesthetics for inset map only:
-geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE,...)
+geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE, ...)
 }\if{html}{\out{</div>}}
 }
-
 \keyword{datasets}
