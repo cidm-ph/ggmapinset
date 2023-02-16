@@ -1,13 +1,38 @@
 #' Build layers to implement an inset-compatible geometry
 #'
-#' For plotting, use [geom_sf_inset()] insetad. This helper is intended to help
-#' with implementing geometries based on \code{geom_sf_inset()}.
+#' For plotting, use [geom_sf_inset()] insetad. This helper is intended to be used when
+#' implementing custom geometries based on [geom_sf_inset()] so that they can provide
+#' parameters to control the inset.
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams geom_sf_inset
 #'
-#' @return A \code{ggplot} layer, or a pair of layers.
+#' @returns A \code{ggplot} layer, or a pair of layers.
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' my_geom_custom <- function(mapping = ggplot2::aes(),
+#'                            data = NULL,
+#'                            stat = "my_custom_stat",
+#'                            position = "identity",
+#'                            ...,
+#'                            inset = NULL,
+#'                            inset_copy = TRUE,
+#'                            inset_clip = TRUE,
+#'                            na.rm = TRUE,
+#'                            inherit.aes = TRUE) {
+#'   params <- rlang::list2(na.rm = na.rm, ...)
+#'   build_sf_inset_layers(data = data, mapping = mapping,
+#'                         stat = stat, position = position,
+#'                         show.legend = show.legend,
+#'                         inherit.aes = inherit.aes,
+#'                         params = params,
+#'                         inset = inset,
+#'                         inset_copy = inset_copy,
+#'                         inset_clip = inset_clip)
+#' }
+#' }
 build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
                                    inherit.aes, params, inset,
                                    inset_copy, inset_clip) {

@@ -30,7 +30,24 @@
 #'   configuration. Only relevant when \code{inset} is specified.
 #' @param inset_clip When an inset is drawn, place included points only in the inset.
 #' @param mapping,data,stat,position,na.rm,show.legend,inherit.aes,... See [ggplot2::geom_sf()]
+#'
+#' @returns A ggplot layer similar to [ggplot2::geom_sf()] but transformed according to the
+#'   inset configuration.
 #' @export
+#'
+#' @examples
+#' library(sf)
+#' library(ggplot2)
+#'
+#' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+#' cfg <- configure_inset(
+#'   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
+#'   scale = 2,
+#'   translation = c(10, -60),
+#'   radius = 50,
+#'   units = "mi")
+#'
+#' ggplot(nc) + geom_sf_inset(aes(fill = AREA), inset = cfg) + coord_sf()
 geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                           stat = "sf", position = "identity",
                           ...,

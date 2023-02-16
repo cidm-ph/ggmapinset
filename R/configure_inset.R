@@ -40,7 +40,19 @@
 #' @param crs_working The coordinate reference system to use internally when
 #'   applying the transformations. See Details.
 #'
+#' @returns An inset configuration object of class \code{inset_config}.
 #' @export
+#'
+#' @examples
+#' library(sf)
+#'
+#' # circular inset with a 2x enlargement
+#' cfg <- configure_inset(
+#'   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
+#'   scale = 2,
+#'   translation = c(70, -180),
+#'   radius = 50,
+#'   units = "mi")
 configure_inset <- function(centre, scale = NULL, translation = NULL,
                             radius = NULL, units = "km", crs_working = NULL) {
   crs_input <- sf::NA_crs_

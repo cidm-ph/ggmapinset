@@ -30,6 +30,10 @@ configuration. Only relevant when \code{inset} is specified.}
 
 \item{inset_clip}{When an inset is drawn, place included points only in the inset.}
 }
+\value{
+A ggplot layer similar to \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} but transformed according to the
+inset configuration.
+}
 \description{
 This is a wrapper around \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} that assists with creating map
 insets.
@@ -58,5 +62,19 @@ geom_sf(aes(...), ...)
 # aesthetics for inset map only:
 geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE, ...)
 }\if{html}{\out{</div>}}
+}
+\examples{
+library(sf)
+library(ggplot2)
+
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+cfg <- configure_inset(
+  centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
+  scale = 2,
+  translation = c(10, -60),
+  radius = 50,
+  units = "mi")
+
+ggplot(nc) + geom_sf_inset(aes(fill = AREA), inset = cfg) + coord_sf()
 }
 \keyword{datasets}

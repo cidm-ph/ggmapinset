@@ -8,7 +8,22 @@
 #' drawn if the inset and original circle overlap, which will affect the count.
 #'
 #' @inheritParams geom_sf_inset
+#'
+#' @returns A ggplot layer holding the inset frame.
 #' @export
+#'
+#' @examples
+#' library(sf)
+#' library(ggplot2)
+#'
+#' cfg <- configure_inset(
+#'   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
+#'   scale = 2,
+#'   translation = c(0, -300),
+#'   radius = 50,
+#'   units = "mi")
+#'
+#' ggplot() + geom_inset_frame(inset = cfg) + coord_sf()
 geom_inset_frame <- function(mapping = ggplot2::aes(),
                              data = NULL,
                              stat = "sf", position = "identity",

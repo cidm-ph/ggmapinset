@@ -33,6 +33,9 @@ the x and y offsets respectively. Units are specified by \code{crs_working}.}
 \item{crs_working}{The coordinate reference system to use internally when
 applying the transformations. See Details.}
 }
+\value{
+An inset configuration object of class \code{inset_config}.
+}
 \description{
 The configuration returned by this function should be passed to all the
 relevant geometry functions that accept a \code{inset} parameter. This
@@ -72,4 +75,15 @@ instead of specifying the whole projection. The possible values for
 \item \code{"ind-ch"}: Indian chain
 \item \code{"us-in"}: US survey inch
 \item \code{"us-yd"}: US survey yard}
+}
+\examples{
+library(sf)
+
+# circular inset with a 2x enlargement
+cfg <- configure_inset(
+  centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
+  scale = 2,
+  translation = c(70, -180),
+  radius = 50,
+  units = "mi")
 }

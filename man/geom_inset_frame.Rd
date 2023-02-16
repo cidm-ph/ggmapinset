@@ -21,6 +21,9 @@ geom_inset_frame(
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.}
 }
+\value{
+A ggplot layer holding the inset frame.
+}
 \description{
 Add a frame and burst lines for an inset.
 }
@@ -33,3 +36,16 @@ connecting them, respectively. Note that the connecting lines might not be
 drawn if the inset and original circle overlap, which will affect the count.
 }
 
+\examples{
+library(sf)
+library(ggplot2)
+
+cfg <- configure_inset(
+  centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
+  scale = 2,
+  translation = c(0, -300),
+  radius = 50,
+  units = "mi")
+
+ggplot() + geom_inset_frame(inset = cfg) + coord_sf()
+}
