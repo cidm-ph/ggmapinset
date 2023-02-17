@@ -27,7 +27,7 @@
 #' ```
 #'
 #' @param centre Coordinates of the inset centre. Ideally this should be an
-#'   sfc object (see [sf::st_sfc()]) including a coordinate reference system.
+#'   \code{sfc} object (see [sf::st_sfc()]) including a coordinate reference system.
 #'   An [sf::st_point()] or a vector of longitude and latitude are also accepted.
 #'   If a CRS cannot be determined, \code{crs_working} is assumed.
 #' @param scale Zoom scale: values larger than one will make the circle bigger.

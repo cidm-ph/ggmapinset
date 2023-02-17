@@ -72,7 +72,7 @@ configuration. Only relevant when \code{inset} is specified.}
 A \code{ggplot} layer, or a pair of layers.
 }
 \description{
-For plotting, use \code{\link[=geom_sf_inset]{geom_sf_inset()}} insetad. This helper is intended to be used when
+For plotting, use \code{\link[=geom_sf_inset]{geom_sf_inset()}} instead. This helper is intended to be used when
 implementing custom geometries based on \code{\link[=geom_sf_inset]{geom_sf_inset()}} so that they can provide
 parameters to control the inset.
 }

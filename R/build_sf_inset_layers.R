@@ -1,6 +1,6 @@
 #' Build layers to implement an inset-compatible geometry
 #'
-#' For plotting, use [geom_sf_inset()] insetad. This helper is intended to be used when
+#' For plotting, use [geom_sf_inset()] instead. This helper is intended to be used when
 #' implementing custom geometries based on [geom_sf_inset()] so that they can provide
 #' parameters to control the inset.
 #'
