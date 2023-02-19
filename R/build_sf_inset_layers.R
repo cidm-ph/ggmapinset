@@ -11,8 +11,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' my_geom_custom <- function(mapping = ggplot2::aes(),
+#' my_custom_geom <- function(mapping = ggplot2::aes(),
 #'                            data = NULL,
 #'                            stat = "my_custom_stat",
 #'                            position = "identity",
@@ -31,7 +30,6 @@
 #'                         inset = inset,
 #'                         inset_copy = inset_copy,
 #'                         inset_clip = inset_clip)
-#' }
 #' }
 build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
                                    inherit.aes, params, inset,

@@ -77,8 +77,7 @@ implementing custom geometries based on \code{\link[=geom_sf_inset]{geom_sf_inse
 parameters to control the inset.
 }
 \examples{
-\dontrun{
-my_geom_custom <- function(mapping = ggplot2::aes(),
+my_custom_geom <- function(mapping = ggplot2::aes(),
                            data = NULL,
                            stat = "my_custom_stat",
                            position = "identity",
@@ -97,6 +96,5 @@ my_geom_custom <- function(mapping = ggplot2::aes(),
                         inset = inset,
                         inset_copy = inset_copy,
                         inset_clip = inset_clip)
-}
 }
 }
