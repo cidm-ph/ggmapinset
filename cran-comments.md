@@ -1,9 +1,8 @@
 # Resubmission
 
-Resubmission to address feedback from v0.2.1:
+Resubmission to address feedback from v0.2.2:
 
-  * Exported functions now describe output value and an example.
-  * Package name is formatted in single quotes in description.
+  * Example for `build_sf_inset_layers()` no longer uses `\dontrun{}`.
 
 ## Test environments
 - R-hub windows-x86_64-devel (r-devel)
@@ -23,7 +22,7 @@ Resubmission to address feedback from v0.2.1:
     'lastMiKTeXException'
 
 ❯ On fedora-clang-devel (r-devel)
-  checking CRAN incoming feasibility ... [6s/23s] NOTE
+  checking CRAN incoming feasibility ... [6s/25s] NOTE
   Maintainer: ‘Carl Suster <Carl.Suster@health.nsw.gov.au>’
   
   New submission
