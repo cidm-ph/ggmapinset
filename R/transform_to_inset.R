@@ -40,5 +40,14 @@ transform_to_inset <- function(x, inset) {
     result <- sf::st_set_crs(result + translation, crs_working)
   }
   result <- sf::st_transform(result, crs_orig)
-  sf::st_set_geometry(x, result)
+
+  if (has_s3_method("st_geometry<-", class(x))) {
+    sf::st_set_geometry(x, result)
+  } else {
+    result
+  }
+}
+
+has_s3_method <- function(f, classes) {
+  any(mapply(FUN = function(c) !is.null(utils::getS3method(f, c, optional = TRUE)), classes))
 }
