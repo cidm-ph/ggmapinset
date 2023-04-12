@@ -15,7 +15,7 @@ transform_to_inset(x, inset)
 A copy of \code{x} with the geometry replaced by the transformed version.
 }
 \description{
-This helper operates on an sf object to scale and translate its objects according
+This helper operates on an sf object to scale and translate its geometry according
 to the inset specification.
 }
 \examples{

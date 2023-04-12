@@ -25,10 +25,11 @@ geom_sf_inset(
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.}
 
-\item{inset_copy}{Draw both the base layers and the inset layers using the same
+\item{inset_copy}{Draw both the base layer and the inset layer using the same
 configuration. Only relevant when \code{inset} is specified.}
 
-\item{inset_clip}{When an inset is drawn, place included points only in the inset.}
+\item{inset_clip}{Clip away the part of the base layer corresponding to the
+inset frame. Only relevant when \code{inset} is specified.}
 }
 \value{
 A ggplot layer similar to \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} but transformed according to the
@@ -46,18 +47,18 @@ parameter.
 After specifying all your usual geoms, use \code{\link[=geom_inset_frame]{geom_inset_frame()}} to add a frame
 around the inset that connects it to the main map.
 
-Internally this works by inserting duplicates of the \code{geom_sf()} layers
-where the duplicates have been transformed and cropped to fit into the inset.
-The way that this copying works can be controlled with the \code{inset_copy}
-parameter if for example you'd like a different aesthetic mapping for the
-copy that goes in the inset. The default copies the layers:
+Internally this works by inserting a duplicate of the base \code{geom_sf()}
+layer which has been transformed and cropped to fit into the inset frame.
+Using \code{inset_copy = FALSE} will suppress the base layer and only draw the
+inset layer, allowing the base layer to be specified separately with different
+aesthetic mapping and parameters. The default copies the layer:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{geom_sf_inset(aes(...), inset = inset_cfg, ...)
 }\if{html}{\out{</div>}}
 
-but this version specifies them separately:
+but this version specifies the two layers separately:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{# aesthetics for main map only:
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# aesthetics for base map only:
 geom_sf(aes(...), ...)
 # aesthetics for inset map only:
 geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE, ...)

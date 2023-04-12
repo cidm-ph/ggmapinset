@@ -63,10 +63,11 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.}
 
-\item{inset_copy}{Draw both the base layers and the inset layers using the same
+\item{inset_copy}{Draw both the base layer and the inset layer using the same
 configuration. Only relevant when \code{inset} is specified.}
 
-\item{inset_clip}{When an inset is drawn, place included points only in the inset.}
+\item{inset_clip}{Clip away the part of the base layer corresponding to the
+inset frame. Only relevant when \code{inset} is specified.}
 }
 \value{
 A \code{ggplot} layer, or a pair of layers.

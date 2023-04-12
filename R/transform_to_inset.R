@@ -1,6 +1,6 @@
 #' Transform coordinates according to inset configuration
 #'
-#' This helper operates on an sf object to scale and translate its objects according
+#' This helper operates on an sf object to scale and translate its geometry according
 #' to the inset specification.
 #'
 #' @param x Spatial data frame or other sf object; see [sf::st_geometry()].

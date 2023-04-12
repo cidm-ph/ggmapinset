@@ -10,26 +10,28 @@
 #' After specifying all your usual geoms, use [geom_inset_frame()] to add a frame
 #' around the inset that connects it to the main map.
 #'
-#' Internally this works by inserting duplicates of the \code{geom_sf()} layers
-#' where the duplicates have been transformed and cropped to fit into the inset.
-#' The way that this copying works can be controlled with the \code{inset_copy}
-#' parameter if for example you'd like a different aesthetic mapping for the
-#' copy that goes in the inset. The default copies the layers:
+#' Internally this works by inserting a duplicate of the base \code{geom_sf()}
+#' layer which has been transformed and cropped to fit into the inset frame.
+#' Using \code{inset_copy = FALSE} will suppress the base layer and only draw the
+#' inset layer, allowing the base layer to be specified separately with different
+#' aesthetic mapping and parameters. The default copies the layer:
 #'
 #'     geom_sf_inset(aes(...), inset = inset_cfg, ...)
 #'
-#' but this version specifies them separately:
+#' but this version specifies the two layers separately:
 #'
-#'     # aesthetics for main map only:
+#'     # aesthetics for base map only:
 #'     geom_sf(aes(...), ...)
 #'     # aesthetics for inset map only:
 #'     geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE, ...)
 #'
 #' @param inset Inset configuration; see [configure_inset()].
-#' @param inset_copy Draw both the base layers and the inset layers using the same
+#' @param inset_copy Draw both the base layer and the inset layer using the same
 #'   configuration. Only relevant when \code{inset} is specified.
-#' @param inset_clip When an inset is drawn, place included points only in the inset.
-#' @param mapping,data,stat,position,na.rm,show.legend,inherit.aes,... See [ggplot2::geom_sf()]
+#' @param inset_clip Clip away the part of the base layer corresponding to the
+#'   inset frame. Only relevant when \code{inset} is specified.
+#' @param mapping,data,stat,position,na.rm,show.legend,inherit.aes,...
+#'   See [ggplot2::geom_sf()]
 #'
 #' @returns A ggplot layer similar to [ggplot2::geom_sf()] but transformed according to the
 #'   inset configuration.
