@@ -22,6 +22,9 @@
     <loc>https://cidm-ph.github.io/ggmapinset/index.html</loc>
   </url>
   <url>
+    <loc>https://cidm-ph.github.io/ggmapinset/news/index.html</loc>
+  </url>
+  <url>
     <loc>https://cidm-ph.github.io/ggmapinset/reference/build_sf_inset_layers.html</loc>
   </url>
   <url>
@@ -38,5 +41,8 @@
   </url>
   <url>
     <loc>https://cidm-ph.github.io/ggmapinset/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://cidm-ph.github.io/ggmapinset/reference/transform_to_inset.html</loc>
   </url>
 </urlset>
