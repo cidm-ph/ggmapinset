@@ -13,8 +13,8 @@ build_sf_inset_layers(
   inherit.aes,
   params,
   inset,
-  inset_copy,
-  inset_clip
+  map_base,
+  map_inset
 )
 }
 \arguments{
@@ -63,11 +63,15 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.}
 
-\item{inset_copy}{Draw both the base layer and the inset layer using the same
-configuration. Only relevant when \code{inset} is specified.}
+\item{map_base}{Controls the layer with the base map. Possible values are
+\code{"normal"} to create a layer as though the inset were not specified,
+\code{"clip"} to create a layer with the inset viewport cut out, and
+\code{"none"} to prevent the insertion of a layer for the base map.}
 
-\item{inset_clip}{Clip away the part of the base layer corresponding to the
-inset frame. Only relevant when \code{inset} is specified.}
+\item{map_inset}{Controls the layer with the inset map. Possible values are
+\code{"auto"} to choose the behaviour based on whether \code{inset} is specified,
+\code{"normal"} to create a layer with the viewport cut out and transformed, and
+\code{"none"} to prevent the insertion og a layer for the viewport map.}
 }
 \value{
 A \code{ggplot} layer, or a pair of layers.
@@ -84,8 +88,8 @@ my_custom_geom <- function(mapping = ggplot2::aes(),
                            position = "identity",
                            ...,
                            inset = NULL,
-                           inset_copy = TRUE,
-                           inset_clip = TRUE,
+                           map_base = "normal",
+                           map_inset = "auto",
                            na.rm = TRUE,
                            inherit.aes = TRUE) {
   params <- rlang::list2(na.rm = na.rm, ...)
@@ -95,7 +99,7 @@ my_custom_geom <- function(mapping = ggplot2::aes(),
                         inherit.aes = inherit.aes,
                         params = params,
                         inset = inset,
-                        inset_copy = inset_copy,
-                        inset_clip = inset_clip)
+                        map_base = map_base,
+                        map_inset = map_inset)
 }
 }

@@ -17,8 +17,8 @@
 #'                            position = "identity",
 #'                            ...,
 #'                            inset = NULL,
-#'                            inset_copy = TRUE,
-#'                            inset_clip = TRUE,
+#'                            map_base = "normal",
+#'                            map_inset = "auto",
 #'                            na.rm = TRUE,
 #'                            inherit.aes = TRUE) {
 #'   params <- rlang::list2(na.rm = na.rm, ...)
@@ -28,15 +28,23 @@
 #'                         inherit.aes = inherit.aes,
 #'                         params = params,
 #'                         inset = inset,
-#'                         inset_copy = inset_copy,
-#'                         inset_clip = inset_clip)
+#'                         map_base = map_base,
+#'                         map_inset = map_inset)
 #' }
 build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
                                    inherit.aes, params, inset,
-                                   inset_copy, inset_clip) {
-  has_inset_cfg <- !is.null(inset) | !is.null(mapping[["inset"]])
+                                   map_base, map_inset) {
+  has_inset_cfg <- !is.null(inset) #| !is.null(mapping[["inset"]])
 
-  make_layer <- function (is_inset) {
+  if (map_inset == "auto") {
+    draw_inset <- map_inset == "normal" || (map_inset == "auto" && has_inset_cfg)
+    map_inset <- ifelse(draw_inset, "normal", "none")
+  }
+  if (map_base == "none" && map_inset == "none") {
+    cli::cli_abort("{.arg map_base} and {.arg map_inset} can't both be disabled")
+  }
+
+  make_layer <- function (inset_mode) {
     ggplot2::layer_sf(
       data = data,
       mapping = mapping,
@@ -45,14 +53,17 @@ build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
       position = position,
       show.legend = show.legend,
       inherit.aes = inherit.aes,
-      params = modifyList(params, list(inset = inset,
-                                       inset_enable = is_inset,
-                                       inset_invert = has_inset_cfg & inset_clip))
+      params = modifyList(params, list(inset = inset, inset_mode = inset_mode))
     )
   }
 
-  layers <- c()
-  if (inset_copy | !has_inset_cfg) layers <- c(layers, make_layer(FALSE))
-  if (              has_inset_cfg) layers <- c(layers, make_layer(TRUE))
-  layers
+
+  base_layer <- switch(map_base,
+                       normal = make_layer("none"),
+                       clip = make_layer("cutout"),
+                       none = NULL)
+  inset_layer <- switch(map_inset,
+                        normal = make_layer("normal"),
+                        none = NULL)
+  c(base_layer, inset_layer)
 }

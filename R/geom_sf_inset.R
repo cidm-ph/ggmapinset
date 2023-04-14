@@ -1,35 +1,40 @@
 #' Visualise sf objects with insets
 #'
 #' This is a wrapper around [ggplot2::geom_sf()] that assists with creating map
-#' insets. You'll normally want to pair it with [geom_inset_frame()].
-#'
-#' First, configure an inset using [configure_inset()], then pass the
-#' configuration object to each applicable layer using the \code{inset}
-#' parameter.
-#'
+#' insets.
+#' First, configure an inset using [configure_inset()], then pass around the
+#' configuration object using the \code{inset} parameter.
 #' After specifying all your usual geoms, use [geom_inset_frame()] to add a frame
 #' around the inset that connects it to the main map.
 #'
-#' Internally this works by inserting a duplicate of the base \code{geom_sf()}
-#' layer which has been transformed and cropped to fit into the inset frame.
-#' Using \code{inset_copy = FALSE} will suppress the base layer and only draw the
-#' inset layer, allowing the base layer to be specified separately with different
-#' aesthetic mapping and parameters. The default copies the layer:
+#' Internally this works by creating two layers: one for the base map, and one
+#' for the inset. These can be separately controlled by the `map_base` and
+#' `map_inset` parameters. If `inset` is not specified, this geom will instead
+#' behave like [ggplot2::geom_sf()].
 #'
-#'     geom_sf_inset(aes(...), inset = inset_cfg, ...)
+#' When an inset is configured, the default creates both base and inset layers
+#' using the same aesthetic mapping and params:
 #'
-#' but this version specifies the two layers separately:
+#'.    cfg <- configure_inset(...)
+#'     geom_sf_inset(aes(...), inset = cfg, ...)
 #'
-#'     # aesthetics for base map only:
+#' You can alternatively specify the two layers separately:
+#'
+#'     # draw the base map only (both versions are equivalent):
 #'     geom_sf(aes(...), ...)
-#'     # aesthetics for inset map only:
-#'     geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE, ...)
+#'     geom_sf_inset(aes(...), inset = cfg, map_inset = "none", ...)
+#'     # draw the inset map only:
+#'     geom_sf_inset(aes(...), inset = cfg, map_base = "none", ...)
 #'
 #' @param inset Inset configuration; see [configure_inset()].
-#' @param inset_copy Draw both the base layer and the inset layer using the same
-#'   configuration. Only relevant when \code{inset} is specified.
-#' @param inset_clip Clip away the part of the base layer corresponding to the
-#'   inset frame. Only relevant when \code{inset} is specified.
+#' @param map_base Controls the layer with the base map. Possible values are
+#'   `"normal"` to create a layer as though the inset were not specified,
+#'   `"clip"` to create a layer with the inset viewport cut out, and
+#'   `"none"` to prevent the insertion of a layer for the base map.
+#' @param map_inset Controls the layer with the inset map. Possible values are
+#'   `"auto"` to choose the behaviour based on whether \code{inset} is specified,
+#'   `"normal"` to create a layer with the viewport cut out and transformed, and
+#'   `"none"` to prevent the insertion og a layer for the viewport map.
 #' @param mapping,data,stat,position,na.rm,show.legend,inherit.aes,...
 #'   See [ggplot2::geom_sf()]
 #'
@@ -54,8 +59,8 @@ geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                           stat = "sf", position = "identity",
                           ...,
                           inset = NULL,
-                          inset_copy = TRUE,
-                          inset_clip = FALSE,
+                          map_base = "normal",
+                          map_inset = "auto",
                           na.rm = TRUE,
                           show.legend = NA,
                           inherit.aes = TRUE) {
@@ -65,37 +70,33 @@ geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                         stat = stat, position = position,
                         show.legend = show.legend, inherit.aes = inherit.aes,
                         params = params, inset = inset,
-                        inset_copy = inset_copy, inset_clip = inset_clip)
+                        map_base = map_base, map_inset = map_inset)
 }
 
 #' @export
 #' @usage NULL
 #' @format NULL
 #' @rdname geom_sf_inset
-#' @importFrom utils modifyList
 GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
-  default_aes = modifyList(ggplot2::GeomSf$default_aes,
-                           list(inset = NULL, inset_invert = FALSE, inset_enable = TRUE),
-                           keep.null = TRUE),
-
-  draw_panel = function(self, data, ...) {
-    if (!is.null(data[["inset"]])) {
-      inset <- make_inset_config(data$inset[[1]])
-      geom <- data$geometry
-      if (!inherits(geom, "sfc")) geom <- sf::st_geometry(geom)
-
-      if (data$inset_enable[[1]]) {
-        data <- transform_only_viewport(data, inset)
-      } else if (data$inset_invert[[1]]) {
-        data <- remove_viewport(data, inset)
-      }
+  draw_panel = function(self, data, panel_params, coord,
+                        inset = NULL, inset_mode = "normal", ...) {
+    if (!is.null(inset) && inset_mode != "none") {
+      data <- switch(inset_mode,
+                     normal = transform_only_viewport(data, inset),
+                     cutout = remove_viewport(data, inset))
     }
 
-    ggplot2::ggproto_parent(ggplot2::GeomSf, self)$draw_panel(data, ...)
-  }
+    ggplot2::GeomSf$draw_panel(data, panel_params, coord, ...)
+  },
+
+  # NOTE: this is a workaround for a ggplot2 behaviour/bug
+  # https://github.com/tidyverse/ggplot2/issues/1516#issuecomment-1507927792
+  draw_group = function(self, data, panel_params, coord,
+                        inset = NULL, inset_mode = "normal", ...) { }
 )
 
 transform_only_viewport <- function(data, inset) {
+  inset <- make_inset_config(inset)
   radius <- inset_radius(inset)
   scale = inset_scale(inset)
   translation = inset_translation(inset)
@@ -120,6 +121,7 @@ transform_only_viewport <- function(data, inset) {
 }
 
 remove_viewport <- function(data, inset) {
+  inset <- make_inset_config(inset)
   radius <- inset_radius(inset)
   result <- with_crs_working(
     inset_crs_working(inset),

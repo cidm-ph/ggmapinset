@@ -13,8 +13,8 @@ geom_sf_inset(
   position = "identity",
   ...,
   inset = NULL,
-  inset_copy = TRUE,
-  inset_clip = FALSE,
+  map_base = "normal",
+  map_inset = "auto",
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -25,11 +25,15 @@ geom_sf_inset(
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.}
 
-\item{inset_copy}{Draw both the base layer and the inset layer using the same
-configuration. Only relevant when \code{inset} is specified.}
+\item{map_base}{Controls the layer with the base map. Possible values are
+\code{"normal"} to create a layer as though the inset were not specified,
+\code{"clip"} to create a layer with the inset viewport cut out, and
+\code{"none"} to prevent the insertion of a layer for the base map.}
 
-\item{inset_clip}{Clip away the part of the base layer corresponding to the
-inset frame. Only relevant when \code{inset} is specified.}
+\item{map_inset}{Controls the layer with the inset map. Possible values are
+\code{"auto"} to choose the behaviour based on whether \code{inset} is specified,
+\code{"normal"} to create a layer with the viewport cut out and transformed, and
+\code{"none"} to prevent the insertion og a layer for the viewport map.}
 }
 \value{
 A ggplot layer similar to \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} but transformed according to the
@@ -37,31 +41,31 @@ inset configuration.
 }
 \description{
 This is a wrapper around \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} that assists with creating map
-insets. You'll normally want to pair it with \code{\link[=geom_inset_frame]{geom_inset_frame()}}.
-}
-\details{
-First, configure an inset using \code{\link[=configure_inset]{configure_inset()}}, then pass the
-configuration object to each applicable layer using the \code{inset}
-parameter.
-
+insets.
+First, configure an inset using \code{\link[=configure_inset]{configure_inset()}}, then pass around the
+configuration object using the \code{inset} parameter.
 After specifying all your usual geoms, use \code{\link[=geom_inset_frame]{geom_inset_frame()}} to add a frame
 around the inset that connects it to the main map.
+}
+\details{
+Internally this works by creating two layers: one for the base map, and one
+for the inset. These can be separately controlled by the \code{map_base} and
+\code{map_inset} parameters. If \code{inset} is not specified, this geom will instead
+behave like \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}.
 
-Internally this works by inserting a duplicate of the base \code{geom_sf()}
-layer which has been transformed and cropped to fit into the inset frame.
-Using \code{inset_copy = FALSE} will suppress the base layer and only draw the
-inset layer, allowing the base layer to be specified separately with different
-aesthetic mapping and parameters. The default copies the layer:
+When an inset is configured, the default creates both base and inset layers
+using the same aesthetic mapping and params:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{geom_sf_inset(aes(...), inset = inset_cfg, ...)
-}\if{html}{\out{</div>}}
+.    cfg <- configure_inset(...)
+geom_sf_inset(aes(...), inset = cfg, ...)
 
-but this version specifies the two layers separately:
+You can alternatively specify the two layers separately:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{# aesthetics for base map only:
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# draw the base map only (both versions are equivalent):
 geom_sf(aes(...), ...)
-# aesthetics for inset map only:
-geom_sf_inset(aes(...), inset = inset_cfg, inset_copy = FALSE, ...)
+geom_sf_inset(aes(...), inset = cfg, map_inset = "none", ...)
+# draw the inset map only:
+geom_sf_inset(aes(...), inset = cfg, map_base = "none", ...)
 }\if{html}{\out{</div>}}
 }
 \examples{
