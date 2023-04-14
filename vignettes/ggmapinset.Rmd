@@ -1,8 +1,8 @@
 ---
-title: "Working with map insets"
+title: "Getting started with 'ggmapinset'"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Working with map insets}
+  %\VignetteIndexEntry{Getting started with 'ggmapinset'}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -26,13 +26,13 @@ This article provides some recipes for working with insets.
 
 ## Different aesthetics for inset layer
 By default, `geom_sf_inset()` creates two copies of the map layer: one for the
-base map and the other for the inset. The inset is transformed and cropped, but
-uses the same underlying aesthetics mapping and parameters.
+base map and the other for the inset map. The inset is transformed and clipped,
+but uses the same underlying aesthetics mapping and parameters.
 
 If you want to have different aesthetics for the two layers, you'll need to turn
-off this copying with `inset_copy = FALSE`. With this parameter set and an
+off this copying with `map_base = "none"`. With this parameter set and an
 `inset` parameter provided, only the inset layer will be drawn. To draw only the
-base layer, you can use `inset_copy = FALSE` with no `inset`, or simply the
+base layer, you can use `map_inset = "none"`, `inset = NULL`, or simply use the
 normal `geom_sf()`.
 
 ```{r separate, fig.width=7, fig.height=3.5}
@@ -41,9 +41,9 @@ cfg <- configure_inset(centre = st_centroid(st_geometry(nc)[nc$NAME == "Bladen"]
 
 ggplot(nc) +
   # this is equivalent to the following line:
-  # geom_sf_inset(fill = "white", inset_copy = FALSE) +
+  # geom_sf_inset(fill = "white") +
   geom_sf(fill = "white") +
-  geom_sf_inset(aes(fill = AREA), inset = cfg, inset_copy = FALSE) +
+  geom_sf_inset(aes(fill = AREA), inset = cfg, map_base = "none") +
   geom_inset_frame(inset = cfg) +
   coord_sf()
 ```
@@ -57,8 +57,7 @@ Note that under some circumstances the frame data will have different
 dimensions, due to facets (the frame is repeated for each facet) or when the
 two circles are nested (in which case the lines are not drawn).
 
-We want the filled frame to sit in between the base map and the inset layers, so
-we need to disable `inset_copy`.
+We want the filled frame to sit in between the base map and the inset layers.
 ```{r frame_fill, fig.width=7, fig.height=3}
 cfg <- configure_inset(centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]),
                        scale = 2, translation = c(100, -120), radius = 50, units = "mi")
@@ -66,7 +65,7 @@ cfg <- configure_inset(centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]
 ggplot(nc) +
   geom_sf(aes(fill = AREA)) +
   geom_inset_frame(inset = cfg, fill = c(NA, "white", NA, NA)) +
-  geom_sf_inset(aes(fill = AREA), inset = cfg, inset_copy = FALSE) +
+  geom_sf_inset(aes(fill = AREA), inset = cfg, map_base = "none") +
   coord_sf()
 ```
 
