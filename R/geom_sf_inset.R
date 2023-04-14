@@ -15,7 +15,7 @@
 #' When an inset is configured, the default creates both base and inset layers
 #' using the same aesthetic mapping and params:
 #'
-#'.    cfg <- configure_inset(...)
+#'     cfg <- configure_inset(...)
 #'     geom_sf_inset(aes(...), inset = cfg, ...)
 #'
 #' You can alternatively specify the two layers separately:
@@ -48,13 +48,16 @@
 #'
 #' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 #' cfg <- configure_inset(
-#'   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
-#'   scale = 2,
-#'   translation = c(10, -100),
+#'   centre = st_sfc(st_point(c(-80, 35.5)), crs = 4326),
+#'   scale = 1.5,
+#'   translation = c(-50, -140),
 #'   radius = 50,
 #'   units = "mi")
 #'
-#' ggplot(nc) + geom_sf_inset(aes(fill = AREA), inset = cfg) + coord_sf()
+#' ggplot(nc) +
+#'   geom_sf_inset(aes(fill = AREA), inset = cfg) +
+#'   geom_inset_frame(inset = cfg) +
+#'   coord_sf()
 geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                           stat = "sf", position = "identity",
                           ...,
