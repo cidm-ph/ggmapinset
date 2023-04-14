@@ -1,7 +1,7 @@
 #' Visualise sf objects with insets
 #'
 #' This is a wrapper around [ggplot2::geom_sf()] that assists with creating map
-#' insets.
+#' insets. You'll normally want to pair it with [geom_inset_frame()].
 #'
 #' First, configure an inset using [configure_inset()], then pass the
 #' configuration object to each applicable layer using the \code{inset}
@@ -45,7 +45,7 @@
 #' cfg <- configure_inset(
 #'   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
 #'   scale = 2,
-#'   translation = c(10, -60),
+#'   translation = c(10, -100),
 #'   radius = 50,
 #'   units = "mi")
 #'
@@ -85,21 +85,9 @@ GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
       if (!inherits(geom, "sfc")) geom <- sf::st_geometry(geom)
 
       if (data$inset_enable[[1]]) {
-        inset_geom <- crop_inset_circle(geom,
-                                        centre = inset_centre(inset),
-                                        radius = inset_radius(inset),
-                                        scale = inset_scale(inset),
-                                        translation = inset_translation(inset),
-                                        crs_working = inset_crs_working(inset))
-        data <- data[attr(inset_geom, "retained"),]
-        data$geometry <- inset_geom
+        data <- transform_only_viewport(data, inset)
       } else if (data$inset_invert[[1]]) {
-        inset_geom <- clip_inset_circle(geom,
-                                        centre = inset_centre(inset),
-                                        radius = inset_radius(inset),
-                                        crs_working = inset_crs_working(inset))
-        data <- data[attr(inset_geom, "retained"),]
-        data$geometry <- inset_geom
+        data <- remove_viewport(data, inset)
       }
     }
 
@@ -107,38 +95,46 @@ GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
   }
 )
 
-crop_inset_circle <- function(x, centre, radius, scale, translation,
-                              crs_working) {
-  crs_orig <- sf::st_crs(x)
+transform_only_viewport <- function(data, inset) {
+  radius <- inset_radius(inset)
+  scale = inset_scale(inset)
+  translation = inset_translation(inset)
+  result <- with_crs_working(
+    inset_crs_working(inset),
+    sf::st_sf(data), inset_centre(inset),
+    .f = function(data, centre) {
+      geometry <- sf::st_geometry(data)
+      result <- clip_to_circular_viewport(geometry, centre, radius)
+      geometry <- transform(result[["geometry"]], centre, scale = scale,
+                            translation = translation)
+      data <- data[result[["retained"]],]
+      sf::st_set_geometry(data, geometry)
+    })
 
-  centre <- sf::st_transform(centre, crs_working)
-  viewport <- sf::st_buffer(centre, radius)
-  x <- sf::st_transform(x, crs_working)
-  result <- sf::st_intersection(x, viewport)
-  retained <- attr(result, "idx")[,1]
-
-  if (!is.null(scale)) {
-    result <- (result - centre) * scale + centre
-    result <- sf::st_set_crs(result, crs_working)
+  if (nrow(result) == 0 && nrow(data) != 0) {
+    cli::cli_warn(c("None of the spatial data is inside the inset viewport",
+                     "i" = "Check your inset configuration to ensure the centre, radius, and units are correct"))
   }
-  if (!is.null(translation)) {
-    result <- sf::st_set_crs(result + translation, crs_working)
-  }
 
-  result <- sf::st_transform(result, crs_orig)
-  attr(result, "retained") <- retained
   result
 }
 
-clip_inset_circle <- function(x, centre, radius, crs_working) {
-  crs_orig <- sf::st_crs(x)
+remove_viewport <- function(data, inset) {
+  radius <- inset_radius(inset)
+  result <- with_crs_working(
+    inset_crs_working(inset),
+    sf::st_sf(data), inset_centre(inset),
+    .f = function(data, centre) {
+      geometry <- sf::st_geometry(data)
+      result <- clip_away_circular_viewport(geometry, centre, radius)
+      data <- data[result[["retained"]],]
+      sf::st_set_geometry(data, result[["geometry"]])
+    })
 
-  centre <- sf::st_transform(centre, crs_working)
-  viewport <- sf::st_buffer(centre, radius)
-  x <- sf::st_transform(x, crs_working)
-  result <- sf::st_difference(x, viewport)
-  retained <- attr(result, "idx")[,1]
-  result <- sf::st_transform(result, crs_orig)
-  attr(result, "retained") <- retained
+  if (nrow(result) == 0 && nrow(data) != 0) {
+    cli::cli_warn(c("None of the spatial data is outside the inset viewport",
+                     "i" = "Check your inset configuration to ensure the centre, radius, and units are correct"))
+  }
+
   result
 }

@@ -23,23 +23,14 @@
 transform_to_inset <- function(x, inset) {
   geometry <- sf::st_geometry(x)
   inset <- make_inset_config(inset)
-
-  crs_orig <- sf::st_crs(geometry)
   crs_working <- inset_crs_working(inset)
-
-  centre <- sf::st_transform(inset_centre(inset), crs_working)
   scale <- inset_scale(inset)
   translation <- inset_translation(inset)
 
-  result <- sf::st_transform(geometry, crs_working)
-  if (!is.null(scale)) {
-    result <- (result - centre) * scale + centre
-    result <- sf::st_set_crs(result, crs_working)
-  }
-  if (!is.null(translation)) {
-    result <- sf::st_set_crs(result + translation, crs_working)
-  }
-  result <- sf::st_transform(result, crs_orig)
+  result <- with_crs_working(
+    crs_working, geometry, inset_centre(inset), .f = function(result, centre) {
+      transform(result, centre, scale = scale, translation = translation)
+    })
 
   if (has_s3_method("st_geometry<-", class(x))) {
     sf::st_set_geometry(x, result)

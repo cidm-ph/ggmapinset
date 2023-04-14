@@ -37,7 +37,7 @@ inset configuration.
 }
 \description{
 This is a wrapper around \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}} that assists with creating map
-insets.
+insets. You'll normally want to pair it with \code{\link[=geom_inset_frame]{geom_inset_frame()}}.
 }
 \details{
 First, configure an inset using \code{\link[=configure_inset]{configure_inset()}}, then pass the
@@ -72,7 +72,7 @@ nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 cfg <- configure_inset(
   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
   scale = 2,
-  translation = c(10, -60),
+  translation = c(10, -100),
   radius = 50,
   units = "mi")
 
