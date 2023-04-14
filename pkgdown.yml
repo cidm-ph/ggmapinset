@@ -2,8 +2,8 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
-  insets: insets.html
-last_built: 2023-04-12T23:07Z
+  ggmapinset: ggmapinset.html
+last_built: 2023-04-14T05:35Z
 urls:
   reference: https://cidm-ph.github.io/ggmapinset/reference
   article: https://cidm-ph.github.io/ggmapinset/articles
