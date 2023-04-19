@@ -8,6 +8,7 @@
 #' @inheritParams geom_sf_inset
 #'
 #' @returns A \code{ggplot} layer, or a pair of layers.
+#' @importFrom utils modifyList
 #' @export
 #'
 #' @examples
