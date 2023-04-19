@@ -83,7 +83,6 @@ cfg <- configure_inset(
 
 ggplot(nc) +
   geom_sf_inset(aes(fill = AREA), inset = cfg) +
-  geom_inset_frame(inset = cfg) +
-  coord_sf()
+  geom_inset_frame(inset = cfg)
 }
 \keyword{datasets}

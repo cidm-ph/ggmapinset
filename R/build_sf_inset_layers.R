@@ -69,5 +69,5 @@ build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
   inset_layer <- switch(map_inset,
                         normal = make_layer("normal"),
                         none = NULL)
-  c(base_layer, inset_layer)
+  c(base_layer, inset_layer, ggplot2::coord_sf(default = TRUE))
 }

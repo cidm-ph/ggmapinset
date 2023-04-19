@@ -56,8 +56,7 @@
 #'
 #' ggplot(nc) +
 #'   geom_sf_inset(aes(fill = AREA), inset = cfg) +
-#'   geom_inset_frame(inset = cfg) +
-#'   coord_sf()
+#'   geom_inset_frame(inset = cfg)
 geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                           stat = "sf", position = "identity",
                           ...,
