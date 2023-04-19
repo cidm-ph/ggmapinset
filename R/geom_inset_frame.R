@@ -1,5 +1,10 @@
 #' Add a frame and burst lines for an inset.
 #'
+#' @section Limitation:
+#' Currently the inset configuration must be passed specifically to this layer
+#' and the frame will be built at call time instead of when the rest of the plot
+#' is built.
+#'
 #' @inheritParams geom_sf_inset
 #' @param source.params,target.params,lines.params Override the aesthetics of the
 #'   inset source, target, and lines respectively. The value should be a list

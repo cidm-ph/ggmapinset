@@ -82,6 +82,13 @@ geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
 GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
   draw_panel = function(self, data, panel_params, coord,
                         inset = NULL, inset_mode = "normal", ...) {
+    if (inherits(coord, "CoordSfInset")) {
+      inset <- print(coord$inset)
+    }
+    if (!rlang::is_missing(inset)) {
+      inset <- inset
+    }
+
     if (!is.null(inset) && inset_mode != "none") {
       data <- switch(inset_mode,
                      normal = transform_only_viewport(data, inset),

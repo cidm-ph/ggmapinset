@@ -34,6 +34,13 @@ A ggplot layer holding the inset frame.
 \description{
 Add a frame and burst lines for an inset.
 }
+\section{Limitation}{
+
+Currently the inset configuration must be passed specifically to this layer
+and the frame will be built at call time instead of when the rest of the plot
+is built.
+}
+
 \examples{
 library(sf)
 library(ggplot2)

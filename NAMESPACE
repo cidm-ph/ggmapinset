@@ -3,6 +3,7 @@
 export(GeomSfInset)
 export(build_sf_inset_layers)
 export(configure_inset)
+export(coord_sf_inset)
 export(geom_inset_frame)
 export(geom_sf_inset)
 export(transform_to_inset)
