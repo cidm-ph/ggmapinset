@@ -115,23 +115,21 @@ use the normal <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html"
 <div class="section level2">
 <h2 id="inset-frame-backgrounds">Inset frame backgrounds<a class="anchor" aria-label="anchor" href="#inset-frame-backgrounds"></a>
 </h2>
-<p>If you’d like to add a background to the inset frame (perhaps because
-it overlaps with part of the map), this can be done with the normal
-aesthetics. The frame is composed of the two circles then the two lines
-connecting them, so we want <code>fill = c(NA, "white", NA, NA)</code>
-to fill just the large circle. Note that under some circumstances the
-frame data will have different dimensions, due to facets (the frame is
-repeated for each facet) or when the two circles are nested (in which
-case the lines are not drawn).</p>
-<p>We want the filled frame to sit in between the base map and the inset
-layers.</p>
+<p>By default, the inset frame is transparent, although often it makes
+sense to add a solid background so that the inset is distinguishable
+from any overlapping part of the base map. The aesthetics of the two
+parts of the frame and the burst lines connecting them can be controlled
+separately.</p>
+<p>Note that when the background is filled, we need to specify the base
+and inset maps in separate layers so that the frame can slip in between
+them.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/configure_inset.html">configure_inset</a></span><span class="op">(</span>centre <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">[</span><span class="va">nc</span><span class="op">$</span><span class="va">NAME</span> <span class="op">==</span> <span class="st">"Yancey"</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>                       scale <span class="op">=</span> <span class="fl">2</span>, translation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="op">-</span><span class="fl">120</span><span class="op">)</span>, radius <span class="op">=</span> <span class="fl">50</span>, units <span class="op">=</span> <span class="st">"mi"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">AREA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/geom_inset_frame.html">geom_inset_frame</a></span><span class="op">(</span>inset <span class="op">=</span> <span class="va">cfg</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">"white"</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_inset_frame.html">geom_inset_frame</a></span><span class="op">(</span>inset <span class="op">=</span> <span class="va">cfg</span>, target.params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/geom_sf_inset.html">geom_sf_inset</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">AREA</span><span class="op">)</span>, inset <span class="op">=</span> <span class="va">cfg</span>, map_base <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">coord_sf</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggmapinset_files/figure-html/frame_fill-1.png" width="672"></p>
