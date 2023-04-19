@@ -34,16 +34,15 @@
 #' }
 build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
                                    inherit.aes, params, inset,
-                                   map_base = c("normal", "clip", "none"),
-                                   map_inset = c("auto", "normal", "none")) {
+                                   map_base = "normal", map_inset = "auto") {
   has_inset_cfg <- !is.null(inset) #| !is.null(mapping[["inset"]])
 
-  map_base <- match.arg(map_base)
-  map_inset <- match.arg(map_inset)
+  map_base <- rlang::arg_match0(map_base, c("normal", "clip", "none"))
+  map_inset <- rlang::arg_match0(map_inset, c("auto", "normal", "none"))
 
   if (map_inset == "auto") {
     draw_inset <- map_inset == "normal" || (map_inset == "auto" && has_inset_cfg)
-    map_inset <- ifelse(draw_inset, "normal", "none")
+    map_inset <- if (draw_inset) "normal" else "none"
   }
   if (map_base == "none" && map_inset == "none") {
     cli::cli_abort("{.arg map_base} and {.arg map_inset} can't both be disabled")

@@ -13,8 +13,8 @@ build_sf_inset_layers(
   inherit.aes,
   params,
   inset,
-  map_base = c("normal", "clip", "none"),
-  map_inset = c("auto", "normal", "none")
+  map_base = "normal",
+  map_inset = "auto"
 )
 }
 \arguments{
