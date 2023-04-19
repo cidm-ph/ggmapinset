@@ -13,8 +13,8 @@ geom_sf_inset(
   position = "identity",
   ...,
   inset = NULL,
-  map_base = "normal",
-  map_inset = "auto",
+  map_base = c("normal", "clip", "none"),
+  map_inset = c("auto", "normal", "none"),
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE

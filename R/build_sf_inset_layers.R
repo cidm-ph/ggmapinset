@@ -34,8 +34,12 @@
 #' }
 build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
                                    inherit.aes, params, inset,
-                                   map_base, map_inset) {
+                                   map_base = c("normal", "clip", "none"),
+                                   map_inset = c("auto", "normal", "none")) {
   has_inset_cfg <- !is.null(inset) #| !is.null(mapping[["inset"]])
+
+  map_base <- match.arg(map_base)
+  map_inset <- match.arg(map_inset)
 
   if (map_inset == "auto") {
     draw_inset <- map_inset == "normal" || (map_inset == "auto" && has_inset_cfg)
@@ -57,7 +61,6 @@ build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
       params = modifyList(params, list(inset = inset, inset_mode = inset_mode))
     )
   }
-
 
   base_layer <- switch(map_base,
                        normal = make_layer("none"),
