@@ -40,6 +40,7 @@ drawn if the inset and original circle overlap, which will affect the count.
 library(sf)
 library(ggplot2)
 
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 cfg <- configure_inset(
   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
   scale = 2,
@@ -47,5 +48,5 @@ cfg <- configure_inset(
   radius = 50,
   units = "mi")
 
-ggplot() + geom_inset_frame(inset = cfg) + coord_sf()
+ggplot() + geom_inset_frame(inset = cfg, data = nc)
 }

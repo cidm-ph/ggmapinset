@@ -16,6 +16,7 @@
 #' library(sf)
 #' library(ggplot2)
 #'
+#' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 #' cfg <- configure_inset(
 #'   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
 #'   scale = 2,
@@ -23,7 +24,7 @@
 #'   radius = 50,
 #'   units = "mi")
 #'
-#' ggplot() + geom_inset_frame(inset = cfg) + coord_sf()
+#' ggplot() + geom_inset_frame(inset = cfg, data = nc)
 geom_inset_frame <- function(mapping = ggplot2::aes(),
                              data = NULL,
                              stat = "sf", position = "identity",
@@ -37,30 +38,55 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
                      "i" = "See {.fn configure_inset}"))
   }
 
-  params <- rlang::list2(na.rm = na.rm, ...)
-  if (is.null(mapping[["colour"]]) & is.null(params[["colour"]])) {
-    params$colour <- "#bbbbbb"
-  }
-  if (is.null(mapping[["fill"]]) & is.null(params[["fill"]])) {
-    params$fill <- NA
-  }
-  if (is.null(mapping[["linewidth"]]) & is.null(params[["linewidth"]])) {
-    params$linewidth <- 0.4
-  }
+  params <- rlang::list2(na.rm = na.rm, inset = inset, ...)
 
-  data <- make_burst_circle(inset)
-
-  ggplot2::layer_sf(
+  layer <- ggplot2::layer_sf(
     data = data,
     mapping = mapping,
     stat = stat,
-    geom = ggplot2::GeomSf,
+    geom = GeomSfInsetFrame,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = params
   )
+
+  c(layer, ggplot2::coord_sf(default = TRUE))
 }
+
+GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
+  extra_params = c(ggplot2::GeomSf$extra_params, "inset"),
+
+  default_aes = ggplot2::aes(
+    linewidth = 0.4,
+    stroke = 0.4,
+    colour = "gray40",
+    fill = NA,
+  ),
+
+  setup_params = function(data, params) {
+    if (is.null(params$inset)) {
+      cli::cli_abort("No value was provided for required param {.arg inset}")
+    }
+
+    GeomSf$setup_params(data, params)
+  },
+
+  setup_data = function(data, params) {
+    frame <- make_burst_circle(params$inset)
+    data <- sf::st_sf(data.frame(geometry = frame, PANEL = 1, group = -1))
+
+    # adjust the bounding box since we bypassed StatSf.
+    # TODO: does this need coordinate transformations?
+    bbox <- sf::st_bbox(frame)
+    data$xmin <- bbox[["xmin"]]
+    data$xmax <- bbox[["xmax"]]
+    data$ymin <- bbox[["ymin"]]
+    data$ymax <- bbox[["ymax"]]
+
+    GeomSf$setup_data(data, params)
+  },
+)
 
 make_burst_circle <- function (inset) {
   crs_working <- inset_crs_working(inset)
@@ -90,7 +116,7 @@ make_burst_circle <- function (inset) {
 
   viewport <- sf::st_transform(viewport, crs_orig)
   result <- sf::st_transform(result, crs_orig)
-  sf::st_sf(c(viewport, result, lines))
+  c(viewport, result, lines)
 }
 
 get_outer_bitangents <- function (centre1, radius1, centre2, radius2) {
