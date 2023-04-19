@@ -1,13 +1,9 @@
 #' Add a frame and burst lines for an inset.
 #'
-#' @section Controlling aesthetics:
-#' Aesthetic mappings or parameters can be provided. They can be scalars, or
-#' vectors of length 4 (times the number of panels when faceting) corresponding
-#' in order to the source circle, target circle, then the two line segments
-#' connecting them, respectively. Note that the connecting lines might not be
-#' drawn if the inset and original circle overlap, which will affect the count.
-#'
 #' @inheritParams geom_sf_inset
+#' @param source.params,target.params,lines.params Override the aesthetics of the
+#'   inset source, target, and lines respectively. The value should be a list
+#'   named by the aesthetics, and the values should be scalars of length one.
 #'
 #' @returns A ggplot layer holding the inset frame.
 #' @export
@@ -31,6 +27,9 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
                              ...,
                              inset = NULL,
                              na.rm = FALSE,
+                             source.params = list(),
+                             target.params = list(),
+                             lines.params = list(),
                              show.legend = NA,
                              inherit.aes = FALSE) {
   if (!is.null(inset) & !is_inset_config(inset)) {
@@ -38,10 +37,12 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
                      "i" = "See {.fn configure_inset}"))
   }
 
-  params <- rlang::list2(na.rm = na.rm, inset = inset, ...)
+  params <- rlang::list2(na.rm = na.rm, source.params = source.params,
+                         target.params = target.params,
+                         lines.params = lines.params, ...)
 
   layer <- ggplot2::layer_sf(
-    data = data,
+    data = make_burst_circle(inset),
     mapping = mapping,
     stat = stat,
     geom = GeomSfInsetFrame,
@@ -54,8 +55,10 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
   c(layer, ggplot2::coord_sf(default = TRUE))
 }
 
+frame_params <- c("source.params", "target.params", "lines.params")
+
 GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
-  extra_params = c(ggplot2::GeomSf$extra_params, "inset"),
+  extra_params = c(ggplot2::GeomSf$extra_params, frame_params),
 
   default_aes = ggplot2::aes(
     linewidth = 0.4,
@@ -64,27 +67,40 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
     fill = NA,
   ),
 
-  setup_params = function(data, params) {
-    if (is.null(params$inset)) {
-      cli::cli_abort("No value was provided for required param {.arg inset}")
+  setup_data = function(data, params) {
+    if (any(data$group != -1)) {
+      cli::cli_abort("geom_inset_frame does not currently support grouped data")
     }
 
-    GeomSf$setup_params(data, params)
+    ggplot2::GeomSf$setup_data(data, params)
   },
 
-  setup_data = function(data, params) {
-    frame <- make_burst_circle(params$inset)
-    data <- sf::st_sf(data.frame(geometry = frame, PANEL = 1, group = -1))
+  draw_layer = function(self, data, params, layout, coord) {
+    n_panels <- nlevels(as.factor(data$PANEL))
+    offsets <- seq(1L, n_panels * 4L, 4L)
 
-    # adjust the bounding box since we bypassed StatSf.
-    # TODO: does this need coordinate transformations?
-    bbox <- sf::st_bbox(frame)
-    data$xmin <- bbox[["xmin"]]
-    data$xmax <- bbox[["xmax"]]
-    data$ymin <- bbox[["ymin"]]
-    data$ymax <- bbox[["ymax"]]
+    for (param in names(params$source.params)) {
+      if (!param %in% names(data)) {
+        cli::cli_abort("Parameter {.arg {param}} in {.arg source.params} does not exist in the layer data")
+      }
+      data[,param][offsets + 0L] <- params$source.params[[param]]
+    }
 
-    GeomSf$setup_data(data, params)
+    for (param in names(params$target.params)) {
+      if (!param %in% names(data)) {
+        cli::cli_abort("Parameter {.arg {param}} in {.arg target.params} does not exist in the layer data")
+      }
+      data[,param][offsets + 1L] <- params$target.params[[param]]
+    }
+
+    for (param in names(params$lines.params)) {
+      if (!param %in% names(data)) {
+        cli::cli_abort("Parameter {.arg {param}} in {.arg lines.params} does not exist in the layer data")
+      }
+      data[,param][c(offsets + 2L, offsets + 3L)] <- params$lines.params[[param]]
+    }
+
+    ggplot2::GeomSf$draw_layer(data, params, layout, coord)
   },
 )
 

@@ -12,6 +12,9 @@ geom_inset_frame(
   ...,
   inset = NULL,
   na.rm = FALSE,
+  source.params = list(),
+  target.params = list(),
+  lines.params = list(),
   show.legend = NA,
   inherit.aes = FALSE
 )
@@ -20,6 +23,10 @@ geom_inset_frame(
 \item{mapping, data, stat, position, na.rm, show.legend, inherit.aes, ...}{See \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}}
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.}
+
+\item{source.params, target.params, lines.params}{Override the aesthetics of the
+inset source, target, and lines respectively. The value should be a list
+named by the aesthetics, and the values should be scalars of length one.}
 }
 \value{
 A ggplot layer holding the inset frame.
@@ -27,15 +34,6 @@ A ggplot layer holding the inset frame.
 \description{
 Add a frame and burst lines for an inset.
 }
-\section{Controlling aesthetics}{
-
-Aesthetic mappings or parameters can be provided. They can be scalars, or
-vectors of length 4 (times the number of panels when faceting) corresponding
-in order to the source circle, target circle, then the two line segments
-connecting them, respectively. Note that the connecting lines might not be
-drawn if the inset and original circle overlap, which will affect the count.
-}
-
 \examples{
 library(sf)
 library(ggplot2)
