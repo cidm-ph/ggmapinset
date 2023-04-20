@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(ggmapinset)
 library(ggplot2)
-library(sf)
 
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 ```
@@ -36,16 +35,15 @@ base layer, you can use `map_inset = "none"`, `inset = NULL`, or simply use the
 normal `geom_sf()`.
 
 ```{r separate, fig.width=7, fig.height=3.5}
-cfg <- configure_inset(centre = st_centroid(st_geometry(nc)[nc$NAME == "Bladen"]),
-                       scale = 1.5, translation = c(-180, -50), radius = 50, units = "mi")
-
 ggplot(nc) +
   # this is equivalent to the following line:
-  # geom_sf_inset(fill = "white") +
+  # geom_sf_inset(fill = "white", map_inset = "none") +
   geom_sf(fill = "white") +
-  geom_sf_inset(aes(fill = AREA), inset = cfg, map_base = "none") +
-  geom_inset_frame(inset = cfg) +
-  coord_sf()
+  geom_sf_inset(aes(fill = AREA), map_base = "none") +
+  geom_inset_frame() +
+  coord_sf_inset(inset = configure_inset(
+    centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]), scale = 1.5,
+    translation = c(-180, -50), radius = 50, units = "mi"))
 ```
 
 ## Inset frame backgrounds
@@ -57,13 +55,12 @@ connecting them can be controlled separately.
 Note that when the background is filled, we need to specify the base and inset
 maps in separate layers so that the frame can slip in between them.
 ```{r frame_fill, fig.width=7, fig.height=3}
-cfg <- configure_inset(centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]),
-                       scale = 2, translation = c(100, -120), radius = 50, units = "mi")
-
 ggplot(nc) +
   geom_sf(aes(fill = AREA)) +
-  geom_inset_frame(inset = cfg, target.aes = list(fill = "white")) +
-  geom_sf_inset(aes(fill = AREA), inset = cfg, map_base = "none") +
-  coord_sf()
+  geom_inset_frame(target.aes = list(fill = "white")) +
+  geom_sf_inset(aes(fill = AREA), map_base = "none") +
+  coord_sf_inset(inset = configure_inset(
+    centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]), scale = 2,
+    translation = c(100, -120), radius = 50, units = "mi"))
 ```
 

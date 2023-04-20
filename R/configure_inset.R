@@ -1,10 +1,9 @@
 #' Configure transformations underpinning a map inset
 #'
-#' The configuration returned by this function should be passed to all the
-#' relevant geometry functions that accept a \code{inset} parameter. This
-#' ensures that they use a consistent transformation for the inset.
+#' The configuration returned by this function will normally be passed to the
+#' coordinate system via [coord_sf_inset()]. Currently only circular insets are
+#' supported, and only one inset per plot.
 #'
-#' @details
 #' The default \code{crs_working} uses the equidistant cylindrical coordinate
 #' reference system with the latitude of true scale set to match the latitude of
 #' \code{centre}. This ensures that the circle will appear circular in most
@@ -100,6 +99,10 @@ is_inset_config <- function (x) {
 
 make_inset_config <- function (inset) {
   UseMethod("make_inset_config")
+}
+
+make_inset_config.NULL <- function (inset) {
+  NULL
 }
 
 make_inset_config.list <- function (inset) {

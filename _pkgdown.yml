@@ -2,3 +2,18 @@ url: https://cidm-ph.github.io/ggmapinset/
 template:
   bootstrap: 5
 
+reference:
+- title: ggplot2 extensions
+  contents:
+  - starts_with("geom_")
+  - starts_with("stat_")
+  - starts_with("coord_")
+  - configure_inset
+- title: helpers for creating inset-aware ggplot2 extensions
+  contents:
+  - build_sf_inset_layers
+  - get_inset_config
+  - transform_to_inset
+- title: package
+  contents:
+  - ggmapinset-package

@@ -35,22 +35,22 @@ an empty part of the map.
 ``` r
 library(ggmapinset)
 library(ggplot2)
-library(sf)
 
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
-cfg <- configure_inset(centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]),
-                       scale = 2, translation = c(70, -180), radius = 50, units = "mi")
-
 # The basic ggplot example:
 # ggplot(nc) +
-#  geom_sf(aes(fill = AREA))
+#   geom_sf(aes(fill = AREA)) +
+#   coord_sf()
 
-# Adding an inset means replacing geom_sf(...) -> geom_sf_inset(..., inset = cfg)
+# Adding an inset means replacing geom_sf(...) -> geom_sf_inset(...) and
+# coord_sf(...) -> coord_sf_inset(..., inset = configure_inset(...))
 ggplot(nc) +
-  geom_sf_inset(aes(fill = AREA), inset = cfg) +
-  geom_inset_frame(inset = cfg) +
-  coord_sf()
+  geom_sf_inset(aes(fill = AREA)) +
+  geom_inset_frame() +
+  coord_sf_inset(inset = configure_inset(
+    centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Yancey"]),
+    scale = 2, translation = c(70, -180), radius = 50, units = "mi"))
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />

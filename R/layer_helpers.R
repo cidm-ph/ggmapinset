@@ -17,7 +17,7 @@
 #'                            stat = "my_custom_stat",
 #'                            position = "identity",
 #'                            ...,
-#'                            inset = NULL,
+#'                            inset = NA,
 #'                            map_base = "normal",
 #'                            map_inset = "auto",
 #'                            na.rm = TRUE,
@@ -35,7 +35,7 @@
 build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
                                    inherit.aes, params, inset,
                                    map_base = "normal", map_inset = "auto") {
-  has_inset_cfg <- !is.null(inset) #| !is.null(mapping[["inset"]])
+  has_inset_cfg <- !is.null(inset)
 
   map_base <- rlang::arg_match0(map_base, c("normal", "clip", "none"))
   map_inset <- rlang::arg_match0(map_inset, c("auto", "normal", "none"))
@@ -69,4 +69,45 @@ build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
                         normal = make_layer("normal"),
                         none = NULL)
   c(base_layer, inset_layer, ggplot2::coord_sf(default = TRUE))
+}
+
+#' Get the inset configuration from the params or coord
+#'
+#' This is a helper for implementing inset-aware ggplot layers. If the `inset` is
+#' missing (`NA`) then the default inset configuration is retrieved from the coord.
+#' If the coord is not inset-aware, then a warning is issued.
+#'
+#' @param inset Inset passed in as a param to the layer
+#' @param coord Coord object for the plot
+#'
+#' @returns Inset configuration or `NULL`
+#' @export
+#' @examples
+#' # defining a new geom deriving from geom_sf()
+#' GeomCustom <- ggplot2::ggproto("GeomCustom", ggplot2::GeomSf,
+#'   draw_panel = function(self, data, panel_params, coord, inset = NA) {
+#'     inset <- get_inset_config(inset, coord)
+#'
+#'     # do something with the inset ...
+#'
+#'     # note that this example doesn't pass on the remaining geom_sf params but
+#'     # in real usage you would probably want to do that
+#'     ggplot2::ggproto_parent(ggplot2::GeomSf, self)$draw_panel(data, panel_params, coord)
+#'   },
+#' )
+get_inset_config <- function (inset, coord) {
+  if (is.null(inset)) {
+    NULL
+  } else if (is.na(inset)) {
+    if (inherits(coord, "CoordSfInset")) {
+      make_inset_config(coord$inset)
+    } else {
+      cli::cli_abort(c("An inset-aware geometry was used but {.arg inset} was not specified",
+                       "i" = "Did you forget to add the inset to the coord?",
+                       "i" = "Suppress by setting {.arg inset} = NULL in the layer or coord"))
+      NULL
+    }
+  } else {
+    make_inset_config(inset)
+  }
 }

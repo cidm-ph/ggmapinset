@@ -1,53 +1,52 @@
-#' Add a frame and burst lines for an inset.
+#' Add a frame and burst lines for an inset
 #'
 #' @section Limitation:
-#' Currently the inset configuration must be passed specifically to this layer
-#' and the frame will be built at call time instead of when the rest of the plot
-#' is built.
+#' The frame cannot be drawn without another sf layer that contains data due to
+#' a limitation of the ggplot layout evaluation. Attempting to plot a frame by
+#' itself will result in the error:
+#' "Scale limits cannot be mapped onto spatial coordinates in `coord_sf()`".
 #'
-#' @inheritParams geom_sf_inset
 #' @param source.aes,target.aes,lines.aes Override the aesthetics of the
 #'   inset source, target, and lines respectively. The value should be a list
 #'   named by the aesthetics, and the values should be scalars of length one.
+#' @inheritParams geom_sf_inset
+#' @param mapping,data,stat,position,na.rm,show.legend,inherit.aes,...
+#'   See [ggplot2::geom_sf()].
 #'
 #' @returns A ggplot layer holding the inset frame.
 #' @export
 #'
 #' @examples
-#' library(sf)
 #' library(ggplot2)
 #'
 #' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
-#' cfg <- configure_inset(
-#'   centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
-#'   scale = 2,
-#'   translation = c(0, -300),
-#'   radius = 50,
-#'   units = "mi")
 #'
-#' ggplot() + geom_inset_frame(inset = cfg, data = nc)
+#' ggplot(nc) +
+#'   geom_sf_inset() +
+#'   geom_inset_frame() +
+#'   coord_sf_inset(inset = configure_inset(
+#'     centre = sf::st_sfc(sf::st_point(c(-82, 35)), crs = 4326),
+#'     scale = 2, translation = c(0, -300), radius = 50, units = "mi"))
 geom_inset_frame <- function(mapping = ggplot2::aes(),
                              data = NULL,
-                             stat = "sf", position = "identity",
+                             stat = "sf_inset", position = "identity",
                              ...,
-                             inset = NULL,
+                             inset = NA,
                              na.rm = FALSE,
                              source.aes = list(),
                              target.aes = list(),
                              lines.aes = list(),
                              show.legend = NA,
                              inherit.aes = FALSE) {
-  if (!is.null(inset) & !is_inset_config(inset)) {
-    cli::cli_abort(c("{.arg inset} must be a {.class inset_config} object",
-                     "i" = "See {.fn configure_inset}"))
+  if (!is.null(data)) {
+    cli::cli_warn("Ignoring {.arg data} provided to {.fn geom_inset_frame} layer")
   }
-
   params <- rlang::list2(na.rm = na.rm, source.aes = source.aes,
                          target.aes = target.aes,
-                         lines.aes = lines.aes, ...)
+                         lines.aes = lines.aes, inset = inset, ...)
 
   layer <- ggplot2::layer_sf(
-    data = make_burst_circle(inset),
+    data = dummy_burst_circle(),
     mapping = mapping,
     stat = stat,
     geom = GeomSfInsetFrame,
@@ -63,7 +62,7 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
 frame_params <- c("source.aes", "target.aes", "lines.aes")
 
 GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
-  extra_params = c(ggplot2::GeomSf$extra_params, frame_params),
+  extra_params = c(ggplot2::GeomSf$extra_params, frame_params, "inset"),
 
   default_aes = ggplot2::aes(
     linewidth = 0.4,
@@ -74,7 +73,7 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
 
   setup_data = function(data, params) {
     if (any(data$group != -1)) {
-      cli::cli_abort("geom_inset_frame does not currently support grouped data")
+      cli::cli_abort("{.fn geom_inset_frame} does not currently support grouped data")
     }
 
     ggplot2::GeomSf$setup_data(data, params)
@@ -83,6 +82,14 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
   draw_layer = function(self, data, params, layout, coord) {
     n_panels <- nlevels(as.factor(data$PANEL))
     offsets <- seq(1L, n_panels * 4L, 4L)
+
+    # replace the dummy data with the real configured inset
+    inset <- get_inset_config(params$inset, coord)
+    if (is.null(inset)) {
+      cli::cli_abort("Inset configuration is required for {.fn geom_inset_frame}")
+    }
+    frame <- make_burst_circle(inset)
+    data$geometry <- rep(frame, n_panels)
 
     for (param in names(params$source.aes)) {
       if (!param %in% names(data)) {
@@ -108,6 +115,20 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
     ggplot2::GeomSf$draw_layer(data, params, layout, coord)
   },
 )
+
+# This must be the same size as the real inset so that the data frame is correctly
+# handled by the ggplot machinery, but it will get replaced by the real frame
+# at layout time. It also needs to have a non-NA CRS but the specific choice isn't
+# important (hopefully).
+dummy_burst_circle <- function () {
+  sf::st_sfc(
+    sf::st_polygon(),
+    sf::st_polygon(),
+    sf::st_linestring(),
+    sf::st_linestring(),
+    crs = "+proj=eqc"
+  )
+}
 
 make_burst_circle <- function (inset) {
   crs_working <- inset_crs_working(inset)
@@ -153,7 +174,12 @@ get_outer_bitangents <- function (centre1, radius1, centre2, radius2) {
   hypot <- sqrt((centre2[[1]] - centre1[[1]])^2 + (centre2[[2]] - centre1[[2]])^2)
   short <- radius1 - radius2
 
-  if (hypot < short) return(sf::st_sfc()) # one circle fully inside the other
+  if (hypot < short) {
+    cli::cli_abort(c("Inset overlaps completely with the source part of the base map",
+                     "x" = "There is no way to draw bitangents (the burst lines)",
+                     "i" = "Adjust {.field translation} or {.field centre} to reduce the overlap"))
+  }
+  # if (hypot < short) return(sf::st_sfc()) # one circle fully inside the other
   # if (hypot == short)     the lines are degenerate
   # otherwise               there are 2 external bitangents
 

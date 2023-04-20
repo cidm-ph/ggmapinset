@@ -1,3 +1,5 @@
+## low-level helpers for operating on inset geometries
+
 # Transforms inputs to crs_working during FUN evaluation then transforms its
 # return value back to the original CRS of the first input.
 with_crs_working <- function(crs_working, ..., .f) {
@@ -9,22 +11,25 @@ with_crs_working <- function(crs_working, ..., .f) {
   sf::st_transform(result, crs_orig)
 }
 
-# Retains only the inset's viewport. Assumes that the geometry and centre are in
+# Retains only the inset's viewport. Assumes that the geometry and viewport are in
 # working CRS and that x is an sfc, not an sf.
-clip_to_circular_viewport <- function(x, centre, radius) {
-  viewport <- sf::st_buffer(centre, radius)
+clip_to_viewport <- function(x, viewport) {
   result <- sf::st_intersection(x, viewport)
   retained <- attr(result, "idx")[,1]
   list(geometry = result, retained = retained)
 }
 
-# Clips away the inset's viewport. Assumes that the geometry and centre are in
+# Clips away the inset's viewport. Assumes that the geometry and viewport are in
 # working CRS and that x is an sfc, not an sf.
-clip_away_circular_viewport <- function(x, centre, radius) {
-  viewport <- sf::st_buffer(centre, radius)
+clip_away_viewport <- function(x, viewport) {
   result <- sf::st_difference(x, viewport)
   retained <- attr(result, "idx")[,1]
   list(geometry = result, retained = retained)
+}
+
+# Returns a circle representing the inset viewport
+circular_viewport <- function(centre, radius) {
+  sf::st_buffer(centre, radius)
 }
 
 # Applies translation and scale. Assumes that the geometry and centre are in the

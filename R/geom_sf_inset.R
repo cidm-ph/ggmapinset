@@ -3,7 +3,7 @@
 #' This is a wrapper around [ggplot2::geom_sf()] that assists with creating map
 #' insets.
 #' First, configure an inset using [configure_inset()], then pass around the
-#' configuration object using the \code{inset} parameter.
+#' configuration object using [coord_sf_inset()] or the \code{inset} parameter.
 #' After specifying all your usual geoms, use [geom_inset_frame()] to add a frame
 #' around the inset that connects it to the main map.
 #'
@@ -15,18 +15,22 @@
 #' When an inset is configured, the default creates both base and inset layers
 #' using the same aesthetic mapping and params:
 #'
-#'     cfg <- configure_inset(...)
-#'     geom_sf_inset(aes(...), inset = cfg, ...)
+#'     geom_sf_inset(...)
 #'
 #' You can alternatively specify the two layers separately:
 #'
 #'     # draw the base map only (both versions are equivalent):
-#'     geom_sf(aes(...), ...)
-#'     geom_sf_inset(aes(...), inset = cfg, map_inset = "none", ...)
-#'     # draw the inset map only:
-#'     geom_sf_inset(aes(...), inset = cfg, map_base = "none", ...)
+#'     geom_sf(...)
+#'     geom_sf_inset(..., map_inset = "none")
+#'
+#'     # separately, draw the inset map only:
+#'     geom_sf_inset(..., map_base = "none")
+#'
+#' `stat_sf_inset()` works the same [ggplot2::stat_sf()] except that it also
+#' expands the axis limits to account for the inset area.
 #'
 #' @param inset Inset configuration; see [configure_inset()].
+#'   If `NA` (the default), this is inherited from the coord (see [coord_sf_inset()]).
 #' @param map_base Controls the layer with the base map. Possible values are
 #'   `"normal"` to create a layer as though the inset were not specified,
 #'   `"clip"` to create a layer with the inset viewport cut out, and
@@ -34,33 +38,29 @@
 #' @param map_inset Controls the layer with the inset map. Possible values are
 #'   `"auto"` to choose the behaviour based on whether \code{inset} is specified,
 #'   `"normal"` to create a layer with the viewport cut out and transformed, and
-#'   `"none"` to prevent the insertion og a layer for the viewport map.
-#' @param mapping,data,stat,position,na.rm,show.legend,inherit.aes,...
-#'   See [ggplot2::geom_sf()]
+#'   `"none"` to prevent the insertion of a layer for the viewport map.
+#' @param mapping,data,stat,geom,position,na.rm,show.legend,inherit.aes,...
+#'   See [ggplot2::geom_sf()].
 #'
 #' @returns A ggplot layer similar to [ggplot2::geom_sf()] but transformed according to the
 #'   inset configuration.
 #' @export
 #'
 #' @examples
-#' library(sf)
 #' library(ggplot2)
 #'
 #' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
-#' cfg <- configure_inset(
-#'   centre = st_sfc(st_point(c(-80, 35.5)), crs = 4326),
-#'   scale = 1.5,
-#'   translation = c(-50, -140),
-#'   radius = 50,
-#'   units = "mi")
 #'
 #' ggplot(nc) +
-#'   geom_sf_inset(aes(fill = AREA), inset = cfg) +
-#'   geom_inset_frame(inset = cfg)
+#'   geom_sf_inset(aes(fill = AREA)) +
+#'   geom_inset_frame() +
+#'   coord_sf_inset(inset = configure_inset(
+#'     centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = 4326),
+#'     scale = 1.5, translation = c(-50, -140), radius = 50, units = "mi"))
 geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
-                          stat = "sf", position = "identity",
+                          stat = "sf_inset", position = "identity",
                           ...,
-                          inset = NULL,
+                          inset = NA,
                           map_base = c("normal", "clip", "none"),
                           map_inset = c("auto", "normal", "none"),
                           na.rm = TRUE,
@@ -81,14 +81,8 @@ geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
 #' @rdname geom_sf_inset
 GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
   draw_panel = function(self, data, panel_params, coord,
-                        inset = NULL, inset_mode = "normal", ...) {
-    if (inherits(coord, "CoordSfInset")) {
-      inset <- print(coord$inset)
-    }
-    if (!rlang::is_missing(inset)) {
-      inset <- inset
-    }
-
+                        inset = NA, inset_mode = "normal", ...) {
+    inset <- get_inset_config(inset, coord)
     if (!is.null(inset) && inset_mode != "none") {
       data <- switch(inset_mode,
                      normal = transform_only_viewport(data, inset),
@@ -114,7 +108,8 @@ transform_only_viewport <- function(data, inset) {
     sf::st_sf(data), inset_centre(inset),
     .f = function(data, centre) {
       geometry <- sf::st_geometry(data)
-      result <- clip_to_circular_viewport(geometry, centre, radius)
+      viewport <- circular_viewport(centre, radius)
+      result <- clip_to_viewport(geometry, viewport)
       geometry <- transform(result[["geometry"]], centre, scale = scale,
                             translation = translation)
       data <- data[result[["retained"]],]
@@ -137,7 +132,8 @@ remove_viewport <- function(data, inset) {
     sf::st_sf(data), inset_centre(inset),
     .f = function(data, centre) {
       geometry <- sf::st_geometry(data)
-      result <- clip_away_circular_viewport(geometry, centre, radius)
+      viewport <- circular_viewport(centre, radius)
+      result <- clip_away_viewport(geometry, viewport)
       data <- data[result[["retained"]],]
       sf::st_set_geometry(data, result[["geometry"]])
     })

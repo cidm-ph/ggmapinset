@@ -37,9 +37,9 @@ applying the transformations. See Details.}
 An inset configuration object of class \code{inset_config}.
 }
 \description{
-The configuration returned by this function should be passed to all the
-relevant geometry functions that accept a \code{inset} parameter. This
-ensures that they use a consistent transformation for the inset.
+The configuration returned by this function will normally be passed to the
+coordinate system via \code{\link[=coord_sf_inset]{coord_sf_inset()}}. Currently only circular insets are
+supported, and only one inset per plot.
 }
 \details{
 The default \code{crs_working} uses the equidistant cylindrical coordinate
