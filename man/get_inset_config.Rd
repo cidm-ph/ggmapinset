@@ -17,7 +17,6 @@ Inset configuration or \code{NULL}
 \description{
 This is a helper for implementing inset-aware ggplot layers. If the \code{inset} is
 missing (\code{NA}) then the default inset configuration is retrieved from the coord.
-If the coord is not inset-aware, then a warning is issued.
 }
 \examples{
 # defining a new geom deriving from geom_sf()

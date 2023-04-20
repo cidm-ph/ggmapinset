@@ -75,7 +75,6 @@ build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
 #'
 #' This is a helper for implementing inset-aware ggplot layers. If the `inset` is
 #' missing (`NA`) then the default inset configuration is retrieved from the coord.
-#' If the coord is not inset-aware, then a warning is issued.
 #'
 #' @param inset Inset passed in as a param to the layer
 #' @param coord Coord object for the plot
@@ -102,9 +101,6 @@ get_inset_config <- function (inset, coord) {
     if (inherits(coord, "CoordSfInset")) {
       make_inset_config(coord$inset)
     } else {
-      cli::cli_abort(c("An inset-aware geometry was used but {.arg inset} was not specified",
-                       "i" = "Did you forget to add the inset to the coord?",
-                       "i" = "Suppress by setting {.arg inset} = NULL in the layer or coord"))
       NULL
     }
   } else {

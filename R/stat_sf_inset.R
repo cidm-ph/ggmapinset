@@ -31,13 +31,10 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
     data <- ggplot2::StatSf$compute_panel(data, scales, coord)
 
     inset <- get_inset_config(inset, coord)
-    if (is.null(inset)) {
-      cli::cli_warn("Inset configuration is required for {.fn stat_sf_inset}")
-    }
 
     # we also need to let the extend the coord boundaries and range to include
     # the transformed inset
-    if (inherits(coord, "CoordSf")) {
+    if (!is.null(inset) && inherits(coord, "CoordSf")) {
       bbox <- inset_bbox(inset)
 
       coord$record_bbox(
