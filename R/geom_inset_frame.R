@@ -6,7 +6,7 @@
 #' is built.
 #'
 #' @inheritParams geom_sf_inset
-#' @param source.params,target.params,lines.params Override the aesthetics of the
+#' @param source.aes,target.aes,lines.aes Override the aesthetics of the
 #'   inset source, target, and lines respectively. The value should be a list
 #'   named by the aesthetics, and the values should be scalars of length one.
 #'
@@ -32,9 +32,9 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
                              ...,
                              inset = NULL,
                              na.rm = FALSE,
-                             source.params = list(),
-                             target.params = list(),
-                             lines.params = list(),
+                             source.aes = list(),
+                             target.aes = list(),
+                             lines.aes = list(),
                              show.legend = NA,
                              inherit.aes = FALSE) {
   if (!is.null(inset) & !is_inset_config(inset)) {
@@ -42,9 +42,9 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
                      "i" = "See {.fn configure_inset}"))
   }
 
-  params <- rlang::list2(na.rm = na.rm, source.params = source.params,
-                         target.params = target.params,
-                         lines.params = lines.params, ...)
+  params <- rlang::list2(na.rm = na.rm, source.aes = source.aes,
+                         target.aes = target.aes,
+                         lines.aes = lines.aes, ...)
 
   layer <- ggplot2::layer_sf(
     data = make_burst_circle(inset),
@@ -60,7 +60,7 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
   c(layer, ggplot2::coord_sf(default = TRUE))
 }
 
-frame_params <- c("source.params", "target.params", "lines.params")
+frame_params <- c("source.aes", "target.aes", "lines.aes")
 
 GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
   extra_params = c(ggplot2::GeomSf$extra_params, frame_params),
@@ -84,25 +84,25 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
     n_panels <- nlevels(as.factor(data$PANEL))
     offsets <- seq(1L, n_panels * 4L, 4L)
 
-    for (param in names(params$source.params)) {
+    for (param in names(params$source.aes)) {
       if (!param %in% names(data)) {
-        cli::cli_abort("Parameter {.arg {param}} in {.arg source.params} does not exist in the layer data")
+        cli::cli_abort("Parameter {.arg {param}} in {.arg source.aes} does not exist in the layer data")
       }
-      data[,param][offsets + 0L] <- params$source.params[[param]]
+      data[,param][offsets + 0L] <- params$source.aes[[param]]
     }
 
-    for (param in names(params$target.params)) {
+    for (param in names(params$target.aes)) {
       if (!param %in% names(data)) {
-        cli::cli_abort("Parameter {.arg {param}} in {.arg target.params} does not exist in the layer data")
+        cli::cli_abort("Parameter {.arg {param}} in {.arg target.aes} does not exist in the layer data")
       }
-      data[,param][offsets + 1L] <- params$target.params[[param]]
+      data[,param][offsets + 1L] <- params$target.aes[[param]]
     }
 
-    for (param in names(params$lines.params)) {
+    for (param in names(params$lines.aes)) {
       if (!param %in% names(data)) {
-        cli::cli_abort("Parameter {.arg {param}} in {.arg lines.params} does not exist in the layer data")
+        cli::cli_abort("Parameter {.arg {param}} in {.arg lines.aes} does not exist in the layer data")
       }
-      data[,param][c(offsets + 2L, offsets + 3L)] <- params$lines.params[[param]]
+      data[,param][c(offsets + 2L, offsets + 3L)] <- params$lines.aes[[param]]
     }
 
     ggplot2::GeomSf$draw_layer(data, params, layout, coord)

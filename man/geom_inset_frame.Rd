@@ -12,9 +12,9 @@ geom_inset_frame(
   ...,
   inset = NULL,
   na.rm = FALSE,
-  source.params = list(),
-  target.params = list(),
-  lines.params = list(),
+  source.aes = list(),
+  target.aes = list(),
+  lines.aes = list(),
   show.legend = NA,
   inherit.aes = FALSE
 )
@@ -24,7 +24,7 @@ geom_inset_frame(
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.}
 
-\item{source.params, target.params, lines.params}{Override the aesthetics of the
+\item{source.aes, target.aes, lines.aes}{Override the aesthetics of the
 inset source, target, and lines respectively. The value should be a list
 named by the aesthetics, and the values should be scalars of length one.}
 }

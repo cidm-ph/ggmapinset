@@ -62,7 +62,7 @@ cfg <- configure_inset(centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]
 
 ggplot(nc) +
   geom_sf(aes(fill = AREA)) +
-  geom_inset_frame(inset = cfg, target.params = list(fill = "white")) +
+  geom_inset_frame(inset = cfg, target.aes = list(fill = "white")) +
   geom_sf_inset(aes(fill = AREA), inset = cfg, map_base = "none") +
   coord_sf()
 ```
