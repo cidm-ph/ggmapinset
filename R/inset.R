@@ -27,6 +27,13 @@ clip_away_viewport <- function(x, viewport) {
   list(geometry = result, retained = retained)
 }
 
+# Return the inset's viewport of the configured shape. It will be in the working
+# CRS of the inset configuration.
+inset_viewport <- function(inset) {
+  centre <- sf::st_transform(inset_centre(inset), inset_crs_working(inset))
+  circular_viewport(centre, inset_radius(inset))
+}
+
 # Returns a circle representing the inset viewport
 circular_viewport <- function(centre, radius) {
   sf::st_buffer(centre, radius)

@@ -25,6 +25,15 @@ install.packages('ggmapinset')
 install.packages('ggmapinset', repos = c('https://cidm-ph.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
+## Replacing ‘ggplot2’ sf layers
+
+`{ggmapinset}` provides replacements for each of the sf-related layers
+from `{ggplot2}` with the suffix `_inset` added to the names. For the
+most part they work the same way as the standard layers, but they can
+understand the inset configuration and make small adjustments
+accordingly such as expanding axes to fit the inset frame or duplicating
+the layer and transforming it to fit into the inset viewport.
+
 ## Example
 
 This example adds an inset to the first example from `ggplot2::geom_sf`.
@@ -48,6 +57,7 @@ nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 ggplot(nc) +
   geom_sf_inset(aes(fill = AREA)) +
   geom_inset_frame() +
+  geom_sf_label_inset(aes(label = NAME), data = ~dplyr::slice_sample(.x, n = 10)) +
   coord_sf_inset(inset = configure_inset(
     centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Yancey"]),
     scale = 2, translation = c(70, -180), radius = 50, units = "mi"))

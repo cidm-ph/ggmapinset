@@ -1,11 +1,11 @@
 #' Visualise sf objects with insets
 #'
-#' This is a wrapper around [ggplot2::geom_sf()] that assists with creating map
-#' insets.
-#' First, configure an inset using [configure_inset()], then pass around the
-#' configuration object using [coord_sf_inset()] or the \code{inset} parameter.
-#' After specifying all your usual geoms, use [geom_inset_frame()] to add a frame
-#' around the inset that connects it to the main map.
+#' These geoms are wrappers around [ggplot2::geom_sf()] and its relatives that
+#' assist with creating map insets.
+#' In many cases all that is needed is to use [coord_sf_inset()] with [configure_inset()]
+#' to configure the location and transformation of the inset, and then replace the
+#' sf-related geoms with their `_inset` counterparts.
+#' Use [geom_inset_frame()] to add a frame around the inset that connects it to the main map.
 #'
 #' Internally this works by creating two layers: one for the base map, and one
 #' for the inset. These can be separately controlled by the `map_base` and
@@ -55,14 +55,14 @@
 #'   geom_sf_inset(aes(fill = AREA)) +
 #'   geom_inset_frame() +
 #'   coord_sf_inset(inset = configure_inset(
-#'     centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = 4326),
+#'     centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = sf::st_crs(nc)),
 #'     scale = 1.5, translation = c(-50, -140), radius = 50, units = "mi"))
 geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                           stat = "sf_inset", position = "identity",
                           ...,
                           inset = NA,
-                          map_base = c("normal", "clip", "none"),
-                          map_inset = c("auto", "normal", "none"),
+                          map_base = "normal",
+                          map_inset = "auto",
                           na.rm = TRUE,
                           show.legend = NA,
                           inherit.aes = TRUE) {
@@ -100,20 +100,18 @@ GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
 
 transform_only_viewport <- function(data, inset) {
   inset <- make_inset_config(inset)
-  radius <- inset_radius(inset)
-  scale = inset_scale(inset)
-  translation = inset_translation(inset)
+  viewport <- inset_viewport(inset)
   result <- with_crs_working(
     inset_crs_working(inset),
     sf::st_sf(data), inset_centre(inset),
     .f = function(data, centre) {
-      geometry <- sf::st_geometry(data)
-      viewport <- circular_viewport(centre, radius)
-      result <- clip_to_viewport(geometry, viewport)
-      geometry <- transform(result[["geometry"]], centre, scale = scale,
-                            translation = translation)
+      result <- clip_to_viewport(data$geometry, viewport)
+      geometry <- transform(result[["geometry"]], centre,
+                            scale = inset_scale(inset),
+                            translation = inset_translation(inset))
       data <- data[result[["retained"]],]
-      sf::st_set_geometry(data, geometry)
+      data$geometry <- geometry
+      data
     })
 
   if (nrow(result) == 0 && nrow(data) != 0) {
@@ -126,16 +124,15 @@ transform_only_viewport <- function(data, inset) {
 
 remove_viewport <- function(data, inset) {
   inset <- make_inset_config(inset)
-  radius <- inset_radius(inset)
+  viewport <- inset_viewport(inset)
   result <- with_crs_working(
     inset_crs_working(inset),
     sf::st_sf(data), inset_centre(inset),
     .f = function(data, centre) {
-      geometry <- sf::st_geometry(data)
-      viewport <- circular_viewport(centre, radius)
-      result <- clip_away_viewport(geometry, viewport)
+      result <- clip_away_viewport(data$geometry, viewport)
       data <- data[result[["retained"]],]
-      sf::st_set_geometry(data, result[["geometry"]])
+      data$geometry <- result[["geometry"]]
+      data
     })
 
   if (nrow(result) == 0 && nrow(data) != 0) {
