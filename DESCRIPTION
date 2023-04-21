@@ -1,7 +1,7 @@
 Package: ggmapinset
 Type: Package
 Title: Add Inset Panels to Maps
-Version: 0.2.4.9000
+Version: 0.2.5
 Authors@R: 
     c(person(given = "Carl",
              family = "Suster",
@@ -29,5 +29,6 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://cidm-ph.github.io/ggmapinset/
+URL: https://github.com/cidm-ph/ggmapinset,
+  https://cidm-ph.github.io/ggmapinset/
 BugReports: https://github.com/cidm-ph/ggmapinset/issues

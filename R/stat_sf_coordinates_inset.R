@@ -34,7 +34,8 @@
 #' ggplot(nc) +
 #'   geom_sf_inset() +
 #'   geom_inset_frame() +
-#'   geom_sf_text(aes(x = after_stat(x_inset), y = after_stat(y_inset), label = NAME), stat = "sf_coordinates_inset") +
+#'   geom_sf_text(aes(x = after_stat(x_inset), y = after_stat(y_inset), label = NAME),
+#'     stat = "sf_coordinates_inset") +
 #'   coord_sf_inset(inset = configure_inset(
 #'     centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = 4326),
 #'     scale = 1.5, translation = c(-50, -140), radius = 50, units = "mi"))

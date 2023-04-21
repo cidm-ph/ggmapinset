@@ -11,6 +11,7 @@ This package helps with making zoomed map insets. See \code{\link[=geom_sf_inset
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://github.com/cidm-ph/ggmapinset}
   \item \url{https://cidm-ph.github.io/ggmapinset/}
   \item Report bugs at \url{https://github.com/cidm-ph/ggmapinset/issues}
 }
