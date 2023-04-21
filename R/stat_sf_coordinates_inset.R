@@ -21,6 +21,11 @@
 #' }
 #'
 #' @param mapping,data,geom,position,na.rm,show.legend,inherit.aes,... See [ggplot2::stat_sf_coordinates()].
+#' @param where Specifies how the text position interacts with the inset.
+#'   `"inset"` means that any points in the inset area are drawn on the inset map,
+#'   `"base"` puts them on the base map. This setting is merely a shorthand for
+#'   setting the position aesthetics to `after_stat(x_inset)` or `after_stat(x)`
+#'   respectively, so will have no effect if these are specified in the mapping.
 #' @inheritParams ggplot2::stat_sf_coordinates
 #' @inheritParams geom_sf_inset
 #'
@@ -40,13 +45,20 @@
 #'     centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = 4326),
 #'     scale = 1.5, translation = c(-50, -140), radius = 50, units = "mi"))
 stat_sf_coordinates_inset <- function(mapping = ggplot2::aes(), data = NULL,
-                                      geom = "sf_inset", position = "identity",
+                                      geom = "point", position = "identity",
                                       ...,
                                       inset = NA,
                                       fun.geometry = NULL,
+                                      where = "inset",
                                       na.rm = TRUE,
                                       show.legend = NA,
                                       inherit.aes = TRUE) {
+  where <- rlang::arg_match0(where, c("inset", "base"))
+  if (where == "inset" && !any(c("x", "y") %in% names(mapping))) {
+    mapping[["x"]] <- quote(after_stat(x_inset))
+    mapping[["y"]] <- quote(after_stat(y_inset))
+  }
+
   ggplot2::layer_sf(
     mapping = mapping,
     data = data,
@@ -98,6 +110,7 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
     data$inside_inset <- NA
     data$inset_scale <- 1
     if (!is.null(inset)) {
+      data$inside_inset <- FALSE
       crs_working2 <- inset_crs_working(inset)
       # cut out and transform the inset viewport from these points
       centre <- sf::st_transform(inset_centre(inset), crs_working2)
@@ -105,18 +118,19 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
       viewport <- circular_viewport(centre, inset_radius(inset))
       geometry <- sf::st_transform(points_sfc, crs_working2)
       result <- clip_to_viewport(geometry, viewport)
-      geometry <- transform(result[["geometry"]], centre,
-                            scale = scale,
-                            translation = inset_translation(inset))
-      geometry <- sf::st_transform(geometry, crs_orig)
+      if (length(result[["retained"]]) > 0) {
+        geometry <- transform(result[["geometry"]], centre,
+                              scale = scale,
+                              translation = inset_translation(inset))
+        geometry <- sf::st_transform(geometry, crs_orig)
 
-      data$inside_inset <- FALSE
-      data$inside_inset[result[["retained"]]] <- TRUE
-      data$inset_scale[data$inside_inset] <- scale
+        data$inside_inset[result[["retained"]]] <- TRUE
+        data$inset_scale[data$inside_inset] <- scale
 
-      coordinates <- sf::st_coordinates(geometry)
-      data$x_inset[data$inside_inset] <- coordinates[, "X"]
-      data$y_inset[data$inside_inset] <- coordinates[, "Y"]
+        coordinates <- sf::st_coordinates(geometry)
+        data$x_inset[data$inside_inset] <- coordinates[, "X"]
+        data$y_inset[data$inside_inset] <- coordinates[, "Y"]
+      }
     }
 
     # we also need to let the extend the coord boundaries and range to include

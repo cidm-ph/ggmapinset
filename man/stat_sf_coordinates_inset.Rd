@@ -9,11 +9,12 @@
 stat_sf_coordinates_inset(
   mapping = ggplot2::aes(),
   data = NULL,
-  geom = "sf_inset",
+  geom = "point",
   position = "identity",
   ...,
   inset = NA,
   fun.geometry = NULL,
+  where = "inset",
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -30,6 +31,12 @@ same length as the input. If \code{NULL}, \code{function(x) sf::st_point_on_surf
 will be used. Note that the function may warn about the incorrectness of
 the result if the data is not projected, but you can ignore this except
 when you really care about the exact locations.}
+
+\item{where}{Specifies how the text position interacts with the inset.
+\code{"inset"} means that any points in the inset area are drawn on the inset map,
+\code{"base"} puts them on the base map. This setting is merely a shorthand for
+setting the position aesthetics to \code{after_stat(x_inset)} or \code{after_stat(x)}
+respectively, so will have no effect if these are specified in the mapping.}
 }
 \value{
 A plot layer

@@ -2,11 +2,6 @@
 #' @rdname geom_sf_inset
 #' @inheritParams ggplot2::geom_text
 #' @inheritParams stat_sf_coordinates_inset
-#' @param where Specifies how the text position interacts with the inset.
-#'   `"inset"` means that any points in the inset area are drawn on the inset map,
-#'   `"base"` puts them on the base map. This setting is merely a shorthand for
-#'   setting the position aesthetics to `after_stat(x_inset)` or `after_stat(x)`
-#'   respectively, so will have no effect if these are specified in the mapping.
 geom_sf_text_inset <- function(mapping = aes(), data = NULL,
                                stat = "sf_coordinates_inset",
                                position = "identity",
@@ -47,11 +42,6 @@ geom_sf_text_inset <- function(mapping = aes(), data = NULL,
 #' @rdname geom_sf_inset
 #' @inheritParams ggplot2::geom_label
 #' @inheritParams stat_sf_coordinates_inset
-#' @param where Specifies how the text position interacts with the inset.
-#'   `"inset"` means that any points in the inset area are drawn on the inset map,
-#'   `"base"` puts them on the base map. This setting is merely a shorthand for
-#'   setting the position aesthetics to `after_stat(x_inset)` or `after_stat(x)`
-#'   respectively, so will have no effect if these are specified in the mapping.
 geom_sf_label_inset <- function(mapping = aes(), data = NULL,
                                 stat = "sf_coordinates_inset",
                                 position = "identity",
