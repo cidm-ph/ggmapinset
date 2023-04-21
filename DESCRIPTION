@@ -1,7 +1,7 @@
 Package: ggmapinset
 Type: Package
 Title: Add Inset Panels to Maps
-Version: 0.2.4
+Version: 0.2.4.9000
 Authors@R: 
     c(person(given = "Carl",
              family = "Suster",

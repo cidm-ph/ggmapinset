@@ -35,6 +35,11 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
     # we also need to let the extend the coord boundaries and range to include
     # the transformed inset
     if (!is.null(inset) && inherits(coord, "CoordSf")) {
+      if (sf::st_crs(inset) != sf::st_crs(data)) {
+        cli::cli_warn(c("Inset coordinate reference system does not match data",
+                         "i" = "The {.field centre} of the inset uses a different CRS to the data; the inset might be drawn incorrectly"))
+      }
+
       bbox <- inset_bbox(inset)
 
       coord$record_bbox(
@@ -47,7 +52,7 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
           x = c(rep(0.5*(bbox[["xmin"]] + bbox[["xmax"]]), 2), bbox[["xmin"]], bbox[["xmax"]]),
           y = c(bbox[["ymin"]], bbox[["ymax"]], rep(0.5*(bbox[["ymin"]] + bbox[["ymax"]]), 2))
         ),
-        coord$get_default_crs(),
+        sf::st_crs(bbox),
         sf::st_crs(data)
       )
 
