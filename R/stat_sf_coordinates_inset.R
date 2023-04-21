@@ -68,29 +68,28 @@ stat_sf_coordinates_inset <- function(mapping = ggplot2::aes(), data = NULL,
 #' @format NULL
 #' @rdname stat_sf_coordinates_inset
 StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::StatSfCoordinates,
-  compute_group = function(data, scales, coord, fun.geometry = NULL, inset = NA) {
+  compute_group = function(data, scales, coord, fun.geometry = NULL, inset = NA, crs_working = NULL) {
     inset <- get_inset_config(inset, coord)
 
-    if (is.null(inset)) {
-      data <- ggplot2::StatSfCoordinates$compute_panel(data, scales, coord, fun.geometry)
-    } else {
-      # with a configured working CRS, we can compute fun.geometry in that CRS
-      crs_orig <- sf::st_crs(data$geometry)
-      crs_working <- inset_crs_working(inset)
-      geom_orig <- data$geometry
-      data$geometry <- sf::st_transform(data$geometry, crs_working)
-      data <- ggplot2::StatSfCoordinates$compute_panel(data, scales, coord, fun.geometry)
-      data$geometry <- geom_orig
-
-      # cast the x and y cols into an sfc of points
-      geom <- sf::st_multipoint(matrix(c(data$x, data$y), ncol = 2))
-      geom <- sf::st_sfc(geom, crs = crs_working)
-      geom <- sf::st_cast(geom, "POINT")
-
-      coordinates <- sf::st_coordinates(sf::st_transform(geom, crs_orig))
-      data$x <- coordinates[, "X"]
-      data$y <- coordinates[, "Y"]
+    if (is.null(crs_working)) {
+      if (!is.null(inset)) crs_working <- inset_crs_working(inset)
+      else crs_working <- sf::NA_crs_
     }
+
+    if (is.null(fun.geometry)) {
+      fun.geometry <- function(x) sf::st_point_on_surface(sf::st_zm(x))
+    }
+
+    crs_orig <- sf::st_crs(data$geometry)
+    points_sfc <- if (is.na(crs_working)) {
+      fun.geometry(data$geometry)
+    } else {
+      with_crs_working(crs_working, data$geometry, .f = fun.geometry)
+    }
+
+    coordinates <- sf::st_coordinates(points_sfc)
+    data$x <- coordinates[, "X"]
+    data$y <- coordinates[, "Y"]
 
     # we can compute where points end up after the inset transformation in case
     # this is relevant for downstream users
@@ -99,11 +98,13 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
     data$inside_inset <- NA
     data$inset_scale <- 1
     if (!is.null(inset)) {
+      crs_working2 <- inset_crs_working(inset)
       # cut out and transform the inset viewport from these points
-      centre <- sf::st_transform(inset_centre(inset), crs_working)
+      centre <- sf::st_transform(inset_centre(inset), crs_working2)
       scale <- inset_scale(inset)
       viewport <- circular_viewport(centre, inset_radius(inset))
-      result <- clip_to_viewport(geom, viewport)
+      geometry <- sf::st_transform(points_sfc, crs_working2)
+      result <- clip_to_viewport(geometry, viewport)
       geometry <- transform(result[["geometry"]], centre,
                             scale = scale,
                             translation = inset_translation(inset))
@@ -120,18 +121,25 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
 
     # we also need to let the extend the coord boundaries and range to include
     # the transformed inset
-    if (!is.null(inset) && inherits(coord, "CoordSf")) {
-      if (sf::st_crs(inset) != sf::st_crs(data)) {
-        cli::cli_warn(c("Inset coordinate reference system does not match data",
-                        "i" = "The {.field centre} of the inset uses a different CRS to the data; the inset might be drawn incorrectly"))
-      }
-
-      bbox <- inset_bbox(inset)
-
+    if (inherits(coord, "CoordSf")) {
+      bbox <- sf::st_bbox(points_sfc)
       coord$record_bbox(
         xmin = bbox[["xmin"]], xmax = bbox[["xmax"]],
         ymin = bbox[["ymin"]], ymax = bbox[["ymax"]]
       )
+
+      if (!is.null(inset)) {
+        # if (sf::st_crs(inset) != sf::st_crs(data)) {
+        #   cli::cli_warn(c("Inset coordinate reference system does not match data",
+        #                   "i" = "The {.field centre} of the inset uses a different CRS to the data; the inset might be drawn incorrectly"))
+        # }
+
+        bbox <- inset_bbox(inset)
+        coord$record_bbox(
+          xmin = bbox[["xmin"]], xmax = bbox[["xmax"]],
+          ymin = bbox[["ymin"]], ymax = bbox[["ymax"]]
+        )
+      }
     }
 
     data
