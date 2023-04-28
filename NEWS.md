@@ -1,3 +1,5 @@
+# ggmapinset (development version)
+
 # ggmapinset 0.3.0
 
 * Replaced the confusing `inset_clip` and `inset_copy` parameters of
