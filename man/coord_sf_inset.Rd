@@ -11,6 +11,9 @@ coord_sf_inset(inset, ...)
 
 \item{...}{Arguments passed to \code{\link[ggplot2:ggsf]{ggplot2::coord_sf()}}}
 }
+\value{
+A ggplot coordinate object to be added to a plot.
+}
 \description{
 This allows a default inset configuration to be provided to avoid having to
 repeat it for each layer. Any layer that is inset-aware can use this as the

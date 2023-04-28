@@ -8,6 +8,7 @@
 #' @param inset Inset configuration; see [configure_inset()].
 #' @param ... Arguments passed to [ggplot2::coord_sf()]
 #'
+#' @returns A ggplot coordinate object to be added to a plot.
 #' @seealso [geom_sf_inset()]
 #' @export
 #'
