@@ -19,7 +19,7 @@ Language: en-GB
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Depends: 
-    R (>= 2.10),
+    R (>= 3.6),
     sf (>= 1.0)
 Imports: 
     cli (>= 3.4.0),
