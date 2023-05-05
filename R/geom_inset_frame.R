@@ -95,21 +95,21 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
       if (!param %in% names(data)) {
         cli::cli_abort("Parameter {.arg {param}} in {.arg source.aes} does not exist in the layer data")
       }
-      data[,param][offsets + 0L] <- params$source.aes[[param]]
+      data[, param][offsets + 0L] <- params$source.aes[[param]]
     }
 
     for (param in names(params$target.aes)) {
       if (!param %in% names(data)) {
         cli::cli_abort("Parameter {.arg {param}} in {.arg target.aes} does not exist in the layer data")
       }
-      data[,param][offsets + 1L] <- params$target.aes[[param]]
+      data[, param][offsets + 1L] <- params$target.aes[[param]]
     }
 
     for (param in names(params$lines.aes)) {
       if (!param %in% names(data)) {
         cli::cli_abort("Parameter {.arg {param}} in {.arg lines.aes} does not exist in the layer data")
       }
-      data[,param][c(offsets + 2L, offsets + 3L)] <- params$lines.aes[[param]]
+      data[, param][c(offsets + 2L, offsets + 3L)] <- params$lines.aes[[param]]
     }
 
     ggplot2::GeomSf$draw_layer(data, params, layout, coord)
@@ -120,7 +120,7 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
 # handled by the ggplot machinery, but it will get replaced by the real frame
 # at layout time. It also needs to have a non-NA CRS but the specific choice isn't
 # important (hopefully).
-dummy_burst_circle <- function () {
+dummy_burst_circle <- function() {
   sf::st_sfc(
     sf::st_polygon(),
     sf::st_polygon(),
@@ -130,7 +130,7 @@ dummy_burst_circle <- function () {
   )
 }
 
-make_burst_circle <- function (inset) {
+make_burst_circle <- function(inset) {
   crs_working <- inset_crs_working(inset)
   crs_orig <- sf::st_crs(inset_centre(inset))
 
@@ -161,7 +161,7 @@ make_burst_circle <- function (inset) {
   c(viewport, result, lines)
 }
 
-get_outer_bitangents <- function (centre1, radius1, centre2, radius2) {
+get_outer_bitangents <- function(centre1, radius1, centre2, radius2) {
   if (radius2 > radius1) {
     tmp1 <- radius2
     tmp2 <- centre2

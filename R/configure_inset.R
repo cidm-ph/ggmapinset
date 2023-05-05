@@ -60,9 +60,9 @@ configure_inset <- function(centre, scale = NULL, translation = NULL,
     if (length(centre) == 0) cli::cli_abort("{.arg centre} has no features")
     if (length(centre) > 1) cli::cli_abort("{.arg centre} has too many features")
     if (!sf::st_is(centre[[1]], "POINT")) cli::cli_abort("{.arg centre} is not a point")
-  } else if (inherits(centre, "sfg") & sf::st_is(centre, "POINT")) {
+  } else if (inherits(centre, "sfg") && sf::st_is(centre, "POINT")) {
     centre <- sf::st_sfc(centre)
-  } else if (is.numeric(centre) & length(centre) == 2) {
+  } else if (is.numeric(centre) && length(centre) == 2) {
     centre <- sf::st_sfc(sf::st_point(centre))
   } else {
     cli::cli_abort(c("{.arg centre} is not in a supported format",
@@ -93,48 +93,48 @@ configure_inset <- function(centre, scale = NULL, translation = NULL,
   ))
 }
 
-is_inset_config <- function (x) {
+is_inset_config <- function(x) {
   inherits(x, "inset_config")
 }
 
-make_inset_config <- function (inset) {
+make_inset_config <- function(inset) {
   UseMethod("make_inset_config")
 }
 
-make_inset_config.NULL <- function (inset) {
+make_inset_config.NULL <- function(inset) {
   NULL
 }
 
-make_inset_config.list <- function (inset) {
+make_inset_config.list <- function(inset) {
   check_inset_config(inset)
   structure(list(inset), class = "inset_config")
 }
 
-make_inset_config.inset_config <- function (inset) {
+make_inset_config.inset_config <- function(inset) {
   inset
 }
 
-inset_crs_working <- function (inset) {
+inset_crs_working <- function(inset) {
   sf::st_crs(inset[[1]]$crs_working)
 }
 
-inset_radius <- function (inset) {
+inset_radius <- function(inset) {
   inset[[1]]$radius
 }
 
-inset_centre <- function (inset) {
+inset_centre <- function(inset) {
   inset[[1]]$centre
 }
 
-inset_scale <- function (inset) {
+inset_scale <- function(inset) {
   inset[[1]]$scale
 }
 
-inset_translation <- function (inset) {
+inset_translation <- function(inset) {
   inset[[1]]$translation
 }
 
-check_inset_config <- function (inset) {
+check_inset_config <- function(inset) {
   if (is.null(inset)) cli::cli_abort("Inset configuration must be provided")
 
   if (!is.null(inset[["radius"]])) {
@@ -152,7 +152,7 @@ check_inset_config <- function (inset) {
   if (is.null(inset[["centre"]])) {
     cli::cli_abort("Inset {.arg centre} must be provided")
   }
-  if (!inherits(inset$centre, "sfc") | is.na(sf::st_crs(inset$centre))) {
+  if (!inherits(inset$centre, "sfc") || is.na(sf::st_crs(inset$centre))) {
     cli::cli_abort("Inset {.arg centre} must be an sfc object with a CRS")
   }
 }

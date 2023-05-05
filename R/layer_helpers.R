@@ -32,9 +32,9 @@
 #'                         map_base = map_base,
 #'                         map_inset = map_inset)
 #' }
-build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
-                                   inherit.aes, params, inset,
-                                   map_base = "normal", map_inset = "auto") {
+build_sf_inset_layers <- function(data, mapping, stat, position, show.legend,
+                                  inherit.aes, params, inset,
+                                  map_base = "normal", map_inset = "auto") {
   has_inset_cfg <- !is.null(inset)
 
   map_base <- rlang::arg_match0(map_base, c("normal", "clip", "none"))
@@ -48,7 +48,7 @@ build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
     cli::cli_abort("{.arg map_base} and {.arg map_inset} can't both be disabled")
   }
 
-  make_layer <- function (inset_mode) {
+  make_layer <- function(inset_mode) {
     ggplot2::layer_sf(
       data = data,
       mapping = mapping,
@@ -94,7 +94,7 @@ build_sf_inset_layers <- function (data, mapping, stat, position, show.legend,
 #'     ggplot2::ggproto_parent(ggplot2::GeomSf, self)$draw_panel(data, panel_params, coord)
 #'   },
 #' )
-get_inset_config <- function (inset, coord) {
+get_inset_config <- function(inset, coord) {
   if (is.null(inset)) {
     NULL
   } else if (is.na(inset)) {

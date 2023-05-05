@@ -66,7 +66,7 @@ geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                           na.rm = TRUE,
                           show.legend = NA,
                           inherit.aes = TRUE) {
-  params = rlang::list2(na.rm = na.rm, ...)
+  params <- rlang::list2(na.rm = na.rm, ...)
 
   build_sf_inset_layers(data = data, mapping = mapping,
                         stat = stat, position = position,
@@ -95,7 +95,8 @@ GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
   # NOTE: this is a workaround for a ggplot2 behaviour/bug
   # https://github.com/tidyverse/ggplot2/issues/1516#issuecomment-1507927792
   draw_group = function(self, data, panel_params, coord,
-                        inset = NULL, inset_mode = "normal", ...) { }
+                        inset = NULL, inset_mode = "normal", ...) {
+  }
 )
 
 transform_only_viewport <- function(data, inset) {
@@ -109,7 +110,7 @@ transform_only_viewport <- function(data, inset) {
       geometry <- transform(result[["geometry"]], centre,
                             scale = inset_scale(inset),
                             translation = inset_translation(inset))
-      data <- data[result[["retained"]],]
+      data <- data[result[["retained"]], ]
       data$geometry <- geometry
       data
     })
@@ -130,7 +131,7 @@ remove_viewport <- function(data, inset) {
     sf::st_sf(data), inset_centre(inset),
     .f = function(data, centre) {
       result <- clip_away_viewport(data$geometry, viewport)
-      data <- data[result[["retained"]],]
+      data <- data[result[["retained"]], ]
       data$geometry <- result[["geometry"]]
       data
     })

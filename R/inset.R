@@ -15,7 +15,7 @@ with_crs_working <- function(crs_working, ..., .f) {
 # working CRS and that x is an sfc, not an sf.
 clip_to_viewport <- function(x, viewport) {
   result <- sf::st_intersection(x, viewport)
-  retained <- attr(result, "idx")[,1]
+  retained <- attr(result, "idx")[, 1]
   list(geometry = result, retained = retained)
 }
 
@@ -23,7 +23,7 @@ clip_to_viewport <- function(x, viewport) {
 # working CRS and that x is an sfc, not an sf.
 clip_away_viewport <- function(x, viewport) {
   result <- sf::st_difference(x, viewport)
-  retained <- attr(result, "idx")[,1]
+  retained <- attr(result, "idx")[, 1]
   list(geometry = result, retained = retained)
 }
 

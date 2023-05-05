@@ -49,8 +49,8 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
 
       bbox_trans <- ggplot2::sf_transform_xy(
         list(
-          x = c(rep(0.5*(bbox[["xmin"]] + bbox[["xmax"]]), 2), bbox[["xmin"]], bbox[["xmax"]]),
-          y = c(bbox[["ymin"]], bbox[["ymax"]], rep(0.5*(bbox[["ymin"]] + bbox[["ymax"]]), 2))
+          x = c(rep(0.5 * (bbox[["xmin"]] + bbox[["xmax"]]), 2), bbox[["xmin"]], bbox[["xmax"]]),
+          y = c(bbox[["ymin"]], bbox[["ymax"]], rep(0.5 * (bbox[["ymin"]] + bbox[["ymax"]]), 2))
         ),
         sf::st_crs(bbox),
         sf::st_crs(data)
@@ -68,9 +68,9 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
 
 # Compute the bounding box of the target part of the inset only
 inset_bbox <- function(inset) {
-  scale = inset_scale(inset)
-  translation = inset_translation(inset)
-  radius = inset_radius(inset)
+  scale <- inset_scale(inset)
+  translation <- inset_translation(inset)
+  radius <- inset_radius(inset)
   result <- with_crs_working(
     inset_crs_working(inset),
     inset_centre(inset),
