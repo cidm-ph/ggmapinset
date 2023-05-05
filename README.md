@@ -9,6 +9,7 @@
 status](https://cidm-ph.r-universe.dev/badges/ggmapinset)](https://cidm-ph.r-universe.dev)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ggmapinset)](https://CRAN.R-project.org/package=ggmapinset)
+[![R-CMD-check](https://github.com/cidm-ph/ggmapinset/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cidm-ph/ggmapinset/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Add zoomed inset panels to your ggplot maps.
