@@ -101,15 +101,18 @@ make_inset_config <- function(inset) {
   UseMethod("make_inset_config")
 }
 
+#' @export
 make_inset_config.NULL <- function(inset) {
   NULL
 }
 
+#' @export
 make_inset_config.list <- function(inset) {
   check_inset_config(inset)
   structure(list(inset), class = "inset_config")
 }
 
+#' @export
 make_inset_config.inset_config <- function(inset) {
   inset
 }
