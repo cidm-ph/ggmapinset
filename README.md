@@ -89,3 +89,8 @@ ggplot(nc) +
 For more information, see the [online
 documentation](https://cidm-ph.github.io/ggmapinset/) and
 `vignette("ggmapinset")`.
+
+## Alternatives
+
+- `ggforce::facet_zoom()`
+- `{ggmagnify}`
