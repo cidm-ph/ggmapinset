@@ -16,7 +16,7 @@ Description: Helper to add insets based on geom_sf() from 'ggplot2'.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-GB
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Roxygen: list(markdown = TRUE)
 Depends: 
     R (>= 3.6),
@@ -32,3 +32,4 @@ VignetteBuilder: knitr
 URL: https://github.com/cidm-ph/ggmapinset,
   https://cidm-ph.github.io/ggmapinset/
 BugReports: https://github.com/cidm-ph/ggmapinset/issues
+LazyData: true
