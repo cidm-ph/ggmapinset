@@ -95,7 +95,7 @@ sites <- tribble(
   "Deniliquin", "inland", "-35 32 0", "144 58 0",
   "Earlwood", "sydney", "-33 55 13", "151 07 37",
   "Forbes", "inland", "-33 23 0", "148 01 0",
-  "Georges River", "sydney", "34 0 36", "151 7 48",
+  "Georges River", "sydney", "-34 0 36", "151 7 48",
   "Gosford", "coastal", "-33 25 37", "151 20 31",
   "Goulburn", "inland", "-34 45 17", "149 37 7",
   "Griffith", "inland", "-34 17 24", "146 2 24",
@@ -149,7 +149,8 @@ coords_to_decimal <- function(coords) {
     str_split_fixed(" ", 3) |>
     as.integer() |>
     matrix(ncol = 3)
-  parts[,1] + parts[,2]/60 + parts[,3]/3600
+  sign_coords <- sign(parts[,1])
+  sign_coords * (abs(parts[,1]) + parts[,2]/60 + parts[,3]/3600)
 }
 
 expand_levels <- function(raw) {
