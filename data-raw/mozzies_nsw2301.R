@@ -48,7 +48,7 @@ raw_counts <- list(
   c("Kiama", ".ll.", ".ll.", ".ll."),
   c("Lake Cathie", "llll", "llll", "mlhm"),
   c("Lismore", "....", "....", "...."),
-  c("Milbank", ".lll", ".lll", ".lll"),
+  c("Millbank", ".lll", ".lll", ".lll"),
   c("Mullumbimby", ".ll.", ".ll.", ".ll."),
   c("Murwillumbah", ".lll", ".lll", ".lll"),
   c("Numbucca", "....", "....", "...."),
@@ -111,7 +111,7 @@ sites <- tribble(
   "Macquarie Marshes", "inland", "-30 55 55", "147 37 44",
   "Mathoura", "inland", "-35 49 0", "144 54 0",
   "Menindee", "inland", "-32 23 33", "142 25 05",
-  "Milbank", "coastal", "-30 45 0", "152 53 0",
+  "Millbank", "coastal", "-30 45 0", "152 53 0",
   "Moama", "inland", "-36 5 0", "144 45 0",
   "Moree", "inland", "-29 27 57", "149 50 02",
   "Mullumbimby", "coastal", "-28 33 0", "153 30 0",
@@ -138,11 +138,7 @@ sites <- tribble(
   "Wyong", "coastal", "-33 16 55", "151 25 5",
   "Yass", "inland", "-34 49 0", "148 54 0",
   "Young", "inland", "-34 18 0", "148 18 0"
-) |>
-  mutate(
-    across(c(lat, long), coords_to_decimal),
-    type = factor(type),
-  )
+)
 
 coords_to_decimal <- function(coords) {
   parts <- coords |>
@@ -172,6 +168,12 @@ counts_dfr <- function(location, cx_annul, ae_vigilax, total) {
     total = expand_levels(total)
   )
 }
+
+sites <- sites |>
+  mutate(
+    across(c(lat, long), coords_to_decimal),
+    type = factor(type),
+  )
 
 mozzies_nsw2301 <- raw_counts |>
   map_dfr(function(x) counts_dfr(x[[1]], x[[2]], x[[3]], x[[4]])) |>
