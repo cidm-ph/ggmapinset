@@ -72,7 +72,8 @@ stat_sf_coordinates_inset <- function(mapping = ggplot2::aes(), data = NULL,
       fun.geometry = fun.geometry,
       na.rm = na.rm,
       ...
-    ))
+    )
+  )
 }
 
 #' @export

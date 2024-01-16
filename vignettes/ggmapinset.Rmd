@@ -187,7 +187,8 @@ ggplot(nc) +
   geom_inset_frame() +
   coord_sf_inset(inset = configure_inset(
     centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]), scale = 1.5,
-    translation = c(-180, -50), radius = 50, units = "mi"))
+    translation = c(-180, -50), radius = 50, units = "mi"
+  ))
 ```
 
 ## Inset frame backgrounds
@@ -205,7 +206,8 @@ ggplot(nc) +
   geom_sf_inset(aes(fill = AREA), map_base = "none") +
   coord_sf_inset(inset = configure_inset(
     centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]), scale = 2,
-    translation = c(100, -120), radius = 50, units = "mi"))
+    translation = c(100, -120), radius = 50, units = "mi"
+  ))
 ```
 
 ## Multiple insets
@@ -219,10 +221,12 @@ having multiple identical copies of the base map.
 ```{r multiple, fig.width=7, fig.height=5}
 inset1 <- configure_inset(
   centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]), scale = 1.5,
-  translation = c(150, -50), radius = 50, units = "mi")
+  translation = c(150, -50), radius = 50, units = "mi"
+)
 inset2 <- configure_inset(
   centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Orange"]), scale = 3,
-  translation = c(30, 120), radius = 30, units = "mi")
+  translation = c(30, 120), radius = 30, units = "mi"
+)
 
 ggplot(nc) +
   # base map

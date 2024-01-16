@@ -107,17 +107,23 @@ transform_only_viewport <- function(data, inset) {
     sf::st_sf(data), inset_centre(inset),
     .f = function(data, centre) {
       result <- clip_to_viewport(data$geometry, viewport)
-      geometry <- transform(result[["geometry"]], centre,
-                            scale = inset_scale(inset),
-                            translation = inset_translation(inset))
+      geometry <- transform(
+        result[["geometry"]],
+        centre,
+        scale = inset_scale(inset),
+        translation = inset_translation(inset)
+      )
       data <- data[result[["retained"]], ]
       data$geometry <- geometry
       data
-    })
+    }
+  )
 
   if (nrow(result) == 0 && nrow(data) != 0) {
-    cli::cli_warn(c("None of the spatial data is inside the inset viewport",
-                     "i" = "Check your inset configuration to ensure the centre, radius, and units are correct"))
+    cli::cli_warn(c(
+      "None of the spatial data is inside the inset viewport",
+      "i" = "Check your inset configuration to ensure the centre, radius, and units are correct"
+    ))
   }
 
   result
@@ -134,11 +140,14 @@ remove_viewport <- function(data, inset) {
       data <- data[result[["retained"]], ]
       data$geometry <- result[["geometry"]]
       data
-    })
+    }
+  )
 
   if (nrow(result) == 0 && nrow(data) != 0) {
-    cli::cli_warn(c("None of the spatial data is outside the inset viewport",
-                     "i" = "Check your inset configuration to ensure the centre, radius, and units are correct"))
+    cli::cli_warn(c(
+      "None of the spatial data is outside the inset viewport",
+      "i" = "Check your inset configuration to ensure the centre, radius, and units are correct"
+    ))
   }
 
   result

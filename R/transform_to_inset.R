@@ -28,9 +28,11 @@ transform_to_inset <- function(x, inset) {
   translation <- inset_translation(inset)
 
   result <- with_crs_working(
-    crs_working, geometry, inset_centre(inset), .f = function(result, centre) {
+    crs_working, geometry, inset_centre(inset),
+    .f = function(result, centre) {
       transform(result, centre, scale = scale, translation = translation)
-    })
+    }
+  )
 
   if (has_s3_method("st_geometry<-", class(x))) {
     sf::st_set_geometry(x, result)

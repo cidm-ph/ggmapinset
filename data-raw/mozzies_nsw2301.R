@@ -117,8 +117,8 @@ sites <- tribble(
   "Mullumbimby", "coastal", "-28 33 0", "153 30 0",
   "Murrumbidgee", "inland", "-34 48 0", "145 53 0",
   "Murwillumbah", "coastal", "-28 19 39", "153 23 45",
-  "Narrabi","inland", "-30 19 0", "149 46 0",
-  "Narrendera","inland", "-34 45 0", "146 33 0",
+  "Narrabi", "inland", "-30 19 0", "149 46 0",
+  "Narrendera", "inland", "-34 45 0", "146 33 0",
   "Newcastle", "coastal", "-32 55 0", "151 45 0",
   "Northern Beaches", "sydney", "-33 45 0", "151 17 0",
   "Numbucca", "coastal", "-30 43 0", "152 55 0",
@@ -127,13 +127,13 @@ sites <- tribble(
   "Port Macquarie", "coastal", "-31 26 0", "152 54 0",
   "Shoalhaven", "coastal", "-34 51 0", "150 44 0",
   "Sydney Olympic Park", "sydney", "-33 50 51", "151 03 54",
-  "Temora","inland", "-34 26 0", "147 32 0",
+  "Temora", "inland", "-34 26 0", "147 32 0",
   "Tweed Heads", "coastal", "-28 11 0", "153 33 0",
   "Wagga Wagga", "inland", "-35 7 8", "147 22 8",
   "Walgett", "inland", "-30 01 0", "148 07 0",
   "Wauchope", "coastal", "-31 27 0", "152 44 0",
   "West Wyalong", "inland", "-33 55 0", "147 13 0",
-  "Wilcannia","inland", "-31 33 25", "143 22 45",
+  "Wilcannia", "inland", "-31 33 25", "143 22 45",
   "Wollongong", "coastal", "-34 25 38", "150 53 38",
   "Wyong", "coastal", "-33 16 55", "151 25 5",
   "Yass", "inland", "-34 49 0", "148 54 0",
@@ -149,8 +149,8 @@ coords_to_decimal <- function(coords) {
     str_split_fixed(" ", 3) |>
     as.integer() |>
     matrix(ncol = 3)
-  sign_coords <- sign(parts[,1])
-  sign_coords * (abs(parts[,1]) + parts[,2]/60 + parts[,3]/3600)
+  sign_coords <- sign(parts[, 1])
+  sign_coords * (abs(parts[, 1]) + parts[, 2] / 60 + parts[, 3] / 3600)
 }
 
 expand_levels <- function(raw) {

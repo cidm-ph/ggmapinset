@@ -19,7 +19,8 @@ stat_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
       inset = inset,
       na.rm = na.rm,
       ...
-    ))
+    )
+  )
 }
 
 #' @export
@@ -77,6 +78,7 @@ inset_bbox <- function(inset) {
     .f = function(centre) {
       viewport <- circular_viewport(centre, radius)
       transform(viewport, centre, scale = scale, translation = translation)
-    })
+    }
+  )
   sf::st_bbox(result)
 }
