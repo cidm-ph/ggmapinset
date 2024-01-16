@@ -26,8 +26,17 @@ Imports:
     ggplot2 (>= 3.4.0),
     rlang (>= 1.0.0)
 Suggests: 
+    dplyr,
+    forcats,
+    ggrepel,
     knitr,
-    rmarkdown
+    nswgeo,
+    purrr,
+    rmarkdown,
+    stringr,
+    tibble,
+    tidyr,
+    units
 VignetteBuilder: knitr
 URL: https://github.com/cidm-ph/ggmapinset,
   https://cidm-ph.github.io/ggmapinset/

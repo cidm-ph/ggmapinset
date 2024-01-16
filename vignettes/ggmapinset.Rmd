@@ -23,6 +23,145 @@ nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
 This article provides some recipes for working with insets.
 
+## Example usage
+This example uses the mosquito surveillance dataset [`mozzies_nsw2301`]. It
+includes points from across New South Wales.
+
+```{r}
+head(mozzies_nsw2301)
+```
+Firstly, we can recreate the basic maps from the report accompanying the dataset.
+Since the dataset has latitude and longitude coordinates, it can easily be
+converted into a spatial data frame with [`sf::st_as_sf()`].
+
+```{r fig.width=9}
+library(dplyr)
+library(sf)
+
+# just take the total count from a single week of the data
+mozzies <- mozzies_nsw2301 |>
+  filter(species == "total", week_ending == as.Date("2023-01-07")) |>
+  st_as_sf(coords = c("long", "lat"), crs = st_crs("WGS84"))
+
+labels <- c("Low (<50)", "Medium (50-100)", "High (101-1,000)",
+            "Very High (1,001-10,000)", "Extreme (>10,000)")
+
+scale1 <-
+  scale_colour_manual(
+    name = NULL,
+    values = c("green", "gold", "darkorange", "red", "black"),
+    labels = labels,
+    na.value = "grey",
+    drop = FALSE
+  )
+scale2 <-
+  scale_size_ordinal(
+    name = NULL,
+    labels = labels,
+    range = c(3, 5),
+    na.value = 2,
+    drop = FALSE
+  )
+
+ggplot(mozzies) +
+  geom_sf(data = nswgeo::nsw, fill = NA) +
+  geom_sf(aes(size = count, colour = count)) +
+  geom_sf_text(aes(label = location), hjust = 0, nudge_x = 0.25, size = 3) +
+  coord_sf(xlim = c(NA, 158)) +
+  scale1 + scale2 +
+  theme_void()
+```
+
+This looks a little congested. We can improve things a bit by using the repulsive
+version of the label geom from `{ggrepel}`:
+
+```{r fig.width=10}
+library(ggrepel)
+
+ggplot(mozzies) +
+  geom_sf(data = nswgeo::nsw, fill = NA) +
+  geom_sf(aes(size = count, colour = count)) +
+  geom_text_repel(
+    aes(label = location, geometry = geometry),
+    hjust = 0,
+    nudge_x = 0.25,
+    size = 3,
+    max.overlaps = 15,
+    point.padding = 0,
+    min.segment.length = 1,
+    stat = "sf_coordinates"
+  ) +
+  coord_sf(xlim = c(NA, 158)) +
+  scale1 + scale2 +
+  theme_void()
+```
+
+The main thing to note above is that `geom_text_repel()` is not hooked into the
+`{ggplot2}`'s geospatial integration, so it needs to be told to use
+`stat_sf_coordinates()` to compute the coordinates, and it needs an explicit
+mapping for the `geometry` aesthetic.
+
+That improved most of the map except for the Sydney region where most of the
+labels are missing since they would overlap. The `max.overlaps` parameter to
+`geom_text_repel()` can help, but doesn't address the overcrowding issue.
+This is where an inset can help.
+
+First we define the inset we want. We can collect up all the points from the
+dataset that were labelled with `type == "sydney"` and use some standard
+geospatial functions to get the diameter and centre of a circle that will cover
+all those points. We then specify that we want this circle to be enlarged by a
+factor of 4, and shifted to south and east:
+
+```{r}
+sydney <- filter(mozzies, type == "sydney")
+sydney_size <- st_distance(sydney, sydney) |> max() |> units::set_units("km")
+sydney_centre <- st_union(sydney) |> st_centroid()
+
+sydney_inset <- configure_inset(
+  centre = sydney_centre,
+  radius = as.numeric(sydney_size),
+  translation = c(400, -200),
+  scale = 4,
+  units = "km"
+)
+```
+
+Finally, we can repeat the previous plot with the `_inset` version of the relevant
+layers. The inset configuration is passed to the coord. The only other change is
+that to make sure the labels for Sydney sites appear in the inset instead of the
+base map, we need to remap the `x` and `y` aesthetics to the versions computed by
+the underlying stat.
+
+```{r fig.width=10}
+ggplot(mozzies) +
+  geom_sf_inset(data = nswgeo::nsw, fill = NA) +
+  geom_sf_inset(aes(size = count, colour = count), map_base = "clip") +
+  geom_text_repel(
+    aes(
+      x = after_stat(x_inset),
+      y = after_stat(y_inset),
+      label = location,
+      geometry = geometry
+    ),
+    hjust = 0,
+    nudge_x = 0.25,
+    size = 3,
+    force_pull = 2,
+    max.overlaps = Inf,
+    point.padding = 0,
+    min.segment.length = 1,
+    stat = "sf_coordinates_inset"
+  ) +
+  geom_inset_frame() +
+  coord_sf_inset(xlim = c(NA, 158), inset = sydney_inset) +
+  scale1 + scale2 +
+  theme_void()
+```
+
+Further tweaks of label placement can be achieved by playing around with the
+parameters of `geom_text_repel()`, or by passing vectors of positions into the
+`nudge_x` and `nudge_y` parameters.
+
 ## Different aesthetics for inset layer
 By default, `geom_sf_inset()` creates two copies of the map layer: one for the
 base map and the other for the inset map. The inset is transformed and clipped,
