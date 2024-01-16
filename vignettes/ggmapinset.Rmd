@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+suppressPackageStartupMessages(library(dplyr))
 ```
 
 ```{r setup}
@@ -24,15 +25,15 @@ nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 This article provides some recipes for working with insets.
 
 ## Example usage
-This example uses the mosquito surveillance dataset [`mozzies_nsw2301`]. It
-includes points from across New South Wales.
+This example uses the mosquito surveillance dataset `ggmapinset::mozzies_nsw2301`.
+It includes points from across New South Wales.
 
 ```{r}
 head(mozzies_nsw2301)
 ```
 Firstly, we can recreate the basic maps from the report accompanying the dataset.
 Since the dataset has latitude and longitude coordinates, it can easily be
-converted into a spatial data frame with [`sf::st_as_sf()`].
+converted into a spatial data frame with `sf::st_as_sf()`.
 
 ```{r fig.width=9}
 library(dplyr)
@@ -72,8 +73,12 @@ ggplot(mozzies) +
   theme_void()
 ```
 
-This looks a little congested. We can improve things a bit by using the repulsive
-version of the label geom from `{ggrepel}`:
+The warning about `sf::st_point_on_surface` can be disregarded. Any errors due
+to the coordinate system are unlikely to make much visual difference to where
+text is placed in this case.
+
+This plot looks a little congested. We can improve things a bit by using the
+repulsive version of the label geom from `{ggrepel}`:
 
 ```{r fig.width=10}
 library(ggrepel)

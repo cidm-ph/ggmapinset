@@ -93,4 +93,4 @@ documentation](https://cidm-ph.github.io/ggmapinset/) and
 ## Alternatives
 
 - `ggforce::facet_zoom()`
-- `{ggmagnify}`
+- `ggmagnify::geom_magnify()`

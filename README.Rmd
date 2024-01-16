@@ -100,4 +100,4 @@ For more information, see the [online documentation](https://cidm-ph.github.io/g
 ## Alternatives
 
 * `ggforce::facet_zoom()`
-* `{ggmagnify}`
+* `ggmagnify::geom_magnify()`
