@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   ggmapinset: ggmapinset.html
-last_built: 2024-01-16T04:32Z
+last_built: 2024-01-16T05:21Z
 urls:
   reference: https://cidm-ph.github.io/ggmapinset/reference
   article: https://cidm-ph.github.io/ggmapinset/articles
