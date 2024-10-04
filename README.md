@@ -92,5 +92,18 @@ documentation](https://cidm-ph.github.io/ggmapinset/) and
 
 ## Alternatives
 
-- `ggforce::facet_zoom()`
-- `ggmagnify::geom_magnify()`
+Other packages implement different approaches:
+
+- [`facet_zoom()`](https://ggforce.data-imaginist.com/reference/facet_zoom.html)
+  from [ggforce](https://cran.r-project.org/package=ggforce)
+- [`geom_magnify()`](https://hughjonesd.github.io/ggmagnify/reference/geom_magnify.html)
+  from [ggmagnify](https://github.com/hughjonesd/ggmagnify/)
+- [`mf_inset_on()`](https://riatelab.github.io/mapsf/reference/mf_inset_on.html)
+  from [mapsf](https://cran.r-project.org/package=mapsf)
+
+There are also several articles describing more manual ways to achieve
+different insets:
+
+- <https://www.datawim.com/post/inset-map-in-r/>
+- <https://dieghernan.github.io/202203_insetmaps/>
+- <https://upgo.lab.mcgill.ca/2019/12/13/making-beautiful-maps/>

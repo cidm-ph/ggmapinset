@@ -9,8 +9,8 @@
   repeating it for every layer.
 * Insets are now based on `stat_sf_inset()` which correctly adjusts the
   coordinate limits and computes some inset-related variables for downstream use.
-* The new `stat_sf_coordinates_inset()`, `stat_sf_text_inset()`, and
-  `stat_sf_label_inset()` labels complete the coverage of sf-related layers.
+* The new `stat_sf_coordinates_inset()`, `geom_sf_text_inset()`, and
+  `geom_sf_label_inset()` labels complete the coverage of sf-related layers.
 * Added `transform_to_inset()` helper for applying the inset transformation to
   arbitrary geometries (for extension developers).
 
