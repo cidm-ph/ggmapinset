@@ -30,13 +30,7 @@ clip_away_viewport <- function(x, viewport) {
 # Return the inset's viewport of the configured shape. It will be in the working
 # CRS of the inset configuration.
 inset_viewport <- function(inset) {
-  centre <- sf::st_transform(inset_centre(inset), inset_crs_working(inset))
-  circular_viewport(centre, inset_radius(inset))
-}
-
-# Returns a circle representing the inset viewport
-circular_viewport <- function(centre, radius) {
-  sf::st_buffer(centre, radius)
+  UseMethod("inset_viewport")
 }
 
 # Applies translation and scale. Assumes that the geometry and centre are in the
@@ -52,4 +46,20 @@ transform <- function(x, centre, scale = NULL, translation = NULL) {
     result <- sf::st_set_crs(result + translation, crs_working)
   }
   result
+}
+
+# Compute the bounding box of the target part of the inset only
+inset_bbox <- function(inset) {
+  scale <- inset_scale(inset)
+  translation <- inset_translation(inset)
+
+  result <- with_crs_working(
+    inset_crs_working(inset),
+    inset_centre(inset),
+    .f = function(centre) {
+      viewport <- inset_viewport(inset)
+      transform(viewport, centre, scale = scale, translation = translation)
+    }
+  )
+  sf::st_bbox(result)
 }

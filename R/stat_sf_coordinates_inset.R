@@ -116,9 +116,8 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
       # cut out and transform the inset viewport from these points
       centre <- sf::st_transform(inset_centre(inset), crs_working2)
       scale <- inset_scale(inset)
-      viewport <- circular_viewport(centre, inset_radius(inset))
       geometry <- sf::st_transform(points_sfc, crs_working2)
-      result <- clip_to_viewport(geometry, viewport)
+      result <- clip_to_viewport(geometry, inset_viewport(inset))
       if (length(result[["retained"]]) > 0) {
         geometry <- transform(result[["geometry"]], centre,
                               scale = scale,

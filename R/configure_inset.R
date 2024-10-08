@@ -6,7 +6,7 @@
 #'
 #' The default \code{crs_working} uses the equidistant cylindrical coordinate
 #' reference system with the latitude of true scale set to match the latitude of
-#' \code{centre}. This ensures that the circle will appear circular in most
+#' \code{centre}. This ensures that circular insets will appear circular in most
 #' cases since the projection is not distorted near the centre. The geometries
 #' are converted to this CRS for the inset transformation and constructing the
 #' inset frame, and are converted back to the CRS of \code{centre} at the end.
@@ -29,11 +29,14 @@
 #'   \code{sfc} object (see [sf::st_sfc()]) including a coordinate reference system.
 #'   An [sf::st_point()] or a vector of longitude and latitude are also accepted.
 #'   If a CRS cannot be determined, \code{crs_working} is assumed.
-#' @param scale Zoom scale: values larger than one will make the circle bigger.
+#' @param scale Zoom scale: values larger than one will make the inset bigger.
 #' @param translation Translation (shift) of the inset relative to the centre.
 #'   This can be an \code{st_point} or simply a vector of length 2 containing
 #'   the x and y offsets respectively. Units are specified by \code{crs_working}.
 #' @param radius Radius of the inset circle in the units of \code{crs_working}.
+#' @param hwidth Half width of the inset in the units of \code{crs_working}.
+#' @param hheight Half height of the inset in the units of \code{crs_working}.
+#'   Defaults to the same value as `hwidth`.
 #' @param units Base length unit (e.g. \code{"km"} or \code{"mi"}). Ignored if
 #'   \code{crs_working} is provided. See Details for supported values.
 #' @param crs_working The coordinate reference system to use internally when
@@ -52,8 +55,16 @@
 #'   translation = c(70, -180),
 #'   radius = 50,
 #'   units = "mi")
-configure_inset <- function(centre, scale = NULL, translation = NULL,
-                            radius = NULL, units = "km", crs_working = NULL) {
+configure_inset <- function(
+    centre,
+    scale = NULL,
+    translation = NULL,
+    radius = NULL,
+    hwidth = NULL,
+    hheight = NULL,
+    units = "km",
+    crs_working = NULL
+) {
   crs_input <- sf::NA_crs_
   if (inherits(centre, "sfc")) {
     crs_input <- sf::st_crs(centre)
@@ -89,6 +100,8 @@ configure_inset <- function(centre, scale = NULL, translation = NULL,
     scale = scale,
     translation = translation,
     radius = radius,
+    hwidth = hwidth,
+    hheight = hheight,
     crs_working = crs_working
   ))
 }
@@ -109,7 +122,7 @@ make_inset_config.NULL <- function(inset) {
 #' @export
 make_inset_config.list <- function(inset) {
   check_inset_config(inset)
-  structure(list(inset), class = "inset_config")
+  structure(list(inset), class = c(paste0("inset_shape_", inset_shape(inset)), "inset_config"))
 }
 
 #' @export
@@ -129,6 +142,16 @@ inset_centre <- function(inset) {
   inset[[1]]$centre
 }
 
+inset_width <- function(inset) {
+  inset[[1]]$hwidth
+}
+
+inset_height <- function(inset) {
+  h <- inset[[1]]$hheight
+  if (!is.null(h)) return(h)
+  inset[[1]]$hwidth
+}
+
 inset_scale <- function(inset) {
   inset[[1]]$scale
 }
@@ -137,15 +160,28 @@ inset_translation <- function(inset) {
   inset[[1]]$translation
 }
 
+inset_shape <- function(inset) {
+  if (!is.null(inset[["radius"]])) return("circle")
+  if (!is.null(inset[["hwidth"]])) return("rectangle")
+  stop("Invalid shape")
+}
+
 check_inset_config <- function(inset) {
   if (is.null(inset)) cli::cli_abort("Inset configuration must be provided")
 
+  if (!is.null(inset[["radius"]]) && !is.null(inset[["hwidth"]])) {
+      cli::cli_abort("Only one of inset {.arg radius} or {.arg hwidth} can be specified")
+  }
   if (!is.null(inset[["radius"]])) {
     if (inset$radius <= 0) {
-      cli::cli_abort("Inset {.arg radius} must be a positive number, not {radius}")
+      cli::cli_abort("Inset {.arg radius} must be a positive number, not {inset$radius}")
+    }
+  } else if (!is.null(inset[["hwidth"]])) {
+    if (inset$hwidth <= 0) {
+      cli::cli_abort("Inset {.arg hwidth} must be a positive number, not {inset$hwidth}")
     }
   } else {
-    cli::cli_abort(c("Unable to determine inset shape", "i" = "Specify inset {.arg radius}"))
+    cli::cli_abort(c("Unable to determine inset shape", "i" = "Specify inset {.arg radius} or {.arg hwidth}"))
   }
 
   if (is.null(inset[["crs_working"]])) {

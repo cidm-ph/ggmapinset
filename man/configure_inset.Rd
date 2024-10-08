@@ -9,6 +9,8 @@ configure_inset(
   scale = NULL,
   translation = NULL,
   radius = NULL,
+  hwidth = NULL,
+  hheight = NULL,
   units = "km",
   crs_working = NULL
 )
@@ -19,13 +21,18 @@ configure_inset(
 An \code{\link[sf:st]{sf::st_point()}} or a vector of longitude and latitude are also accepted.
 If a CRS cannot be determined, \code{crs_working} is assumed.}
 
-\item{scale}{Zoom scale: values larger than one will make the circle bigger.}
+\item{scale}{Zoom scale: values larger than one will make the inset bigger.}
 
 \item{translation}{Translation (shift) of the inset relative to the centre.
 This can be an \code{st_point} or simply a vector of length 2 containing
 the x and y offsets respectively. Units are specified by \code{crs_working}.}
 
 \item{radius}{Radius of the inset circle in the units of \code{crs_working}.}
+
+\item{hwidth}{Half width of the inset in the units of \code{crs_working}.}
+
+\item{hheight}{Half height of the inset in the units of \code{crs_working}.
+Defaults to the same value as \code{hwidth}.}
 
 \item{units}{Base length unit (e.g. \code{"km"} or \code{"mi"}). Ignored if
 \code{crs_working} is provided. See Details for supported values.}
@@ -44,7 +51,7 @@ supported, and only one inset per plot.
 \details{
 The default \code{crs_working} uses the equidistant cylindrical coordinate
 reference system with the latitude of true scale set to match the latitude of
-\code{centre}. This ensures that the circle will appear circular in most
+\code{centre}. This ensures that circular insets will appear circular in most
 cases since the projection is not distorted near the centre. The geometries
 are converted to this CRS for the inset transformation and constructing the
 inset frame, and are converted back to the CRS of \code{centre} at the end.

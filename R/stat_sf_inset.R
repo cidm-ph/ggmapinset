@@ -66,19 +66,3 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
     data
   }
 )
-
-# Compute the bounding box of the target part of the inset only
-inset_bbox <- function(inset) {
-  scale <- inset_scale(inset)
-  translation <- inset_translation(inset)
-  radius <- inset_radius(inset)
-  result <- with_crs_working(
-    inset_crs_working(inset),
-    inset_centre(inset),
-    .f = function(centre) {
-      viewport <- circular_viewport(centre, radius)
-      transform(viewport, centre, scale = scale, translation = translation)
-    }
-  )
-  sf::st_bbox(result)
-}
