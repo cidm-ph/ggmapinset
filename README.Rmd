@@ -92,10 +92,18 @@ ggplot(nc) +
   geom_sf_label_inset(aes(label = NAME), data = ~dplyr::filter(.x, NAME %in% labelled_counties)) +
   # configure the inset in the coordinate system so that all layers can see it
   coord_sf_inset(inset = configure_inset(centre = inset_centre, scale = 2, units = "mi",
-                                         translation = c(70, -180), hwidth = 50))
+                                         translation = c(70, -180), radius = 50))
 ```
 
 For more information, see the [online documentation](https://cidm-ph.github.io/ggmapinset/) and `vignette("ggmapinset")`.
+
+## Limitations
+
+The package implements insets by duplicating and transforming spatial data within a single
+coordinate system. That means that you don't get separate grid lines for the inset panel
+and, more significantly, the inset can be distorted by the projection of the base map if
+you move it too far. This tends not to be a problem in practice if you choose a
+coordinate system that isn't too distorted over the area of the base map.
 
 ## Alternatives
 

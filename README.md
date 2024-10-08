@@ -90,6 +90,16 @@ For more information, see the [online
 documentation](https://cidm-ph.github.io/ggmapinset/) and
 `vignette("ggmapinset")`.
 
+## Limitations
+
+The package implements insets by duplicating and transforming spatial
+data within a single coordinate system. That means that you don’t get
+separate grid lines for the inset panel and, more significantly, the
+inset can be distorted by the projection of the base map if you move it
+too far. This tends not to be a problem in practice if you choose a
+coordinate system that isn’t too distorted over the area of the base
+map.
+
 ## Alternatives
 
 Other packages implement different approaches:
