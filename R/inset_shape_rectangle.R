@@ -26,8 +26,6 @@ make_frame.inset_shape_rectangle <- function(inset) {
   if (is.null(trans)) trans <- c(0, 0)
   scale <- inset_scale(inset)
   if (is.null(scale)) scale <- 1
-  width <- inset_width(inset)
-  height <- inset_width(inset)
 
   viewport <- inset_viewport(inset)
   result <- viewport

@@ -59,14 +59,14 @@
 #'   radius = 50,
 #'   units = "mi")
 configure_inset <- function(
-    centre,
-    scale = NULL,
-    translation = NULL,
-    radius = NULL,
-    hwidth = NULL,
-    hheight = NULL,
-    units = "km",
-    crs_working = NULL
+  centre,
+  scale = NULL,
+  translation = NULL,
+  radius = NULL,
+  hwidth = NULL,
+  hheight = NULL,
+  units = "km",
+  crs_working = NULL
 ) {
   crs_input <- sf::NA_crs_
   if (inherits(centre, "sfc")) {
@@ -173,7 +173,7 @@ check_inset_config <- function(inset) {
   if (is.null(inset)) cli::cli_abort("Inset configuration must be provided")
 
   if (!is.null(inset[["radius"]]) && !is.null(inset[["hwidth"]])) {
-      cli::cli_abort("Only one of inset {.arg radius} or {.arg hwidth} can be specified")
+    cli::cli_abort("Only one of inset {.arg radius} or {.arg hwidth} can be specified")
   }
   if (!is.null(inset[["radius"]])) {
     if (inset$radius <= 0) {
