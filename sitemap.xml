@@ -1,60 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/404.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/articles/ggmapinset.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/build_sf_inset_layers.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/configure_inset.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/coord_sf_inset.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/geom_inset_frame.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/get_inset_config.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/ggmapinset-package.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/mozzies_nsw2301.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/stat_sf_coordinates_inset.html</loc>
-  </url>
-  <url>
-    <loc>https://cidm-ph.github.io/ggmapinset/reference/transform_to_inset.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://cidm-ph.github.io/ggmapinset/404.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/LICENSE-text.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/LICENSE.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/articles/ggmapinset.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/articles/index.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/authors.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/index.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/news/index.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/build_sf_inset_layers.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/configure_inset.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/coord_sf_inset.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/geom_inset_frame.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/get_inset_config.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/ggmapinset-package.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/index.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/mozzies_nsw2301.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/stat_sf_coordinates_inset.html</loc></url>
+<url><loc>https://cidm-ph.github.io/ggmapinset/reference/transform_to_inset.html</loc></url>
 </urlset>
+
