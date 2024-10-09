@@ -1,5 +1,8 @@
 # ggmapinset (development version)
 
+* Added support for rectangular insets (use `hwidth` instead of `radius` in the
+  inset configuration).
+
 # ggmapinset 0.3.0
 
 * Replaced the confusing `inset_clip` and `inset_copy` parameters of

@@ -50,9 +50,7 @@ get_outer_bitangents <- function(centre1, radius1, centre2, radius2) {
   short <- radius1 - radius2
 
   if (hypot < short) {
-    cli::cli_abort(c("Inset overlaps completely with the source part of the base map",
-                     "x" = "There is no way to draw bitangents (the burst lines)",
-                     "i" = "Adjust {.field translation} or {.field centre} to reduce the overlap"))
+    return(sf::st_multilinestring() |> sf::st_sfc(crs = sf::st_crs(centre1)))
   }
   # if (hypot < short) return(sf::st_sfc()) # one circle fully inside the other
   # if (hypot == short)     the lines are degenerate
@@ -72,5 +70,5 @@ get_outer_bitangents <- function(centre1, radius1, centre2, radius2) {
   )
   b2 <- sf::st_cast(sf::st_union(b2), "LINESTRING")
 
-  c(b1, b2)
+  sf::st_combine(c(b1, b2))
 }

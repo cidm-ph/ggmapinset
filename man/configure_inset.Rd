@@ -27,9 +27,11 @@ If a CRS cannot be determined, \code{crs_working} is assumed.}
 This can be an \code{st_point} or simply a vector of length 2 containing
 the x and y offsets respectively. Units are specified by \code{crs_working}.}
 
-\item{radius}{Radius of the inset circle in the units of \code{crs_working}.}
+\item{radius}{Radius of the inset circle in the units of \code{crs_working}.
+Cannot be used with \code{hwidth}.}
 
-\item{hwidth}{Half width of the inset in the units of \code{crs_working}.}
+\item{hwidth}{Half width of the inset in the units of \code{crs_working}.
+Cannot be used with \code{radius}.}
 
 \item{hheight}{Half height of the inset in the units of \code{crs_working}.
 Defaults to the same value as \code{hwidth}.}
@@ -45,8 +47,9 @@ An inset configuration object of class \code{inset_config}.
 }
 \description{
 The configuration returned by this function will normally be passed to the
-coordinate system via \code{\link[=coord_sf_inset]{coord_sf_inset()}}. Currently only circular insets are
-supported, and only one inset per plot.
+coordinate system via \code{\link[=coord_sf_inset]{coord_sf_inset()}}. Insets can either be circular
+(if \code{radius} is specified) or rectangular (if \code{hwidth} and
+optionally \code{hheight} are specified).
 }
 \details{
 The default \code{crs_working} uses the equidistant cylindrical coordinate

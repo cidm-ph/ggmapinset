@@ -81,7 +81,7 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
 
   draw_layer = function(self, data, params, layout, coord) {
     n_panels <- nlevels(as.factor(data$PANEL))
-    offsets <- seq(1L, n_panels * 4L, 4L)
+    offsets <- seq(1L, n_panels * 3L, 3L)
 
     # replace the dummy data with the real configured inset
     inset <- get_inset_config(params$inset, coord)
@@ -109,7 +109,7 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
       if (!param %in% names(data)) {
         cli::cli_abort("Parameter {.arg {param}} in {.arg lines.aes} does not exist in the layer data")
       }
-      data[, param][c(offsets + 2L, offsets + 3L)] <- params$lines.aes[[param]]
+      data[, param][offsets + 2L] <- params$lines.aes[[param]]
     }
 
     ggplot2::GeomSf$draw_layer(data, params, layout, coord)
@@ -124,8 +124,7 @@ dummy_frame <- function() {
   sf::st_sfc(
     sf::st_polygon(),
     sf::st_polygon(),
-    sf::st_linestring(),
-    sf::st_linestring(),
+    sf::st_multilinestring(),
     crs = "+proj=eqc"
   )
 }

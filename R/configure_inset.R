@@ -1,8 +1,9 @@
 #' Configure transformations underpinning a map inset
 #'
 #' The configuration returned by this function will normally be passed to the
-#' coordinate system via [coord_sf_inset()]. Currently only circular insets are
-#' supported, and only one inset per plot.
+#' coordinate system via [coord_sf_inset()]. Insets can either be circular
+#' (if \code{radius} is specified) or rectangular (if \code{hwidth} and
+#' optionally \code{hheight} are specified).
 #'
 #' The default \code{crs_working} uses the equidistant cylindrical coordinate
 #' reference system with the latitude of true scale set to match the latitude of
@@ -34,7 +35,9 @@
 #'   This can be an \code{st_point} or simply a vector of length 2 containing
 #'   the x and y offsets respectively. Units are specified by \code{crs_working}.
 #' @param radius Radius of the inset circle in the units of \code{crs_working}.
+#'   Cannot be used with \code{hwidth}.
 #' @param hwidth Half width of the inset in the units of \code{crs_working}.
+#'   Cannot be used with \code{radius}.
 #' @param hheight Half height of the inset in the units of \code{crs_working}.
 #'   Defaults to the same value as `hwidth`.
 #' @param units Base length unit (e.g. \code{"km"} or \code{"mi"}). Ignored if
@@ -122,7 +125,7 @@ make_inset_config.NULL <- function(inset) {
 #' @export
 make_inset_config.list <- function(inset) {
   check_inset_config(inset)
-  structure(list(inset), class = c(paste0("inset_shape_", inset_shape(inset)), "inset_config"))
+  structure(list(inset), class = c(paste0("inset_shape_", guess_inset_shape(inset)), "inset_config"))
 }
 
 #' @export
@@ -160,7 +163,7 @@ inset_translation <- function(inset) {
   inset[[1]]$translation
 }
 
-inset_shape <- function(inset) {
+guess_inset_shape <- function(inset) {
   if (!is.null(inset[["radius"]])) return("circle")
   if (!is.null(inset[["hwidth"]])) return("rectangle")
   stop("Invalid shape")
