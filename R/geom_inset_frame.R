@@ -108,8 +108,8 @@ get_sf_aes_default <- function(aes_name) {
   line_def <- ggplot2::GeomLine$default_aes[[aes_name]]
   polygon_def <- ggplot2::GeomPolygon$default_aes[[aes_name]]
   if (aes_name == "fill") polygon_def <- NA_character_
-  else if (aes_name == "colour") polygon_def <- "grey40"
-  else if (aes_name == "linewidth") polygon_def <- 0.2
+  else if (aes_name == "colour") return(rep("grey40", 3))
+  else if (aes_name == "linewidth") return(rep(0.2, 3))
 
   values <- c(polygon_def, polygon_def, line_def)
   if (aes_name == "alpha") values <- as.numeric(values)
@@ -127,6 +127,7 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
     list(
       fill = NA_character_,
       colour = "grey40",
+      linewidth = 0.2,
       alpha = NA_real_
     )
   ),
