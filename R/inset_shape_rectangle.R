@@ -54,14 +54,11 @@ get_burst_lines <- function(r1, r2) {
     sf::st_linestring(matrix(c(y1[[x[[1]]]], y2[[x[[2]]]]), ncol = 2))
   }) |> sf::st_sfc(crs = sf::st_crs(r1))
 
-  # exclude rays intersecting the source rectangle
+  # exclude rays intersecting the source or target rectangles
   rays <- rays[sf::st_relate(rays, r1, pattern = "FF1F00***", sparse = FALSE)]
+  rays <- rays[sf::st_relate(rays, r2, pattern = "FF1F00***", sparse = FALSE)]
 
   if (length(rays) == 0) return(sf::st_sfc(sf::st_multilinestring(), crs = sf::st_crs(r1)))
-
-  # as long as it leaves us with something, also exclude any intersecting the target rectangle
-  rays2 <- rays[sf::st_relate(rays, r2, pattern = "FF1F00***", sparse = FALSE)]
-  if (length(rays2) > 0) rays <- rays2
 
   # keep only the shortest ray from each corner
   rays <- rays[order(sf::st_length(rays))]
