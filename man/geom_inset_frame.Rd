@@ -33,7 +33,19 @@ named by the aesthetics, and the values should be scalars of length one.}
 A ggplot layer holding the inset frame.
 }
 \description{
-Add a frame and burst lines for an inset
+The frame is computed from the inset configuration, so any \code{data} passed
+to this layer is ignored. The frame is an sf object consisting of three features:
+the source area, the target area (a scaled and translated version of the source
+area), and the connecting/burst lines.
+}
+\details{
+Burst lines for circular insets are bitangenets (tangent to both the source and
+target circles) or absent if the circles are nested.
+Burst lines for rectangular insets are the shortest line from each corner of the
+source rectangle to any corner of the target rectangle, after excluding any such
+lines that intersect either rectangle or each other.
+When the burst lines are absent due to geometrical constraints, there will still
+be a corresponding (empty) feature in the frame layer's data.
 }
 \section{Limitation}{
 
@@ -54,4 +66,30 @@ ggplot(nc) +
   coord_sf_inset(inset = configure_inset(
     centre = sf::st_sfc(sf::st_point(c(-82, 35)), crs = 4326),
     scale = 2, translation = c(0, -300), radius = 50, units = "mi"))
+
+make_demo <- function(...) {
+  centroid <-
+    sf::st_centroid(nc$geometry[[21]]) |>
+    sf::st_sfc(crs = sf::st_crs(nc))
+
+  ggplot(nc) +
+    geom_sf(fill = "grey95", colour = "grey85") +
+    # For a filled frame, we want to interleave it between the base layer
+    # (above this line) and the target layer (below the following line).
+    geom_inset_frame(target.aes = list(fill = "white")) +
+    geom_sf_inset(map_base = "none") +
+    coord_sf_inset(inset = configure_inset(centre = centroid, ...)) +
+    theme_void()
+}
+
+# the lines connecting the frames vary depending on relative size and position:
+make_demo(scale = 3, radius = 50, translation = c(-200, -200))
+make_demo(scale = 3, radius = 50, translation = c(-100, -100))
+make_demo(scale = 3, radius = 50, translation = c(0, 0))
+make_demo(scale = 0.5, radius = 50, translation = c(0, 0))
+make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(-300, 0))
+make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(-250, -200))
+make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(-150, -100))
+make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(0, 0))
+make_demo(scale = 0.5, hwidth = 50, hheight = 40, translation = c(0, 0))
 }
