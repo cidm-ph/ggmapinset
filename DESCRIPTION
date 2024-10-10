@@ -24,7 +24,8 @@ Depends:
 Imports: 
     cli (>= 3.4.0),
     ggplot2 (>= 3.4.0),
-    rlang (>= 1.0.0)
+    rlang (>= 1.0.0),
+    vctrs (>= 0.6.5)
 Suggests: 
     dplyr,
     forcats,

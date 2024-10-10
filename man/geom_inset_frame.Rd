@@ -62,10 +62,14 @@ nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
 ggplot(nc) +
   geom_sf_inset() +
-  geom_inset_frame() +
+  geom_inset_frame(
+    source.aes = list(fill = "red", alpha = 0.2, linewidth = 0),
+    target.aes = list(colour = "blue"),
+    lines.aes = list(linetype = 2, linewidth = 2)
+  ) +
   coord_sf_inset(inset = configure_inset(
     centre = sf::st_sfc(sf::st_point(c(-82, 35)), crs = 4326),
-    scale = 2, translation = c(0, -300), radius = 50, units = "mi"))
+    scale = 4, translation = c(0, -260), radius = 50, units = "mi"))
 
 make_demo <- function(...) {
   centroid <-

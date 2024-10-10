@@ -36,10 +36,14 @@
 #'
 #' ggplot(nc) +
 #'   geom_sf_inset() +
-#'   geom_inset_frame() +
+#'   geom_inset_frame(
+#'     source.aes = list(fill = "red", alpha = 0.2, linewidth = 0),
+#'     target.aes = list(colour = "blue"),
+#'     lines.aes = list(linetype = 2, linewidth = 2)
+#'   ) +
 #'   coord_sf_inset(inset = configure_inset(
 #'     centre = sf::st_sfc(sf::st_point(c(-82, 35)), crs = 4326),
-#'     scale = 2, translation = c(0, -300), radius = 50, units = "mi"))
+#'     scale = 4, translation = c(0, -260), radius = 50, units = "mi"))
 #'
 #' make_demo <- function(...) {
 #'   centroid <-
@@ -100,14 +104,31 @@ geom_inset_frame <- function(mapping = ggplot2::aes(),
 
 frame_params <- c("source.aes", "target.aes", "lines.aes")
 
+get_sf_aes_default <- function(aes_name) {
+  line_def <- ggplot2::GeomLine$default_aes[[aes_name]]
+  polygon_def <- ggplot2::GeomPolygon$default_aes[[aes_name]]
+  if (aes_name == "fill") polygon_def <- NA_character_
+  else if (aes_name == "colour") polygon_def <- "grey40"
+  else if (aes_name == "linewidth") polygon_def <- 0.2
+
+  values <- c(polygon_def, polygon_def, line_def)
+  if (aes_name == "alpha") values <- as.numeric(values)
+
+  values
+}
+
+
+#' @importFrom vctrs vec_slice
 GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
   extra_params = c(ggplot2::GeomSf$extra_params, frame_params, "inset"),
 
-  default_aes = ggplot2::aes(
-    linewidth = 0.4,
-    stroke = 0.4,
-    colour = "gray40",
-    fill = NA,
+  default_aes = modifyList(
+    ggplot2::GeomSf$default_aes,
+    list(
+      fill = NA_character_,
+      colour = "grey40",
+      alpha = NA_real_
+    )
   ),
 
   setup_data = function(data, params) {
@@ -130,25 +151,24 @@ GeomSfInsetFrame <- ggplot2::ggproto("GeomSfInsetFrame", ggplot2::GeomSf,
     frame <- make_frame(inset)
     data$geometry <- rep(frame, n_panels)
 
+    extra_cols <- setdiff(
+      c(names(params$source.aes), names(params$target.aes), names(params$lines.aes)),
+      names(data)
+    )
+    for (param in extra_cols) {
+      data[, param] <- rep(get_sf_aes_default(param), n_panels)
+    }
+
     for (param in names(params$source.aes)) {
-      if (!param %in% names(data)) {
-        cli::cli_abort("Parameter {.arg {param}} in {.arg source.aes} does not exist in the layer data")
-      }
-      data[, param][offsets + 0L] <- params$source.aes[[param]]
+      vctrs::vec_slice(data[, param], offsets + 0L) <- params$source.aes[[param]]
     }
 
     for (param in names(params$target.aes)) {
-      if (!param %in% names(data)) {
-        cli::cli_abort("Parameter {.arg {param}} in {.arg target.aes} does not exist in the layer data")
-      }
-      data[, param][offsets + 1L] <- params$target.aes[[param]]
+      vctrs::vec_slice(data[, param], offsets + 1L) <- params$target.aes[[param]]
     }
 
     for (param in names(params$lines.aes)) {
-      if (!param %in% names(data)) {
-        cli::cli_abort("Parameter {.arg {param}} in {.arg lines.aes} does not exist in the layer data")
-      }
-      data[, param][offsets + 2L] <- params$lines.aes[[param]]
+      vctrs::vec_slice(data[, param], offsets + 2L) <- params$lines.aes[[param]]
     }
 
     ggplot2::GeomSf$draw_layer(data, params, layout, coord)
