@@ -187,9 +187,12 @@ ggplot(nc) +
   geom_sf(fill = "white") +
   geom_sf_inset(aes(fill = AREA), map_base = "none") +
   geom_inset_frame() +
-  coord_sf_inset(inset = configure_inset(
-    centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]), scale = 1.5,
-    translation = c(-180, -50), radius = 50, units = "mi"
+  coord_sf_inset(configure_inset(
+    shape_circle(
+      centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]),
+      radius = 50
+    ),
+    scale = 1.5, translation = c(-180, -50),  units = "mi"
   ))
 ```
 
@@ -206,9 +209,12 @@ ggplot(nc) +
   geom_sf(aes(fill = AREA)) +
   geom_inset_frame(target.aes = list(fill = "white")) +
   geom_sf_inset(aes(fill = AREA), map_base = "none") +
-  coord_sf_inset(inset = configure_inset(
-    centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]), scale = 2,
-    translation = c(100, -120), radius = 50, units = "mi"
+  coord_sf_inset(configure_inset(
+    shape_circle(
+      centre = st_centroid(st_geometry(nc)[nc$NAME == "Yancey"]),
+      radius = 50
+    ),
+    scale = 2, translation = c(100, -120), units = "mi"
   ))
 ```
 
@@ -226,18 +232,14 @@ inset1 <- configure_inset(
     centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]),
     hwidth = 50
   ),
-  scale = 1.5,
-  translation = c(150, -50),
-  units = "mi"
+  scale = 1.5, translation = c(150, -50), units = "mi"
 )
 inset2 <- configure_inset(
   shape_circle(
     centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Orange"]),
     radius = 30
   ),
-  scale = 3,
-  translation = c(30, 120),
-  units = "mi"
+  scale = 3, translation = c(30, 120), units = "mi"
 )
 
 ggplot(nc) +

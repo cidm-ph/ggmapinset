@@ -1,19 +1,20 @@
 #' @export
-#' @rdname geom_sf_inset
+#' @rdname stat_sf_coordinates_inset
+#' @param stat,parse,check_overlap See [ggplot2::geom_sf_text()].
 #' @inheritParams ggplot2::geom_text
-#' @inheritParams stat_sf_coordinates_inset
-geom_sf_text_inset <- function(mapping = aes(), data = NULL,
-                               stat = "sf_coordinates_inset",
-                               position = "identity",
-                               ...,
-                               where = "inset",
-                               parse = FALSE,
-                               check_overlap = FALSE,
-                               na.rm = FALSE,
-                               show.legend = NA,
-                               inherit.aes = TRUE,
-                               fun.geometry = NULL) {
-
+geom_sf_text_inset <- function(
+  mapping = aes(), data = NULL,
+  stat = "sf_coordinates_inset",
+  position = "identity",
+  ...,
+  where = "inset",
+  parse = FALSE,
+  check_overlap = FALSE,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  fun.geometry = NULL
+) {
   where <- rlang::arg_match0(where, c("inset", "base"))
   if (where == "inset" && !any(c("x", "y") %in% names(mapping))) {
     mapping[["x"]] <- quote(after_stat(x_inset))
@@ -39,20 +40,21 @@ geom_sf_text_inset <- function(mapping = aes(), data = NULL,
 }
 
 #' @export
-#' @rdname geom_sf_inset
+#' @rdname stat_sf_coordinates_inset
+#' @param stat,parse,check_overlap See [ggplot2::geom_sf_text()].
 #' @inheritParams ggplot2::geom_label
-#' @inheritParams stat_sf_coordinates_inset
-geom_sf_label_inset <- function(mapping = aes(), data = NULL,
-                                stat = "sf_coordinates_inset",
-                                position = "identity",
-                                ...,
-                                where = "inset",
-                                parse = FALSE,
-                                na.rm = FALSE,
-                                show.legend = NA,
-                                inherit.aes = TRUE,
-                                fun.geometry = NULL) {
-
+geom_sf_label_inset <- function(
+  mapping = aes(), data = NULL,
+  stat = "sf_coordinates_inset",
+  position = "identity",
+  ...,
+  where = "inset",
+  parse = FALSE,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  fun.geometry = NULL
+) {
   where <- rlang::arg_match0(where, c("inset", "base"))
   if (where == "inset" && !any(c("x", "y") %in% names(mapping))) {
     mapping[["x"]] <- quote(after_stat(x_inset))

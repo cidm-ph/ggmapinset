@@ -54,29 +54,33 @@
 #' ggplot(nc) +
 #'   geom_sf_inset(aes(fill = AREA)) +
 #'   geom_inset_frame() +
-#'   coord_sf_inset(inset = configure_inset(
+#'   coord_sf_inset(configure_inset(
 #'     shape_circle(
 #'       centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = sf::st_crs(nc)),
 #'       radius = 50
 #'     ),
 #'     scale = 1.5, translation = c(-50, -140), units = "mi"
 #'   ))
-geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
-                          stat = "sf_inset", position = "identity",
-                          ...,
-                          inset = NA,
-                          map_base = "normal",
-                          map_inset = "auto",
-                          na.rm = TRUE,
-                          show.legend = NA,
-                          inherit.aes = TRUE) {
+geom_sf_inset <- function(
+  mapping = ggplot2::aes(), data = NULL,
+  stat = "sf_inset", position = "identity",
+  ...,
+  inset = NA,
+  map_base = "normal",
+  map_inset = "auto",
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   params <- rlang::list2(na.rm = na.rm, ...)
 
-  build_sf_inset_layers(data = data, mapping = mapping,
-                        stat = stat, position = position,
-                        show.legend = show.legend, inherit.aes = inherit.aes,
-                        params = params, inset = inset,
-                        map_base = map_base, map_inset = map_inset)
+  build_sf_inset_layers(
+    data = data, mapping = mapping,
+    stat = stat, position = position,
+    show.legend = show.legend, inherit.aes = inherit.aes,
+    params = params, inset = inset,
+    map_base = map_base, map_inset = map_inset
+  )
 }
 
 #' @export
@@ -84,8 +88,9 @@ geom_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
 #' @format NULL
 #' @rdname geom_sf_inset
 GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
-  draw_panel = function(self, data, panel_params, coord,
-                        inset = NA, inset_mode = "normal", ...) {
+  draw_panel = function(
+    self, data, panel_params, coord, inset = NA, inset_mode = "normal", ...
+  ) {
     inset <- get_inset_config(inset, coord)
     if (!is.null(inset) && inset_mode != "none") {
       data <- switch(inset_mode,
@@ -98,9 +103,9 @@ GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
 
   # NOTE: this is a workaround for a ggplot2 behaviour/bug
   # https://github.com/tidyverse/ggplot2/issues/1516#issuecomment-1507927792
-  draw_group = function(self, data, panel_params, coord,
-                        inset = NULL, inset_mode = "normal", ...) {
-  }
+  draw_group = function(
+    self, data, panel_params, coord, inset = NULL, inset_mode = "normal", ...
+  ) { }
 )
 
 transform_only_viewport <- function(data, inset) {

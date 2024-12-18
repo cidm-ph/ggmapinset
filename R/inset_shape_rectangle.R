@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @examples
+#' library(ggplot2)
 #' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 #' make_demo <- function(...) {
 #'   ggplot(nc) +
@@ -32,7 +33,7 @@
 #' make_demo(rectangle, scale = 3, translation = c(-250, -200))
 #' make_demo(rectangle, scale = 3, translation = c(-150, -100))
 #' make_demo(rectangle, scale = 3, translation = c(0, 0))
-#' make_demo(rectangle, scale = 1.5, translation = c(0, 0))
+#' make_demo(rectangle, scale = 0.5, translation = c(0, 0))
 shape_rectangle <- function(centre, hwidth, hheight = NULL) {
   centre <- coerce_centre(centre)
   if (hwidth <= 0) {

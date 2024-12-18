@@ -3,7 +3,8 @@
 #' Reduce spatial data to coordinates in the same way as [`stat_sf_coordinates()`][ggplot2::stat_sf_coordinates].
 #' The result can then be used by [`geom_sf()`][ggplot2::geom_sf] or
 #' [`geom_sf_inset()`][ggmapinset::geom_sf_inset] or any geom that needs `x` and
-#' `y` aesthetics.
+#' `y` aesthetics. As this is particularly useful for text, wrappers are
+#' provided for [`geom_text()`][ggplot2::geom_text] and [`geom_label()`][ggplot2::geom_label].
 #'
 #' @section Required aesthetics:
 #' \describe{
@@ -20,13 +21,12 @@
 #'   \item{inset_scale}{1 for points outside the inset, otherwise the configured inset scale parameter}
 #' }
 #'
-#' @param mapping,data,geom,position,na.rm,show.legend,inherit.aes,... See [ggplot2::stat_sf_coordinates()].
+#' @param mapping,data,geom,position,na.rm,show.legend,inherit.aes,fun.geometry,... See [ggplot2::stat_sf_coordinates()].
 #' @param where Specifies how the text position interacts with the inset.
 #'   `"inset"` means that any points in the inset area are drawn on the inset map,
 #'   `"base"` puts them on the base map. This setting is merely a shorthand for
 #'   setting the position aesthetics to `after_stat(x_inset)` or `after_stat(x)`
 #'   respectively, so will have no effect if these are specified in the mapping.
-#' @inheritParams ggplot2::stat_sf_coordinates
 #' @inheritParams geom_sf_inset
 #'
 #' @export
@@ -39,20 +39,27 @@
 #' ggplot(nc) +
 #'   geom_sf_inset() +
 #'   geom_inset_frame() +
-#'   geom_sf_text(aes(x = after_stat(x_inset), y = after_stat(y_inset), label = NAME),
+#'   geom_sf_text(
+#'     aes(x = after_stat(x_inset), y = after_stat(y_inset), label = NAME),
 #'     stat = "sf_coordinates_inset") +
-#'   coord_sf_inset(inset = configure_inset(
-#'     centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = 4326),
-#'     scale = 1.5, translation = c(-50, -140), radius = 50, units = "mi"))
-stat_sf_coordinates_inset <- function(mapping = ggplot2::aes(), data = NULL,
-                                      geom = "point", position = "identity",
-                                      ...,
-                                      inset = NA,
-                                      fun.geometry = NULL,
-                                      where = "inset",
-                                      na.rm = TRUE,
-                                      show.legend = NA,
-                                      inherit.aes = TRUE) {
+#'   coord_sf_inset(configure_inset(
+#'     shape_circle(
+#'       centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = 4326),
+#'       radius = 50
+#'     ),
+#'     scale = 1.5, translation = c(-50, -140), units = "mi"
+#'   ))
+stat_sf_coordinates_inset <- function(
+  mapping = ggplot2::aes(), data = NULL,
+  geom = "point", position = "identity",
+  ...,
+  inset = NA,
+  fun.geometry = NULL,
+  where = "inset",
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   where <- rlang::arg_match0(where, c("inset", "base"))
   if (where == "inset" && !any(c("x", "y") %in% names(mapping))) {
     mapping[["x"]] <- quote(after_stat(x_inset))
