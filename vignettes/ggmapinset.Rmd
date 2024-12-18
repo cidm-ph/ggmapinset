@@ -47,22 +47,20 @@ mozzies <- mozzies_nsw2301 |>
 labels <- c("Low (<50)", "Medium (50-100)", "High (101-1,000)",
             "Very High (1,001-10,000)", "Extreme (>10,000)")
 
-scale1 <-
-  scale_colour_manual(
-    name = NULL,
-    values = c("green", "gold", "darkorange", "red", "black"),
-    labels = labels,
-    na.value = "grey",
-    drop = FALSE
-  )
-scale2 <-
-  scale_size_ordinal(
-    name = NULL,
-    labels = labels,
-    range = c(3, 5),
-    na.value = 2,
-    drop = FALSE
-  )
+scale1 <- scale_colour_manual(
+  name = NULL,
+  values = c("green", "gold", "darkorange", "red", "black"),
+  labels = labels,
+  na.value = "grey",
+  drop = FALSE
+)
+scale2 <- scale_size_ordinal(
+  name = NULL,
+  labels = labels,
+  range = c(3, 5),
+  na.value = 2,
+  drop = FALSE
+)
 
 ggplot(mozzies) +
   geom_sf(data = nswgeo::nsw, fill = NA) +
@@ -123,10 +121,7 @@ sydney_size <- st_distance(sydney, sydney) |> max() |> as.numeric() / 1000
 sydney_centre <- st_union(sydney) |> st_centroid()
 
 sydney_inset <- configure_inset(
-  shape_circle(
-    centre = sydney_centre,
-    radius = sydney_size
-  ),
+  shape_circle(centre = sydney_centre, radius = sydney_size),
   translation = c(400, -200),
   scale = 4,
   units = "km"

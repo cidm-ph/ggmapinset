@@ -46,10 +46,7 @@
 #'
 #' # circular inset with a 2x enlargement
 #' cfg <- configure_inset(
-#'   shape_circle(
-#'     centre = st_sfc(st_point(c(-82, 35)), crs = 4326),
-#'     radius = 50
-#'   ),
+#'   shape_circle(centre = c(-82, 35), radius = 50),
 #'   scale = 2,
 #'   translation = c(70, -180),
 #'   units = "mi"

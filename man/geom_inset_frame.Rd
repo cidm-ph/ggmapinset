@@ -68,10 +68,7 @@ ggplot(nc) +
     lines.aes = list(linetype = 2, linewidth = 2)
   ) +
   coord_sf_inset(inset = configure_inset(
-    shape_circle(
-      centre = sf::st_sfc(sf::st_point(c(-82, 35)), crs = 4326),
-      radius = 50
-    ),
+    shape_circle(centre = c(-82, 35), radius = 50),
     scale = 5, translation = c(0, -260), units = "mi"
   ))
 }
