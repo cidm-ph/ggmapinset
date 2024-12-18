@@ -1,7 +1,56 @@
+#' Circular insets
+#'
+#' @param centre Coordinates of the inset centre. Ideally this should be an
+#'   \code{sfc} object (see [sf::st_sfc()]) including a coordinate reference system.
+#'   An [sf::st_point()] or a vector of longitude and latitude are also accepted.
+#'   If a CRS cannot be determined, WGS 84 is assumed.
+#' @param radius Radius of the inset circle in the units of the inset's `crs_working`.
+#' @family shapes
+#' @seealso [configure_inset()]
+#' @export
+#'
+#' @examples
+#' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+#' make_demo <- function(...) {
+#'   ggplot(nc) +
+#'     geom_sf(fill = "grey95", colour = "grey85") +
+#'     # For a filled frame, we want to interleave it between the base layer
+#'     # (above this line) and the target layer (below the following line).
+#'     geom_inset_frame(target.aes = list(fill = "white")) +
+#'     geom_sf_inset(map_base = "none") +
+#'     coord_sf_inset(inset = configure_inset(...)) +
+#'     theme_void()
+#' }
+#' centroid <-
+#'   sf::st_centroid(nc$geometry[[21]]) |>
+#'   sf::st_sfc(crs = sf::st_crs(nc))
+#' circle <- shape_circle(centroid, radius = 50)
+#'
+#' make_demo(circle, scale = 3, translation = c(-200, -200))
+#' make_demo(circle, scale = 3, translation = c(-100, -100))
+#' make_demo(circle, scale = 3, translation = c(0, 0))
+#' make_demo(circle, scale = 0.5, translation = c(0, 0))
+shape_circle <- function(centre, radius) {
+  centre <- coerce_centre(centre)
+  if (radius <= 0) {
+    cli::cli_abort("Circle {.arg radius} must be a positive number, not {radius}")
+  }
+
+  structure(
+    list(centre = centre, radius = radius),
+    class = c("shape_circle", "ggmapinset_shape")
+  )
+}
+
+#' @export
+central_point.shape_circle <- function(shape) {
+  shape$centre
+}
+
 #' @export
 inset_viewport.inset_shape_circle <- function(inset) {
   centre <- sf::st_transform(inset_centre(inset), inset_crs_working(inset))
-  sf::st_buffer(centre, inset_radius(inset))
+  sf::st_buffer(centre, inset_shape(inset)$radius)
 }
 
 #' @export
@@ -14,7 +63,7 @@ make_frame.inset_shape_circle <- function(inset) {
   if (is.null(trans)) trans <- c(0, 0)
   scale <- inset_scale(inset)
   if (is.null(scale)) scale <- 1
-  radius <- inset_radius(inset)
+  radius <- inset_shape(inset)$radius
 
   viewport <- inset_viewport(inset)
   result <- viewport

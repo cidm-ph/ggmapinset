@@ -42,34 +42,12 @@
 #'     lines.aes = list(linetype = 2, linewidth = 2)
 #'   ) +
 #'   coord_sf_inset(inset = configure_inset(
-#'     centre = sf::st_sfc(sf::st_point(c(-82, 35)), crs = 4326),
-#'     scale = 4, translation = c(0, -260), radius = 50, units = "mi"))
-#'
-#' make_demo <- function(...) {
-#'   centroid <-
-#'     sf::st_centroid(nc$geometry[[21]]) |>
-#'     sf::st_sfc(crs = sf::st_crs(nc))
-#'
-#'   ggplot(nc) +
-#'     geom_sf(fill = "grey95", colour = "grey85") +
-#'     # For a filled frame, we want to interleave it between the base layer
-#'     # (above this line) and the target layer (below the following line).
-#'     geom_inset_frame(target.aes = list(fill = "white")) +
-#'     geom_sf_inset(map_base = "none") +
-#'     coord_sf_inset(inset = configure_inset(centre = centroid, ...)) +
-#'     theme_void()
-#' }
-#'
-#' # the lines connecting the frames vary depending on relative size and position:
-#' make_demo(scale = 3, radius = 50, translation = c(-200, -200))
-#' make_demo(scale = 3, radius = 50, translation = c(-100, -100))
-#' make_demo(scale = 3, radius = 50, translation = c(0, 0))
-#' make_demo(scale = 0.5, radius = 50, translation = c(0, 0))
-#' make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(-300, 0))
-#' make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(-250, -200))
-#' make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(-150, -100))
-#' make_demo(scale = 3, hwidth = 50, hheight = 40, translation = c(0, 0))
-#' make_demo(scale = 0.5, hwidth = 50, hheight = 40, translation = c(0, 0))
+#'     shape_circle(
+#'       centre = sf::st_sfc(sf::st_point(c(-82, 35)), crs = 4326),
+#'       radius = 50
+#'     ),
+#'     scale = 5, translation = c(0, -260), units = "mi"
+#'   ))
 geom_inset_frame <- function(mapping = ggplot2::aes(),
                              data = NULL,
                              stat = "sf_inset", position = "identity",

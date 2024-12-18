@@ -80,8 +80,9 @@ ggplot(nc) +
   geom_inset_frame() +
   geom_sf_label_inset(aes(label = NAME), data = ~dplyr::filter(.x, NAME %in% labelled_counties)) +
   # configure the inset in the coordinate system so that all layers can see it
-  coord_sf_inset(inset = configure_inset(centre = inset_centre, scale = 2, units = "mi",
-                                         translation = c(70, -180), radius = 50))
+  coord_sf_inset(inset = configure_inset(
+    shape_circle(centre = inset_centre, radius = 50),
+    scale = 2, units = "mi", translation = c(70, -180)))
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />

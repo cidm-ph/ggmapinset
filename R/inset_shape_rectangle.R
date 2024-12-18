@@ -1,9 +1,64 @@
+#' Rectangular insets
+#'
+#' @param centre Coordinates of the inset centre. Ideally this should be an
+#'   \code{sfc} object (see [sf::st_sfc()]) including a coordinate reference system.
+#'   An [sf::st_point()] or a vector of longitude and latitude are also accepted.
+#'   If a CRS cannot be determined, WGS 84 is assumed.
+#' @param hwidth Half width of the inset in the units of the inset's `crs_working`.
+#' @param hheight Half height of the inset in the units of the inset's `crs_working`.
+#'   Defaults to the same value as `hwidth`.
+#' @family shapes
+#' @seealso [configure_inset()]
+#' @export
+#'
+#' @examples
+#' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+#' make_demo <- function(...) {
+#'   ggplot(nc) +
+#'     geom_sf(fill = "grey95", colour = "grey85") +
+#'     # For a filled frame, we want to interleave it between the base layer
+#'     # (above this line) and the target layer (below the following line).
+#'     geom_inset_frame(target.aes = list(fill = "white")) +
+#'     geom_sf_inset(map_base = "none") +
+#'     coord_sf_inset(inset = configure_inset(...)) +
+#'     theme_void()
+#' }
+#' centroid <-
+#'   sf::st_centroid(nc$geometry[[21]]) |>
+#'   sf::st_sfc(crs = sf::st_crs(nc))
+#' rectangle <- shape_rectangle(centroid, hwidth = 50, hheight = 40)
+#'
+#' make_demo(rectangle, scale = 3, translation = c(-300, 0))
+#' make_demo(rectangle, scale = 3, translation = c(-250, -200))
+#' make_demo(rectangle, scale = 3, translation = c(-150, -100))
+#' make_demo(rectangle, scale = 3, translation = c(0, 0))
+#' make_demo(rectangle, scale = 1.5, translation = c(0, 0))
+shape_rectangle <- function(centre, hwidth, hheight = NULL) {
+  centre <- coerce_centre(centre)
+  if (hwidth <= 0) {
+    cli::cli_abort("Rectangle {.arg hwidth} must be a positive number, not {hwidth}")
+  }
+  if (is.null(hheight)) {
+    hheight <- hwidth
+  }
+
+  structure(
+    list(centre = centre, hwidth = hwidth, hheight = hheight),
+    class = c("shape_rectangle", "ggmapinset_shape")
+  )
+}
+
+#' @export
+central_point.shape_rectangle <- function(shape) {
+  shape$centre
+}
+
 #' @export
 inset_viewport.inset_shape_rectangle <- function(inset) {
   centre <- sf::st_transform(inset_centre(inset), inset_crs_working(inset))
 
-  width <- inset_width(inset)
-  height <- inset_height(inset)
+  width <- inset_shape(inset)$hwidth
+  height <- inset_shape(inset)$hheight
   c(
     centre + c(-width, +height), # NW
     centre + c(+width, +height), # NE

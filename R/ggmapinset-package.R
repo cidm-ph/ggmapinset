@@ -7,4 +7,5 @@
 
 #' @import sf
 #' @import ggplot2
+#' @importFrom lifecycle deprecated
 NULL

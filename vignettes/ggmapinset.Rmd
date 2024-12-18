@@ -123,8 +123,10 @@ sydney_size <- st_distance(sydney, sydney) |> max() |> units::set_units("km")
 sydney_centre <- st_union(sydney) |> st_centroid()
 
 sydney_inset <- configure_inset(
-  centre = sydney_centre,
-  radius = as.numeric(sydney_size),
+  shape_circle(
+    centre = sydney_centre,
+    radius = as.numeric(sydney_size)
+  ),
   translation = c(400, -200),
   scale = 4,
   units = "km"
@@ -220,12 +222,22 @@ you will probably want to disable that behaviour with `map_base = "none"` to avo
 having multiple identical copies of the base map.
 ```{r multiple, fig.width=7, fig.height=5}
 inset1 <- configure_inset(
-  centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]), scale = 1.5,
-  translation = c(150, -50), hwidth = 50, units = "mi"
+  shape_rectangle(
+    centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]),
+    hwidth = 50
+  ),
+  scale = 1.5,
+  translation = c(150, -50),
+  units = "mi"
 )
 inset2 <- configure_inset(
-  centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Orange"]), scale = 3,
-  translation = c(30, 120), radius = 30, units = "mi"
+  shape_circle(
+    centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Orange"]),
+    radius = 30
+  ),
+  scale = 3,
+  translation = c(30, 120),
+  units = "mi"
 )
 
 ggplot(nc) +

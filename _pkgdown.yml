@@ -8,13 +8,16 @@ reference:
   - starts_with("geom_")
   - starts_with("stat_")
   - starts_with("coord_")
+- title: Inset configuration
+  contents:
   - configure_inset
-- title: helpers for creating inset-aware ggplot2 extensions
+  - starts_with("shape_")
+- title: Helpers for creating inset-aware ggplot2 extensions
   contents:
   - build_sf_inset_layers
   - get_inset_config
   - transform_to_inset
-- title: package
+- title: Package
   contents:
   - ggmapinset-package
   - mozzies_nsw2301

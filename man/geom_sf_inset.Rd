@@ -149,7 +149,11 @@ ggplot(nc) +
   geom_sf_inset(aes(fill = AREA)) +
   geom_inset_frame() +
   coord_sf_inset(inset = configure_inset(
-    centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = sf::st_crs(nc)),
-    scale = 1.5, translation = c(-50, -140), radius = 50, units = "mi"))
+    shape_circle(
+      centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = sf::st_crs(nc)),
+      radius = 50
+    ),
+    scale = 1.5, translation = c(-50, -140), units = "mi"
+  ))
 }
 \keyword{datasets}

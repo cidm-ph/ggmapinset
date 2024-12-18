@@ -1,7 +1,6 @@
 # ggmapinset (development version)
 
-* Added support for rectangular insets (use `hwidth` instead of `radius` in the
-  inset configuration).
+* Added support for rectangular insets via `shape_rectangle()`.
 
 # ggmapinset 0.3.0
 
