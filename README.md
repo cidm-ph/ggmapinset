@@ -31,7 +31,7 @@ install.packages('ggmapinset', repos = c('https://cidm-ph.r-universe.dev', 'http
 `{ggmapinset}` provides drop-in replacements for each of the
 `{sf}`-related layers from `{ggplot2}`:
 
-| ‘ggplot2’ function      | ‘ggmapinset’ replacement      |
+| `ggplot2` function      | `ggmapinset` replacement      |
 |:------------------------|:------------------------------|
 | `geom_sf()`             | `geom_sf_inset()`             |
 | `geom_sf_text()`        | `geom_sf_text_inset()`        |
@@ -63,27 +63,56 @@ nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 # find the centroid of the specified county
 inset_centre <- sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Yancey"])
 
+inset_cfg <- configure_inset(
+  shape_circle(
+    centre = inset_centre,
+    radius = 50
+  ),
+  scale = 2,
+  units = "mi",
+  translation = c(70, -180)
+)
+
 # pick some counties to label
 labelled_counties <- sample(nc$NAME, 10)
-
-# the basic ggplot example:
-base_plot <- ggplot(nc) +
-  geom_sf(aes(fill = AREA)) +
-  geom_sf_label(aes(label = NAME), data = ~dplyr::filter(.x, NAME %in% labelled_counties)) +
-  coord_sf()
-
-# the same plot with an inset zooming in on one area:
-ggplot(nc) +
-  # replace sf layers with their `_inset` versions
-  geom_sf_inset(aes(fill = AREA)) +
-  # add the inset frame (the two circles with the connecting lines)
-  geom_inset_frame() +
-  geom_sf_label_inset(aes(label = NAME), data = ~dplyr::filter(.x, NAME %in% labelled_counties)) +
-  # configure the inset in the coordinate system so that all layers can see it
-  coord_sf_inset(inset = configure_inset(
-    shape_circle(centre = inset_centre, radius = 50),
-    scale = 2, units = "mi", translation = c(70, -180)))
+data_subset <- function(df) df[df$NAME %in% labelled_counties,]
 ```
+
+<div style="display: flex; gap: 1em;">
+
+<div style="flex-grow: 1">
+
+``` r
+# base ggplot
+ggplot(nc) +
+  geom_sf(aes(fill = AREA)) +
+  
+  geom_sf_label(
+    aes(label = NAME),
+    data = data_subset
+  ) +
+  coord_sf()
+```
+
+</div>
+
+<div style="flex-grow: 1">
+
+``` r
+# with inset added
+ggplot(nc) +
+  geom_sf_inset(aes(fill = AREA)) +
+  geom_inset_frame() +
+  geom_sf_label_inset(
+    aes(label = NAME),
+    data = data_subset
+  ) +
+  coord_sf_inset(inset_cfg)
+```
+
+</div>
+
+</div>
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
