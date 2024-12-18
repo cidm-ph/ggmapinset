@@ -224,20 +224,20 @@ having multiple identical copies of the base map.
 ```{r multiple, fig.width=7, fig.height=5}
 inset1 <- configure_inset(
   shape_rectangle(
-    centre = sf::st_centroid(nc[nc$NAME == "Bladen",]),
+    centre = sf::st_centroid(nc[nc$NAME == "Bladen", ]),
     hwidth = 50
   ),
   scale = 1.5, translation = c(150, -50), units = "mi"
 )
 inset2 <- configure_inset(
   shape_circle(
-    centre = sf::st_centroid(nc[nc$NAME == "Orange",]),
+    centre = sf::st_centroid(nc[nc$NAME == "Orange", ]),
     radius = 30
   ),
   scale = 3, translation = c(30, 120), units = "mi"
 )
 inset3 <- configure_inset(
-  shape_sf(nc[nc$NAME == "Gates",]),
+  shape_sf(nc[nc$NAME == "Gates", ]),
   scale = 6, translation = c(90, 70), units = "mi"
 )
 
@@ -249,7 +249,7 @@ ggplot(nc) +
   geom_inset_frame(inset = inset1, colour = "red") +
   # inset 2
   geom_sf_inset(map_base = "none", inset = inset2) +
-  geom_inset_frame(inset = inset2, colour = "blue")+
+  geom_inset_frame(inset = inset2, colour = "blue") +
   # inset 3
   geom_sf_inset(map_base = "none", inset = inset3, colour = NA) +
   geom_inset_frame(inset = inset3, colour = "magenta")

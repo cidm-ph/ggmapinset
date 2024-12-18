@@ -60,18 +60,16 @@ library(ggplot2)
 # load the North Carolina map example shipped with sf
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
-# find the centroid of the specified county
-inset_centre <- sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Yancey"])
-
 inset_cfg <- configure_inset(
   shape_circle(
-    centre = inset_centre,
+    centre =  sf::st_centroid(nc[nc$NAME == "Yancey",]),
     radius = 50
   ),
   scale = 2,
   units = "mi",
   translation = c(70, -180)
 )
+#> Warning: st_centroid assumes attributes are constant over geometries
 
 # pick some counties to label
 labelled_counties <- sample(nc$NAME, 10)

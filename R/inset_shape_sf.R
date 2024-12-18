@@ -85,7 +85,6 @@ make_frame.inset_shape_sf <- function(inset) {
   if (is.null(trans)) trans <- c(0, 0)
   scale <- inset_scale(inset)
   if (is.null(scale)) scale <- 1
-  radius <- inset_shape(inset)$radius
 
   viewport <- inset_viewport(inset)
   result <- viewport
@@ -112,11 +111,13 @@ get_quasi_tangents <- function(shape1, shape2) {
   y1 <- sf::st_intersection(
     sf::st_boundary(shape1),
     sf::st_convex_hull(shape1) |> sf::st_boundary()
-  ) |> sf::st_cast("POINT")
+  ) |>
+    sf::st_cast("POINT")
   y2 <- sf::st_intersection(
     sf::st_boundary(shape2),
     sf::st_convex_hull(shape2) |> sf::st_boundary()
-  ) |> sf::st_cast("POINT")
+  ) |>
+    sf::st_cast("POINT")
 
   # make every possible line between shapes at those key points
   rays <- apply(
