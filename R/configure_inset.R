@@ -26,7 +26,8 @@
 #' cat("}\n")
 #' ```
 #'
-#' @param shape Inset shape: see [shape_circle()] or [shape_rectangle()].
+#' @param shape Inset shape: see [shape_circle()], [shape_rectangle()],
+#'   or [shape_sf()].
 #' @param scale Zoom scale: values larger than one will make the inset bigger.
 #' @param translation Translation (shift) of the inset relative to the centre.
 #'   This can be an `sf::st_point()` or simply a vector of length 2 containing

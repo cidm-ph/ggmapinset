@@ -15,7 +15,8 @@ configure_inset(
 )
 }
 \arguments{
-\item{shape}{Inset shape: see \code{\link[=shape_circle]{shape_circle()}} or \code{\link[=shape_rectangle]{shape_rectangle()}}.}
+\item{shape}{Inset shape: see \code{\link[=shape_circle]{shape_circle()}}, \code{\link[=shape_rectangle]{shape_rectangle()}},
+or \code{\link[=shape_sf]{shape_sf()}}.}
 
 \item{scale}{Zoom scale: values larger than one will make the inset bigger.}
 

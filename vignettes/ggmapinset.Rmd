@@ -236,6 +236,10 @@ inset2 <- configure_inset(
   ),
   scale = 3, translation = c(30, 120), units = "mi"
 )
+inset3 <- configure_inset(
+  shape_sf(nc[nc$NAME == "Gates",]),
+  scale = 6, translation = c(90, 70), units = "mi"
+)
 
 ggplot(nc) +
   # base map
@@ -245,6 +249,9 @@ ggplot(nc) +
   geom_inset_frame(inset = inset1, colour = "red") +
   # inset 2
   geom_sf_inset(map_base = "none", inset = inset2) +
-  geom_inset_frame(inset = inset2, colour = "blue")
+  geom_inset_frame(inset = inset2, colour = "blue")+
+  # inset 3
+  geom_sf_inset(map_base = "none", inset = inset3, colour = NA) +
+  geom_inset_frame(inset = inset3, colour = "magenta")
 ```
 

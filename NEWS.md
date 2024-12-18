@@ -1,6 +1,7 @@
 # ggmapinset (development version)
 
 * Added support for rectangular insets via `shape_rectangle()`.
+* Added support for arbitrary insets via `shape_sf()`.
 
 # ggmapinset 0.3.0
 

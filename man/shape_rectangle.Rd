@@ -48,6 +48,7 @@ make_demo(rectangle, scale = 0.5, translation = c(0, 0))
 \code{\link[=configure_inset]{configure_inset()}}
 
 Other shapes: 
-\code{\link{shape_circle}()}
+\code{\link{shape_circle}()},
+\code{\link{shape_sf}()}
 }
 \concept{shapes}
