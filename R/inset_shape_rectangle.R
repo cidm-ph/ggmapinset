@@ -7,6 +7,7 @@
 #' @param hwidth Half width of the inset in the units of the inset's `crs_working`.
 #' @param hheight Half height of the inset in the units of the inset's `crs_working`.
 #'   Defaults to the same value as `hwidth`.
+#' @returns A shape definition suitable for use with [configure_inset()].
 #' @family shapes
 #' @seealso [configure_inset()]
 #' @export

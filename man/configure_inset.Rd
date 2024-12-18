@@ -37,10 +37,9 @@ Use \code{shape = shape_circle(centre, radius)} instead.}
 An inset configuration object of class \code{inset_config}.
 }
 \description{
-The configuration returned by this function will normally be passed to the
-coordinate system via \code{\link[=coord_sf_inset]{coord_sf_inset()}}. Insets can either be circular
-(if \code{radius} is specified) or rectangular (if \code{hwidth} and
-optionally \code{hheight} are specified).
+The configuration returned by this function will often be passed to the
+coordinate system via \code{\link[=coord_sf_inset]{coord_sf_inset()}} so that it is propagated to all
+relevant layers.
 }
 \details{
 The default \code{crs_working} uses the equidistant cylindrical coordinate

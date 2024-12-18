@@ -14,6 +14,9 @@ If a CRS cannot be determined, WGS 84 is assumed.}
 
 \item{radius}{Radius of the inset circle in the units of the inset's \code{crs_working}.}
 }
+\value{
+A shape definition suitable for use with \code{\link[=configure_inset]{configure_inset()}}.
+}
 \description{
 Circular insets
 }

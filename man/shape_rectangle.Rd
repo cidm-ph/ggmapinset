@@ -17,6 +17,9 @@ If a CRS cannot be determined, WGS 84 is assumed.}
 \item{hheight}{Half height of the inset in the units of the inset's \code{crs_working}.
 Defaults to the same value as \code{hwidth}.}
 }
+\value{
+A shape definition suitable for use with \code{\link[=configure_inset]{configure_inset()}}.
+}
 \description{
 Rectangular insets
 }

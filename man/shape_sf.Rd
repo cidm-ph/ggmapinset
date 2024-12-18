@@ -10,6 +10,9 @@ shape_sf(geometry)
 \item{geometry}{A simple features geometry that is either a polygon or
 multipolygon, and is valid and simple.}
 }
+\value{
+A shape definition suitable for use with \code{\link[=configure_inset]{configure_inset()}}.
+}
 \description{
 You can use any polygon to define the shape of the inset, including a
 feature from your base map layer.

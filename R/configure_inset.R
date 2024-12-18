@@ -1,9 +1,8 @@
 #' Configure transformations underpinning a map inset
 #'
-#' The configuration returned by this function will normally be passed to the
-#' coordinate system via [coord_sf_inset()]. Insets can either be circular
-#' (if \code{radius} is specified) or rectangular (if \code{hwidth} and
-#' optionally \code{hheight} are specified).
+#' The configuration returned by this function will often be passed to the
+#' coordinate system via [coord_sf_inset()] so that it is propagated to all
+#' relevant layers.
 #'
 #' The default \code{crs_working} uses the equidistant cylindrical coordinate
 #' reference system with the latitude of true scale set to match the latitude of

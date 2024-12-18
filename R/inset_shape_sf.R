@@ -5,6 +5,7 @@
 #'
 #' @param geometry A simple features geometry that is either a polygon or
 #'   multipolygon, and is valid and simple.
+#' @returns A shape definition suitable for use with [configure_inset()].
 #' @family shapes
 #' @seealso [configure_inset()]
 #' @export

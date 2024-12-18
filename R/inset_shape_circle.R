@@ -5,6 +5,7 @@
 #'   An [sf::st_point()] or a vector of longitude and latitude are also accepted.
 #'   If a CRS cannot be determined, WGS 84 is assumed.
 #' @param radius Radius of the inset circle in the units of the inset's `crs_working`.
+#' @returns A shape definition suitable for use with [configure_inset()].
 #' @family shapes
 #' @seealso [configure_inset()]
 #' @export
