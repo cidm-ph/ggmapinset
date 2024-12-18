@@ -119,13 +119,13 @@ factor of 4, and shifted to south and east:
 
 ```{r}
 sydney <- filter(mozzies, type == "sydney")
-sydney_size <- st_distance(sydney, sydney) |> max() |> units::set_units("km")
+sydney_size <- st_distance(sydney, sydney) |> max() |> as.numeric() / 1000
 sydney_centre <- st_union(sydney) |> st_centroid()
 
 sydney_inset <- configure_inset(
   shape_circle(
     centre = sydney_centre,
-    radius = as.numeric(sydney_size)
+    radius = sydney_size
   ),
   translation = c(400, -200),
   scale = 4,
