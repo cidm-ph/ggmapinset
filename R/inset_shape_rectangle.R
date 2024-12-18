@@ -123,5 +123,12 @@ get_burst_lines <- function(r1, r2) {
     disjoint <- !sf::st_touches(rays, rays[[i]], sparse = FALSE)
     rays_keep[i:length(rays)] <- rays_keep[i:length(rays)] & disjoint[i:length(rays)]
   }
-  rays[rays_keep] |> sf::st_combine()
+  rays <- rays[rays_keep]
+
+  # keep at most the two longest remaining rays
+  if (length(rays) > 2) {
+    rays <- rays[order(sf::st_length(rays), decreasing = TRUE)[1:2]]
+  }
+
+  rays |> sf::st_combine()
 }
