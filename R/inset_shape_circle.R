@@ -22,10 +22,7 @@
 #'     coord_sf_inset(inset = configure_inset(...)) +
 #'     theme_void()
 #' }
-#' centroid <-
-#'   sf::st_centroid(nc$geometry[[21]]) |>
-#'   sf::st_sfc(crs = sf::st_crs(nc))
-#' circle <- shape_circle(centroid, radius = 50)
+#' circle <- shape_circle(sf::st_centroid(nc[21,]), radius = 50)
 #'
 #' make_demo(circle, scale = 3, translation = c(-200, -200))
 #' make_demo(circle, scale = 3, translation = c(-100, -100))

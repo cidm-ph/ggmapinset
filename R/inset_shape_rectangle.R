@@ -24,10 +24,7 @@
 #'     coord_sf_inset(inset = configure_inset(...)) +
 #'     theme_void()
 #' }
-#' centroid <-
-#'   sf::st_centroid(nc$geometry[[21]]) |>
-#'   sf::st_sfc(crs = sf::st_crs(nc))
-#' rectangle <- shape_rectangle(centroid, hwidth = 50, hheight = 40)
+#' rectangle <- shape_rectangle(sf::st_centroid(nc[21,]), hwidth = 50, hheight = 40)
 #'
 #' make_demo(rectangle, scale = 3, translation = c(-300, 0))
 #' make_demo(rectangle, scale = 3, translation = c(-250, -200))
@@ -131,5 +128,5 @@ get_burst_lines <- function(r1, r2) {
     rays <- rays[order(sf::st_length(rays), decreasing = TRUE)[1:2]]
   }
 
-  rays |> sf::st_combine()
+  sf::st_combine(rays)
 }

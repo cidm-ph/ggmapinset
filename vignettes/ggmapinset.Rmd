@@ -224,14 +224,14 @@ having multiple identical copies of the base map.
 ```{r multiple, fig.width=7, fig.height=5}
 inset1 <- configure_inset(
   shape_rectangle(
-    centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Bladen"]),
+    centre = sf::st_centroid(nc[nc$NAME == "Bladen",]),
     hwidth = 50
   ),
   scale = 1.5, translation = c(150, -50), units = "mi"
 )
 inset2 <- configure_inset(
   shape_circle(
-    centre = sf::st_centroid(sf::st_geometry(nc)[nc$NAME == "Orange"]),
+    centre = sf::st_centroid(nc[nc$NAME == "Orange",]),
     radius = 30
   ),
   scale = 3, translation = c(30, 120), units = "mi"

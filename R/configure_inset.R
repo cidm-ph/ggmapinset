@@ -151,6 +151,9 @@ coerce_centre <- function(centre) {
     cli::cli_abort("Shape {.arg centre} must be provided")
   }
   crs_input <- sf::NA_crs_
+  if (inherits(centre, "sf")) {
+    centre <- sf::st_geometry(centre)
+  }
   if (inherits(centre, "sfc")) {
     crs_input <- sf::st_crs(centre)
     if (length(centre) == 0) cli::cli_abort("{.arg centre} has no features")
