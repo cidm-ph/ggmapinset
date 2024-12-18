@@ -143,13 +143,15 @@ get_quasi_tangents <- function(shape1, shape2) {
   }
   rays <- rays[rays_keep]
 
-  # keep at most the two rays that are furthest apart from each other
+  # keep at most the two rays that are "most separated" by computing the enclosed area
   if (length(rays) > 2) {
     sep <- expand.grid(i = seq_along(rays), j = seq_along(rays))
-    sep$distance <- apply(sep, 1, simplify = TRUE, FUN = function(x) {
-      sf::st_distance(rays[[x[[1]]]], rays[[x[[2]]]])
+    sep$area <- apply(sep, 1, simplify = TRUE, FUN = function(x) {
+      sf::st_combine(c(rays[[x[[1]]]], rays[[x[[2]]]])) |>
+        sf::st_triangulate() |>
+        sf::st_area()
     })
-    sep_max <- sep[which.max(sep$distance),]
+    sep_max <- sep[which.max(sep$area), ]
     rays <- rays[c(sep_max$i, sep_max$j)]
   }
 
