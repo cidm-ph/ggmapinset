@@ -8,8 +8,8 @@
 <title>Add Inset Panels to Maps • ggmapinset</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Add Inset Panels to Maps">
 <meta name="description" content="Helper to add insets based on geom_sf() from ggplot2. This package gives you a drop-in replacement for geom_sf() that supports adding a zoomed inset map without having to create and embed a separate plot.">
 <meta property="og:description" content="Helper to add insets based on geom_sf() from ggplot2. This package gives you a drop-in replacement for geom_sf() that supports adding a zoomed inset map without having to create and embed a separate plot.">
@@ -80,11 +80,11 @@
 </tr>
 <tr class="even">
 <td align="left"><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_text()</a></code></td>
-<td align="left"><code><a href="reference/geom_sf_inset.html">geom_sf_text_inset()</a></code></td>
+<td align="left"><code><a href="reference/stat_sf_coordinates_inset.html">geom_sf_text_inset()</a></code></td>
 </tr>
 <tr class="odd">
 <td align="left"><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf_label()</a></code></td>
-<td align="left"><code><a href="reference/geom_sf_inset.html">geom_sf_label_inset()</a></code></td>
+<td align="left"><code><a href="reference/stat_sf_coordinates_inset.html">geom_sf_label_inset()</a></code></td>
 </tr>
 <tr class="even">
 <td align="left"><code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">stat_sf()</a></code></td>
@@ -131,10 +131,11 @@
 <span>  <span class="fu"><a href="reference/geom_sf_inset.html">geom_sf_inset</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">AREA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># add the inset frame (the two circles with the connecting lines)</span></span>
 <span>  <span class="fu"><a href="reference/geom_inset_frame.html">geom_inset_frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/geom_sf_inset.html">geom_sf_label_inset</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">NAME</span><span class="op">)</span>, data <span class="op">=</span> <span class="op">~</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.x</span>, <span class="va">NAME</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">labelled_counties</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/stat_sf_coordinates_inset.html">geom_sf_label_inset</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">NAME</span><span class="op">)</span>, data <span class="op">=</span> <span class="op">~</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.x</span>, <span class="va">NAME</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">labelled_counties</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># configure the inset in the coordinate system so that all layers can see it</span></span>
-<span>  <span class="fu"><a href="reference/coord_sf_inset.html">coord_sf_inset</a></span><span class="op">(</span>inset <span class="op">=</span> <span class="fu"><a href="reference/configure_inset.html">configure_inset</a></span><span class="op">(</span>centre <span class="op">=</span> <span class="va">inset_centre</span>, scale <span class="op">=</span> <span class="fl">2</span>, units <span class="op">=</span> <span class="st">"mi"</span>,</span>
-<span>                                         translation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">180</span><span class="op">)</span>, radius <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="reference/coord_sf_inset.html">coord_sf_inset</a></span><span class="op">(</span>inset <span class="op">=</span> <span class="fu"><a href="reference/configure_inset.html">configure_inset</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="reference/shape_circle.html">shape_circle</a></span><span class="op">(</span>centre <span class="op">=</span> <span class="va">inset_centre</span>, radius <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>,</span>
+<span>    scale <span class="op">=</span> <span class="fl">2</span>, units <span class="op">=</span> <span class="st">"mi"</span>, translation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">70</span>, <span class="op">-</span><span class="fl">180</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 <p>For more information, see the <a href="https://cidm-ph.github.io/ggmapinset/">online documentation</a> and <code><a href="articles/ggmapinset.html">vignette("ggmapinset")</a></code>.</p>
 </div>
