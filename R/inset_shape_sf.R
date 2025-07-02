@@ -157,5 +157,5 @@ get_quasi_tangents <- function(shape1, shape2) {
     rays <- rays[c(sep_max$i, sep_max$j)]
   }
 
-  return(sf::st_combine(rays))
+  sf::st_combine(rays)
 }
