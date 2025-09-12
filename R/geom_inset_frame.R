@@ -159,7 +159,7 @@ dummy_frame <- function() {
   sf::st_sfc(
     sf::st_polygon(),
     sf::st_polygon(),
-    sf::st_multilinestring(),
+    sf::st_geometrycollection(),
     crs = "+proj=eqc"
   )
 }
