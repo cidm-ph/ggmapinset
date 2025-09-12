@@ -1,5 +1,7 @@
 # ggmapinset (development version)
 
+* Housekeeping: correct minimum R version, suppress a spurious warning.
+
 # ggmapinset 0.4.0
 
 * Added support for rectangular insets via `shape_rectangle()`.
