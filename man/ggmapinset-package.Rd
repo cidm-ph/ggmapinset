@@ -18,11 +18,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Carl Suster \email{Carl.Suster@health.nsw.gov.au} (\href{https://orcid.org/0000-0001-7021-9380}{ORCID})
+\strong{Maintainer}: Carl Suster \email{carl.suster@sydney.edu.au} (\href{https://orcid.org/0000-0001-7021-9380}{ORCID})
 
 Other contributors:
 \itemize{
-  \item Western Sydney Local Health District, NSW Health [copyright holder]
+  \item Western Sydney Local Health District, NSW Health (2022-2025) [copyright holder]
 }
 
 }

@@ -2,14 +2,15 @@ Package: ggmapinset
 Type: Package
 Title: Add Inset Panels to Maps
 Version: 0.4.0.9000
-Authors@R: 
+Authors@R:
     c(person(given = "Carl",
              family = "Suster",
-             email = "Carl.Suster@health.nsw.gov.au",
+             email = "carl.suster@sydney.edu.au",
              role = c("aut", "cre"),
              comment = c(ORCID = "0000-0001-7021-9380")),
       person("Western Sydney Local Health District, NSW Health",
-             role = "cph"))
+             role = "cph",
+             comment = "2022-2025"))
 Description: Helper to add insets based on geom_sf() from 'ggplot2'.
     This package gives you a drop-in replacement for geom_sf() that supports
     adding a zoomed inset map without having to create and embed a separate plot.
@@ -18,16 +19,16 @@ Encoding: UTF-8
 Language: en-GB
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
-Depends: 
+Depends:
     R (>= 4.1),
     sf (>= 1.0)
-Imports: 
+Imports:
     cli (>= 3.4.0),
     ggplot2 (>= 3.4.0),
     lifecycle,
     rlang (>= 1.0.0),
     vctrs (>= 0.6.5)
-Suggests: 
+Suggests:
     dplyr,
     forcats,
     ggrepel,
