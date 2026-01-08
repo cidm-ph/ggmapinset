@@ -4,6 +4,7 @@ stat_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
                           geom = "sf_inset", position = "identity",
                           ...,
                           inset = NA,
+                          precision = NA,
                           na.rm = TRUE,
                           show.legend = NA,
                           inherit.aes = TRUE) {
@@ -17,6 +18,7 @@ stat_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
     show.legend = show.legend,
     params = rlang::list2(
       inset = inset,
+      precision = precision,
       na.rm = na.rm,
       ...
     )
@@ -28,7 +30,7 @@ stat_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
 #' @format NULL
 #' @rdname geom_sf_inset
 StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
-  compute_panel = function(data, scales, coord, inset = NA) {
+  compute_panel = function(data, scales, coord, inset = NA, precision = NA) {
     data <- ggplot2::StatSf$compute_panel(data, scales, coord)
 
     inset <- get_inset_config(inset, coord)
@@ -41,7 +43,7 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
       #                    "i" = "The {.field centre} of the inset uses a different CRS to the data; the inset might be drawn incorrectly"))
       # }
 
-      bbox <- inset_bbox(inset)
+      bbox <- inset_bbox(inset, precision = precision)
 
       coord$record_bbox(
         xmin = bbox[["xmin"]], xmax = bbox[["xmax"]],

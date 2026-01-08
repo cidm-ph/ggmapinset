@@ -56,6 +56,7 @@ stat_sf_coordinates_inset <- function(
   inset = NA,
   fun.geometry = NULL,
   where = "inset",
+  precision = NA,
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -77,6 +78,7 @@ stat_sf_coordinates_inset <- function(
     params = rlang::list2(
       inset = inset,
       fun.geometry = fun.geometry,
+      precision = precision,
       na.rm = na.rm,
       ...
     )
@@ -88,7 +90,7 @@ stat_sf_coordinates_inset <- function(
 #' @format NULL
 #' @rdname stat_sf_coordinates_inset
 StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::StatSfCoordinates,
-  compute_group = function(data, scales, coord, fun.geometry = NULL, inset = NA, crs_working = NULL) {
+  compute_group = function(data, scales, coord, fun.geometry = NULL, inset = NA, crs_working = NULL, precision = NA) {
     inset <- get_inset_config(inset, coord)
 
     if (is.null(crs_working)) {
@@ -128,7 +130,8 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
       if (length(result[["retained"]]) > 0) {
         geometry <- transform(result[["geometry"]], centre,
                               scale = scale,
-                              translation = inset_translation(inset))
+                              translation = inset_translation(inset),
+                              precision = precision)
         geometry <- sf::st_transform(geometry, crs_orig)
 
         data$inside_inset[result[["retained"]]] <- TRUE

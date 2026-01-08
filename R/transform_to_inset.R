@@ -20,7 +20,7 @@
 #'   units = "mi")
 #'
 #' transform_to_inset(nc, cfg)
-transform_to_inset <- function(x, inset) {
+transform_to_inset <- function(x, inset, precision = NA) {
   geometry <- sf::st_geometry(x)
   inset <- make_inset_config(inset)
   crs_working <- inset_crs_working(inset)
@@ -30,7 +30,7 @@ transform_to_inset <- function(x, inset) {
   result <- with_crs_working(
     crs_working, geometry, inset_centre(inset),
     .f = function(result, centre) {
-      transform(result, centre, scale = scale, translation = translation)
+      transform(result, centre, scale = scale, translation = translation, precision = precision)
     }
   )
 
