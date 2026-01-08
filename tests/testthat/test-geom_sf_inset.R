@@ -1,12 +1,12 @@
 test_that("basic inset works", {
   library(ggplot2)
   nc <-
-    sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE) |>
-    round_sf_geom(100)
+    sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+    # round_sf_geom(100)
 
   basic_inset <-
     ggplot(nc) +
-    geom_sf_inset(aes(fill = AREA)) +
+    geom_sf_inset(aes(fill = AREA), precision = 100) +
     geom_inset_frame(
       source.aes = list(colour = "white"),
       lines.aes = list(colour = "red"),

@@ -35,7 +35,7 @@ inset_viewport <- function(inset) {
 
 # Applies translation and scale. Assumes that the geometry and centre are in the
 # working CRS and that x is an sfc, not an sf.
-transform <- function(x, centre, scale = NULL, translation = NULL) {
+transform <- function(x, centre, scale = NULL, translation = NULL, precision = NA) {
   crs_working <- sf::st_crs(x)
   result <- x
   if (!is.null(scale)) {
@@ -45,11 +45,17 @@ transform <- function(x, centre, scale = NULL, translation = NULL) {
   if (!is.null(translation)) {
     result <- sf::st_set_crs(result + translation, crs_working)
   }
+  if (!is.na(precision)) {
+    result <-
+      sf::st_set_precision(result, precision) |>
+      sf::st_as_binary() |>
+      sf::st_as_sfc(crs = sf::st_crs(result))
+  }
   result
 }
 
 # Compute the bounding box of the target part of the inset only
-inset_bbox <- function(inset) {
+inset_bbox <- function(inset, precision = NA) {
   scale <- inset_scale(inset)
   translation <- inset_translation(inset)
 
@@ -58,7 +64,7 @@ inset_bbox <- function(inset) {
     inset_centre(inset),
     .f = function(centre) {
       viewport <- inset_viewport(inset)
-      transform(viewport, centre, scale = scale, translation = translation)
+      transform(viewport, centre, scale = scale, translation = translation, precision = precision)
     }
   )
   sf::st_bbox(result)
