@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2025 Carl Suster
+Copyright (c) 2025-2026 Carl Suster
 Copyright (c) 2022-2025 Western Sydney Local Health District, NSW Health
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
