@@ -106,6 +106,50 @@ of specifying the whole projection. The possible values for `units` are
 
 - `"link"`: link
 
+- `"US"`: yard 0.914401828803658 Yard_US
+
+- `"Decimeter"`: Decimeter
+
+- `"International"`: 0.0254 Inch
+
+- `"US"`: inch 0.0254000508001016 Inch_US
+
+- `"International"`: 5.0292 Rod
+
+- `"US"`: rod 5.02921005842012 Rod_US
+
+- `"US"`: mile (pre-1954) 1853.248
+
+- `"Nautical_Mile_US"`:
+
+- `"UK"`: mile (pre-1970) 1853.184
+
+- `"Nautical_Mile_UK"`:
+
+- `"Height"`: Oliver Smoot, used
+
+- `"to"`: the Harvard Bridge
+
+- `"1.7018"`:
+
+- `"Old"`: unit of distance
+
+- `"used"`: Texas (33 1/3
+
+- `"US"`: 0.846668360003387 Vara_TX
+
+- `"Desktop"`: Point (1/72 of
+
+- `"an"`: inch) 0.000352777777777778 Point
+
+- `"Micrometer"`: Micrometer
+
+- `"Nanometer"`: Nanometer
+
+- `"50"`: length 50000 50_Kilometers
+
+- `"150"`: length 150000 150_Kilometers
+
 - `"dm"`: decimeter
 
 - `"in"`: inch

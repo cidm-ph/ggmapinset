@@ -105,8 +105,6 @@ ggplot(mozzies) +
   theme_void()
 #> Warning in st_point_on_surface.sfc(sf::st_zm(x)): st_point_on_surface may not
 #> give correct results for longitude/latitude data
-#> Warning: ggrepel: 7 unlabeled data points (too many overlaps). Consider
-#> increasing max.overlaps
 ```
 
 ![](ggmapinset_files/figure-html/unnamed-chunk-4-1.png)
