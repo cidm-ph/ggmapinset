@@ -70,6 +70,28 @@ instead of specifying the whole projection. The possible values for
 \item \code{"yd"}: yard
 \item \code{"ch"}: chain
 \item \code{"link"}: link
+\item \code{"US"}: yard 0.914401828803658 Yard_US
+\item \code{"Decimeter"}: Decimeter
+\item \code{"International"}: 0.0254 Inch
+\item \code{"US"}: inch 0.0254000508001016 Inch_US
+\item \code{"International"}: 5.0292 Rod
+\item \code{"US"}: rod 5.02921005842012 Rod_US
+\item \code{"US"}: mile (pre-1954) 1853.248
+\item \code{"Nautical_Mile_US"}:
+\item \code{"UK"}: mile (pre-1970) 1853.184
+\item \code{"Nautical_Mile_UK"}:
+\item \code{"Height"}: Oliver Smoot, used
+\item \code{"to"}: the Harvard Bridge
+\item \code{"1.7018"}:
+\item \code{"Old"}: unit of distance
+\item \code{"used"}: Texas (33 1/3
+\item \code{"US"}: 0.846668360003387 Vara_TX
+\item \code{"Desktop"}: Point (1/72 of
+\item \code{"an"}: inch) 0.000352777777777778 Point
+\item \code{"Micrometer"}: Micrometer
+\item \code{"Nanometer"}: Nanometer
+\item \code{"50"}: length 50000 50_Kilometers
+\item \code{"150"}: length 150000 150_Kilometers
 \item \code{"dm"}: decimeter
 \item \code{"in"}: inch
 \item \code{"ind-ch"}: Indian chain

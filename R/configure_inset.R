@@ -165,7 +165,7 @@ coerce_centre <- function(centre) {
   } else {
     cli::cli_abort(c(
       "{.arg centre} is not in a supported format",
-      "i" = "Provide values like an {.fn sf::st_sfc}, {.fn sf::st_point}, or {c(0, 0)}."
+      "i" = "Provide values like an {.fn sf::st_sfc}, {.fn sf::st_point}, or {.code c(0, 0)}."
     ))
   }
   if (is.na(crs_input)) {
