@@ -14,6 +14,7 @@ reference:
   contents:
   - configure_inset
   - starts_with("shape_")
+  - coerce_centre
 - title: Helpers for creating inset-aware ggplot2 extensions
   contents:
   - build_sf_inset_layers

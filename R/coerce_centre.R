@@ -1,17 +1,16 @@
-# Convert an object to a point in a suitable format
-#
-# This is an internal helper used by the shape definition functions
-# that is not intended to be used directly. It is an S3 generic, so
-# by defining new methods, the shpe helpers can be made to accept
-# new types of objects defining their centre point.
-#
-# This is primarily intended for ggautomap to allow it to convert a
-# place name into a coordinate.
-#
-# @param centre Object defining the centre point.
-# @param ... Unused in the default implementation.
-# @returns A `sfc` object containins a single [`sf::st_point`] feature
-#   and with an appropriate CRS set.
+#' Convert an object to a point in a suitable format
+#'
+#' This is an internal helper used by the shape definition functions
+#' to process their `centre` parameters, where present.
+#' It is not intended to be used directly.
+#' Instead, it allows extensions to integrate with the shape
+#' functions so that they can accept new definitions.
+#'
+#' @param centre Object defining the centre point.
+#' @param ... Unused in the default implementation.
+#' @returns A `sfc` object containins a single [`sf::st_point`] feature
+#'   and with an appropriate CRS set.
+#' @export
 coerce_centre <- function(centre, ...) {
   UseMethod("coerce_centre")
 }
