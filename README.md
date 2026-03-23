@@ -112,7 +112,7 @@ ggplot(nc) +
 
 </div>
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" alt="" width="100%" />
 
 For more information, see the [online
 documentation](https://cidm-ph.github.io/ggmapinset/) and
