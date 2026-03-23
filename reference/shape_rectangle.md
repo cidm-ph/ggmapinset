@@ -5,7 +5,7 @@ Rectangular insets
 ## Usage
 
 ``` r
-shape_rectangle(centre, hwidth, hheight = NULL)
+shape_rectangle(centre, hwidth, hheight = NULL, ...)
 ```
 
 ## Arguments
@@ -28,6 +28,11 @@ shape_rectangle(centre, hwidth, hheight = NULL)
 
   Half height of the inset in the units of the inset's `crs_working`.
   Defaults to the same value as `hwidth`.
+
+- ...:
+
+  Additional parameters for specifying the centre in extensions. Unused
+  by default.
 
 ## Value
 

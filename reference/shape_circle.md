@@ -5,7 +5,7 @@ Circular insets
 ## Usage
 
 ``` r
-shape_circle(centre, radius)
+shape_circle(centre, radius, ...)
 ```
 
 ## Arguments
@@ -23,6 +23,11 @@ shape_circle(centre, radius)
 - radius:
 
   Radius of the inset circle in the units of the inset's `crs_working`.
+
+- ...:
+
+  Additional parameters for specifying the centre in extensions. Unused
+  by default.
 
 ## Value
 
