@@ -4,6 +4,16 @@
 
 - Housekeeping: correct minimum R version, suppress a spurious warning.
 - Expose a new extension point `coerce_centre` for {ggautomap}.
+- The `inset` param of layer helpers and
+  [`geom_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.md)
+  no longer accepts `NA`. Instead
+  [`waiver()`](https://ggplot2.tidyverse.org/reference/waiver.html) is
+  used as the default, and `NULL` still disables the inset. This should
+  be updated in any extensions using
+  [`build_sf_inset_layers()`](https://cidm-ph.github.io/ggmapinset/reference/build_sf_inset_layers.md).
+- [`geom_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.md)
+  no longer draws the inset if `inset = waiver()` but there is no inset
+  configured on the coord.
 
 ## ggmapinset 0.4.0
 

@@ -14,7 +14,7 @@ geom_inset_frame(
   stat = "sf_inset",
   position = "identity",
   ...,
-  inset = NA,
+  inset = waiver(),
   na.rm = FALSE,
   source.aes = list(),
   target.aes = list(),

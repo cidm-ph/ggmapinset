@@ -16,12 +16,12 @@ to add a frame around the inset that connects it to the main map.
 
 ``` r
 geom_sf_inset(
-  mapping = ggplot2::aes(),
+  mapping = aes(),
   data = NULL,
   stat = "sf_inset",
   position = "identity",
   ...,
-  inset = NA,
+  inset = waiver(),
   map_base = "normal",
   map_inset = "auto",
   na.rm = TRUE,
@@ -30,12 +30,12 @@ geom_sf_inset(
 )
 
 stat_sf_inset(
-  mapping = ggplot2::aes(),
+  mapping = aes(),
   data = NULL,
   geom = "sf_inset",
   position = "identity",
   ...,
-  inset = NA,
+  inset = waiver(),
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE

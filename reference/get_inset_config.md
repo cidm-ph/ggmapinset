@@ -1,8 +1,7 @@
 # Get the inset configuration from the params or coord
 
 This is a helper for implementing inset-aware ggplot layers. If the
-`inset` is missing (`NA`) then the default inset configuration is
-retrieved from the coord.
+`inset` is not specified then it is retrieved from the coord if present.
 
 ## Usage
 
@@ -29,7 +28,7 @@ Inset configuration or `NULL`
 ``` r
 # defining a new geom deriving from geom_sf()
 GeomCustom <- ggplot2::ggproto("GeomCustom", ggplot2::GeomSf,
-  draw_panel = function(self, data, panel_params, coord, inset = NA) {
+  draw_panel = function(self, data, panel_params, coord, inset = ggplot2::waiver()) {
     inset <- get_inset_config(inset, coord)
 
     # do something with the inset ...
