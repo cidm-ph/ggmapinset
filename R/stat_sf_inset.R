@@ -1,12 +1,16 @@
 #' @export
 #' @rdname geom_sf_inset
-stat_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
-                          geom = "sf_inset", position = "identity",
-                          ...,
-                          inset = NA,
-                          na.rm = TRUE,
-                          show.legend = NA,
-                          inherit.aes = TRUE) {
+stat_sf_inset <- function(
+  mapping = aes(),
+  data = NULL,
+  geom = "sf_inset",
+  position = "identity",
+  ...,
+  inset = waiver(),
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   ggplot2::layer_sf(
     mapping = mapping,
     data = data,
@@ -27,8 +31,10 @@ stat_sf_inset <- function(mapping = ggplot2::aes(), data = NULL,
 #' @usage NULL
 #' @format NULL
 #' @rdname geom_sf_inset
-StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
-  compute_panel = function(data, scales, coord, inset = NA) {
+StatSfInset <- ggplot2::ggproto(
+  "StatSfInset",
+  ggplot2::StatSf,
+  compute_panel = function(data, scales, coord, inset = waiver()) {
     data <- ggplot2::StatSf$compute_panel(data, scales, coord)
 
     inset <- get_inset_config(inset, coord)
@@ -44,14 +50,24 @@ StatSfInset <- ggplot2::ggproto("StatSfInset", ggplot2::StatSf,
       bbox <- inset_bbox(inset)
 
       coord$record_bbox(
-        xmin = bbox[["xmin"]], xmax = bbox[["xmax"]],
-        ymin = bbox[["ymin"]], ymax = bbox[["ymax"]]
+        xmin = bbox[["xmin"]],
+        xmax = bbox[["xmax"]],
+        ymin = bbox[["ymin"]],
+        ymax = bbox[["ymax"]]
       )
 
       bbox_trans <- ggplot2::sf_transform_xy(
         list(
-          x = c(rep(0.5 * (bbox[["xmin"]] + bbox[["xmax"]]), 2), bbox[["xmin"]], bbox[["xmax"]]),
-          y = c(bbox[["ymin"]], bbox[["ymax"]], rep(0.5 * (bbox[["ymin"]] + bbox[["ymax"]]), 2))
+          x = c(
+            rep(0.5 * (bbox[["xmin"]] + bbox[["xmax"]]), 2),
+            bbox[["xmin"]],
+            bbox[["xmax"]]
+          ),
+          y = c(
+            bbox[["ymin"]],
+            bbox[["ymax"]],
+            rep(0.5 * (bbox[["ymin"]] + bbox[["ymax"]]), 2)
+          )
         ),
         sf::st_crs(bbox),
         sf::st_crs(data)

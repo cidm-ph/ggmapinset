@@ -100,6 +100,14 @@ make_inset_config <- function(inset) {
 }
 
 #' @export
+make_inset_config.default <- function(inset) {
+  cli::cli_abort(c(
+    "!" = "{.arg inset} cannot be {.obj_type_friendly {inset}}",
+    "i" = "use `NULL` to disable the inset or `waiver()` to use the default"
+  ))
+}
+
+#' @export
 make_inset_config.NULL <- function(inset) {
   NULL
 }

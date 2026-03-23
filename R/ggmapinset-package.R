@@ -6,6 +6,6 @@
 "_PACKAGE"
 
 #' @import sf
-#' @import ggplot2
+#' @importFrom ggplot2 waiver is_waiver ggproto aes
 #' @importFrom lifecycle deprecated
 NULL

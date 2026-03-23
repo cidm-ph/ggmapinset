@@ -39,12 +39,12 @@ geom_sf_label_inset(
 )
 
 stat_sf_coordinates_inset(
-  mapping = ggplot2::aes(),
+  mapping = aes(),
   data = NULL,
   geom = "point",
   position = "identity",
   ...,
-  inset = NA,
+  inset = waiver(),
   fun.geometry = NULL,
   where = "inset",
   na.rm = TRUE,

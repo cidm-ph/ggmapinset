@@ -50,10 +50,12 @@
 #'     scale = 1.5, translation = c(-50, -140), units = "mi"
 #'   ))
 stat_sf_coordinates_inset <- function(
-  mapping = ggplot2::aes(), data = NULL,
-  geom = "point", position = "identity",
+  mapping = aes(),
+  data = NULL,
+  geom = "point",
+  position = "identity",
   ...,
-  inset = NA,
+  inset = waiver(),
   fun.geometry = NULL,
   where = "inset",
   na.rm = TRUE,
@@ -87,13 +89,25 @@ stat_sf_coordinates_inset <- function(
 #' @usage NULL
 #' @format NULL
 #' @rdname stat_sf_coordinates_inset
-StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::StatSfCoordinates,
-  compute_group = function(data, scales, coord, fun.geometry = NULL, inset = NA, crs_working = NULL) {
+StatSfCoordinatesInset <- ggplot2::ggproto(
+  "StatSfCoordinatesInset",
+  ggplot2::StatSfCoordinates,
+  compute_group = function(
+    data,
+    scales,
+    coord,
+    fun.geometry = NULL,
+    inset = waiver(),
+    crs_working = NULL
+  ) {
     inset <- get_inset_config(inset, coord)
 
     if (is.null(crs_working)) {
-      if (!is.null(inset)) crs_working <- inset_crs_working(inset)
-      else crs_working <- sf::NA_crs_
+      if (!is.null(inset)) {
+        crs_working <- inset_crs_working(inset)
+      } else {
+        crs_working <- sf::NA_crs_
+      }
     }
 
     if (is.null(fun.geometry)) {
@@ -126,9 +140,12 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
       geometry <- sf::st_transform(points_sfc, crs_working2)
       result <- clip_to_viewport(geometry, inset_viewport(inset))
       if (length(result[["retained"]]) > 0) {
-        geometry <- transform(result[["geometry"]], centre,
-                              scale = scale,
-                              translation = inset_translation(inset))
+        geometry <- transform(
+          result[["geometry"]],
+          centre,
+          scale = scale,
+          translation = inset_translation(inset)
+        )
         geometry <- sf::st_transform(geometry, crs_orig)
 
         data$inside_inset[result[["retained"]]] <- TRUE
@@ -145,8 +162,10 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
     if (inherits(coord, "CoordSf")) {
       bbox <- sf::st_bbox(points_sfc)
       coord$record_bbox(
-        xmin = bbox[["xmin"]], xmax = bbox[["xmax"]],
-        ymin = bbox[["ymin"]], ymax = bbox[["ymax"]]
+        xmin = bbox[["xmin"]],
+        xmax = bbox[["xmax"]],
+        ymin = bbox[["ymin"]],
+        ymax = bbox[["ymax"]]
       )
 
       if (!is.null(inset)) {
@@ -157,8 +176,10 @@ StatSfCoordinatesInset <- ggplot2::ggproto("StatSfCoordinatesInset", ggplot2::St
 
         bbox <- inset_bbox(inset)
         coord$record_bbox(
-          xmin = bbox[["xmin"]], xmax = bbox[["xmax"]],
-          ymin = bbox[["ymin"]], ymax = bbox[["ymax"]]
+          xmin = bbox[["xmin"]],
+          xmax = bbox[["xmax"]],
+          ymin = bbox[["ymin"]],
+          ymax = bbox[["ymax"]]
         )
       }
     }

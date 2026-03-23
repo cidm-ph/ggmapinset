@@ -16,12 +16,12 @@ Inset configuration or \code{NULL}
 }
 \description{
 This is a helper for implementing inset-aware ggplot layers. If the \code{inset} is
-missing (\code{NA}) then the default inset configuration is retrieved from the coord.
+not specified then it is retrieved from the coord if present.
 }
 \examples{
 # defining a new geom deriving from geom_sf()
 GeomCustom <- ggplot2::ggproto("GeomCustom", ggplot2::GeomSf,
-  draw_panel = function(self, data, panel_params, coord, inset = NA) {
+  draw_panel = function(self, data, panel_params, coord, inset = ggplot2::waiver()) {
     inset <- get_inset_config(inset, coord)
 
     # do something with the inset ...

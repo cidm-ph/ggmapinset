@@ -62,10 +62,12 @@
 #'     scale = 1.5, translation = c(-50, -140), units = "mi"
 #'   ))
 geom_sf_inset <- function(
-  mapping = ggplot2::aes(), data = NULL,
-  stat = "sf_inset", position = "identity",
+  mapping = aes(),
+  data = NULL,
+  stat = "sf_inset",
+  position = "identity",
   ...,
-  inset = NA,
+  inset = waiver(),
   map_base = "normal",
   map_inset = "auto",
   na.rm = TRUE,
@@ -75,11 +77,16 @@ geom_sf_inset <- function(
   params <- rlang::list2(na.rm = na.rm, ...)
 
   build_sf_inset_layers(
-    data = data, mapping = mapping,
-    stat = stat, position = position,
-    show.legend = show.legend, inherit.aes = inherit.aes,
-    params = params, inset = inset,
-    map_base = map_base, map_inset = map_inset
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = params,
+    inset = inset,
+    map_base = map_base,
+    map_inset = map_inset
   )
 }
 
@@ -87,15 +94,33 @@ geom_sf_inset <- function(
 #' @usage NULL
 #' @format NULL
 #' @rdname geom_sf_inset
-GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
+GeomSfInset <- ggplot2::ggproto(
+  "GeomSfInset",
+  ggplot2::GeomSf,
   draw_panel = function(
-    self, data, panel_params, coord, inset = NA, inset_mode = "normal", ...
+    self,
+    data,
+    panel_params,
+    coord,
+    inset = waiver(),
+    inset_mode = "normal",
+    layer_type = "base",
+    ...
   ) {
     inset <- get_inset_config(inset, coord)
+    if (is.null(inset) && layer_type == "inset") {
+      # If there is no inset configuration and this is supposed to be an inset
+      # layer, do nothing. Otherwise we end up drawing a second copy of the
+      # base layer on top of itself which can cause confusion.
+      return(grid::nullGrob())
+    }
+
     if (!is.null(inset) && inset_mode != "none") {
-      data <- switch(inset_mode,
-                     normal = transform_only_viewport(data, inset),
-                     cutout = remove_viewport(data, inset))
+      data <- switch(
+        inset_mode,
+        normal = transform_only_viewport(data, inset),
+        cutout = remove_viewport(data, inset)
+      )
     }
 
     ggplot2::GeomSf$draw_panel(data, panel_params, coord, ...)
@@ -104,8 +129,15 @@ GeomSfInset <- ggplot2::ggproto("GeomSfInset", ggplot2::GeomSf,
   # NOTE: this is a workaround for a ggplot2 behaviour/bug
   # https://github.com/tidyverse/ggplot2/issues/1516#issuecomment-1507927792
   draw_group = function(
-    self, data, panel_params, coord, inset = NULL, inset_mode = "normal", ...
-  ) { }
+    self,
+    data,
+    panel_params,
+    coord,
+    inset = NULL,
+    inset_mode = "normal",
+    layer_type = "base",
+    ...
+  ) {}
 )
 
 transform_only_viewport <- function(data, inset) {

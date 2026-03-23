@@ -45,23 +45,33 @@
 #'     shape_circle(centre = c(-82, 35), radius = 50),
 #'     scale = 5, translation = c(0, -260), units = "mi"
 #'   ))
-geom_inset_frame <- function(mapping = ggplot2::aes(),
-                             data = NULL,
-                             stat = "sf_inset", position = "identity",
-                             ...,
-                             inset = NA,
-                             na.rm = FALSE,
-                             source.aes = list(),
-                             target.aes = list(),
-                             lines.aes = list(),
-                             show.legend = NA,
-                             inherit.aes = FALSE) {
+geom_inset_frame <- function(
+  mapping = ggplot2::aes(),
+  data = NULL,
+  stat = "sf_inset",
+  position = "identity",
+  ...,
+  inset = waiver(),
+  na.rm = FALSE,
+  source.aes = list(),
+  target.aes = list(),
+  lines.aes = list(),
+  show.legend = NA,
+  inherit.aes = FALSE
+) {
   if (!is.null(data)) {
-    cli::cli_warn("Ignoring {.arg data} provided to {.fn geom_inset_frame} layer")
+    cli::cli_warn(
+      "Ignoring {.arg data} provided to {.fn geom_inset_frame} layer"
+    )
   }
-  params <- rlang::list2(na.rm = na.rm, source.aes = source.aes,
-                         target.aes = target.aes,
-                         lines.aes = lines.aes, inset = inset, ...)
+  params <- rlang::list2(
+    na.rm = na.rm,
+    source.aes = source.aes,
+    target.aes = target.aes,
+    lines.aes = lines.aes,
+    inset = inset,
+    ...
+  )
 
   layer <- ggplot2::layer_sf(
     data = dummy_frame(),

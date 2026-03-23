@@ -48,7 +48,7 @@ my_custom_geom <- function(
   stat = "my_custom_stat",
   position = "identity",
   ...,
-  inset = NA,
+  inset = ggplot2::waiver(),
   map_base = "normal",
   map_inset = "auto",
   na.rm = TRUE,
@@ -56,8 +56,10 @@ my_custom_geom <- function(
 ) {
   params <- rlang::list2(na.rm = na.rm, ...)
   build_sf_inset_layers(
-    data = data, mapping = mapping,
-    stat = stat, position = position,
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = params,
