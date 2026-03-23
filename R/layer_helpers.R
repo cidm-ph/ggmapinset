@@ -137,7 +137,16 @@ build_sf_inset_layers <- function(
 get_inset_config <- function(inset, coord) {
   if (is.null(inset)) {
     NULL
-  } else if (is_waiver(inset)) {
+  } else if (is.na(inset) || is_waiver(inset)) {
+    if (is.na(inset)) {
+      lifecycle::deprecate_warn(
+        when = "0.5.0",
+        what = "get_inset_config(inset = 'must not be NA')",
+        details = "use `inset = waiver()` instead to default to the coord's inset"
+      )
+      inset <- waiver()
+    }
+
     if (inherits(coord, "CoordSfInset")) {
       make_inset_config(coord$inset)
     } else {
