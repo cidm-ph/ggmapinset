@@ -4,7 +4,7 @@
 \alias{shape_circle}
 \title{Circular insets}
 \usage{
-shape_circle(centre, radius)
+shape_circle(centre, radius, ...)
 }
 \arguments{
 \item{centre}{Coordinates of the inset centre. Ideally this should be an
@@ -13,6 +13,8 @@ An \code{\link[sf:st]{sf::st_point()}} or a vector of longitude and latitude are
 If a CRS cannot be determined, WGS 84 is assumed.}
 
 \item{radius}{Radius of the inset circle in the units of the inset's \code{crs_working}.}
+
+\item{...}{Additional parameters for specifying the centre in extensions. Unused by default.}
 }
 \value{
 A shape definition suitable for use with \code{\link[=configure_inset]{configure_inset()}}.

@@ -5,6 +5,7 @@
 #'   An [sf::st_point()] or a vector of longitude and latitude are also accepted.
 #'   If a CRS cannot be determined, WGS 84 is assumed.
 #' @param radius Radius of the inset circle in the units of the inset's `crs_working`.
+#' @param ... Additional parameters for specifying the centre in extensions. Unused by default.
 #' @returns A shape definition suitable for use with [configure_inset()].
 #' @family shapes
 #' @seealso [configure_inset()]
@@ -29,10 +30,12 @@
 #' make_demo(circle, scale = 3, translation = c(-100, -100))
 #' make_demo(circle, scale = 3, translation = c(0, 0))
 #' make_demo(circle, scale = 0.5, translation = c(0, 0))
-shape_circle <- function(centre, radius) {
-  centre <- coerce_centre(centre)
+shape_circle <- function(centre, radius, ...) {
+  centre <- coerce_centre(centre, ...)
   if (radius <= 0) {
-    cli::cli_abort("Circle {.arg radius} must be a positive number, not {radius}")
+    cli::cli_abort(
+      "Circle {.arg radius} must be a positive number, not {radius}"
+    )
   }
 
   structure(

@@ -3,6 +3,7 @@
 S3method(central_point,shape_circle)
 S3method(central_point,shape_rectangle)
 S3method(central_point,shape_sf)
+S3method(coerce_centre,default)
 S3method(inset_viewport,inset_shape_circle)
 S3method(inset_viewport,inset_shape_rectangle)
 S3method(inset_viewport,inset_shape_sf)

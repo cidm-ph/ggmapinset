@@ -7,6 +7,7 @@
 #' @param hwidth Half width of the inset in the units of the inset's `crs_working`.
 #' @param hheight Half height of the inset in the units of the inset's `crs_working`.
 #'   Defaults to the same value as `hwidth`.
+#' @param ... Additional parameters for specifying the centre in extensions. Unused by default.
 #' @returns A shape definition suitable for use with [configure_inset()].
 #' @family shapes
 #' @seealso [configure_inset()]
@@ -32,10 +33,12 @@
 #' make_demo(rectangle, scale = 3, translation = c(-150, -100))
 #' make_demo(rectangle, scale = 3, translation = c(0, 0))
 #' make_demo(rectangle, scale = 0.5, translation = c(0, 0))
-shape_rectangle <- function(centre, hwidth, hheight = NULL) {
-  centre <- coerce_centre(centre)
+shape_rectangle <- function(centre, hwidth, hheight = NULL, ...) {
+  centre <- coerce_centre(centre, ...)
   if (hwidth <= 0) {
-    cli::cli_abort("Rectangle {.arg hwidth} must be a positive number, not {hwidth}")
+    cli::cli_abort(
+      "Rectangle {.arg hwidth} must be a positive number, not {hwidth}"
+    )
   }
   if (is.null(hheight)) {
     hheight <- hwidth

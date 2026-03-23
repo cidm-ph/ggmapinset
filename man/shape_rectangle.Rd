@@ -4,7 +4,7 @@
 \alias{shape_rectangle}
 \title{Rectangular insets}
 \usage{
-shape_rectangle(centre, hwidth, hheight = NULL)
+shape_rectangle(centre, hwidth, hheight = NULL, ...)
 }
 \arguments{
 \item{centre}{Coordinates of the inset centre. Ideally this should be an
@@ -16,6 +16,8 @@ If a CRS cannot be determined, WGS 84 is assumed.}
 
 \item{hheight}{Half height of the inset in the units of the inset's \code{crs_working}.
 Defaults to the same value as \code{hwidth}.}
+
+\item{...}{Additional parameters for specifying the centre in extensions. Unused by default.}
 }
 \value{
 A shape definition suitable for use with \code{\link[=configure_inset]{configure_inset()}}.
