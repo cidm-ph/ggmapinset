@@ -3,6 +3,7 @@
 ## ggmapinset (development version)
 
 - Housekeeping: correct minimum R version, suppress a spurious warning.
+- Expose a new extension point `coerce_centre` for {ggautomap}.
 
 ## ggmapinset 0.4.0
 

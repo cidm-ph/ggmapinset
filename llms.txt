@@ -152,6 +152,8 @@ different insets:
   : Rectangular insets
 - [`shape_sf()`](https://cidm-ph.github.io/ggmapinset/reference/shape_sf.md)
   : Arbitrary geometry as insets
+- [`coerce_centre()`](https://cidm-ph.github.io/ggmapinset/reference/coerce_centre.md)
+  : Convert an object to a point in a suitable format
 
 ## Helpers for creating inset-aware ggplot2 extensions
 
