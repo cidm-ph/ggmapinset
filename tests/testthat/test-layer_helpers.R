@@ -1,6 +1,27 @@
-test_that("inset config does not allow NA", {
-  expect_equal(get_inset_config(NULL, list(inset = NULL)), NULL)
-  expect_error(get_inset_config(NA, list(inset = NULL)))
+test_that("inset config inherits correctly from coord", {
+  point <- sf::st_sfc(sf::st_point(c(0, 0)), crs = "EPSG:3857")
+  config_a <- configure_inset(shape_circle(point, 1))
+  config_b <- configure_inset(shape_circle(point, 2))
+  coord <- structure(list(inset = config_b), class = "CoordSfInset")
+  coord_empty <- structure(list(), class = "CoordSf")
+
+  expect_equal(get_inset_config(config_a, coord_empty), config_a)
+  expect_equal(get_inset_config(config_a, coord), config_a)
+  expect_equal(get_inset_config(NULL, coord_empty), NULL)
+  expect_equal(get_inset_config(NULL, coord), NULL)
+  expect_equal(get_inset_config(waiver(), coord_empty), NULL)
+  expect_equal(get_inset_config(waiver(), coord), config_b)
+
+  # NA deprecated but works like waiver()
+  expect_error(
+    rlang::with_options(
+      lifecycle_verbosity = "error",
+      get_inset_config(NA, coord_empty)
+    ),
+    ".*inset.* must not be NA*"
+  )
+  expect_equal(get_inset_config(NA, coord_empty), NULL)
+  expect_equal(get_inset_config(NA, coord), config_b)
 })
 
 test_that("inset is disabled when inset=NULL", {
