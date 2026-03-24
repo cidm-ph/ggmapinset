@@ -23,7 +23,7 @@ geom_inset_frame(
 \item{mapping, data, stat, position, na.rm, show.legend, inherit.aes, ...}{See \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}.}
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.
-If \code{NA} (the default), this is inherited from the coord (see \code{\link[=coord_sf_inset]{coord_sf_inset()}}).}
+If \code{waiver()}, the default, this is inherited from the coord (see \code{\link[=coord_sf_inset]{coord_sf_inset()}}).}
 
 \item{source.aes, target.aes, lines.aes}{Override the aesthetics of the
 inset source, target, and lines respectively. The value should be a list

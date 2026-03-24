@@ -24,7 +24,7 @@ get_inset_config(inset, coord)
 \item{data, mapping, stat, position, show.legend, inherit.aes, params}{See \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.
-If \code{NA} (the default), this is inherited from the coord (see \code{\link[=coord_sf_inset]{coord_sf_inset()}}).}
+If \code{waiver()}, the default, this is inherited from the coord (see \code{\link[=coord_sf_inset]{coord_sf_inset()}}).}
 
 \item{map_base}{Controls the layer with the base map. Possible values are
 \code{"normal"} to create a layer as though the inset were not specified,
@@ -36,7 +36,7 @@ If \code{NA} (the default), this is inherited from the coord (see \code{\link[=c
 \code{"normal"} to create a layer with the viewport cut out and transformed, and
 \code{"none"} to prevent the insertion of a layer for the viewport map.}
 
-\item{coord}{Coord object for the plot}
+\item{coord}{Coord object for the plot.}
 }
 \value{
 \itemize{
@@ -54,11 +54,10 @@ parameters to control the inset.
 \code{ggplot2::layer_sf()}. This allows an \code{inset} parameter to control the creation of two
 layers (base + inset) as needed.
 
-\code{get_inset_config()} should always be called early inside the draw function
-(usually \code{Geom$draw_panel()} or \code{Geom$draw_group()}).
+\code{get_inset_config()} should always be called early inside the draw function,
+usually \code{Geom$draw_panel()} or \code{Geom$draw_group()}.
 It takes the \code{inset} and the \code{coord} and returns the valid inset configuration after
 applying fallback to the coord if needed.
-Failure to call this will result in an error.
 }
 \examples{
 my_custom_geom <- function(

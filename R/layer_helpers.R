@@ -8,14 +8,14 @@
 #' `ggplot2::layer_sf()`. This allows an `inset` parameter to control the creation of two
 #' layers (base + inset) as needed.
 #'
-#' `get_inset_config()` should always be called early inside the draw function
-#' (usually `Geom$draw_panel()` or `Geom$draw_group()`).
+#' `get_inset_config()` should always be called early inside the draw function,
+#' usually `Geom$draw_panel()` or `Geom$draw_group()`.
 #' It takes the `inset` and the `coord` and returns the valid inset configuration after
 #' applying fallback to the coord if needed.
 #'
 #' @param data,mapping,stat,position,show.legend,inherit.aes,params  See [ggplot2::layer()].
 #' @inheritParams geom_sf_inset
-#' @param coord Coord object for the plot
+#' @param coord Coord object for the plot.
 #'
 #' @returns
 #'   - For `build_sf_inset_layers()`: a \code{ggplot} layer, or a pair of layers.

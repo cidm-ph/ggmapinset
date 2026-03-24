@@ -30,7 +30,7 @@
 #' expands the axis limits to account for the inset area.
 #'
 #' @param inset Inset configuration; see [configure_inset()].
-#'   If `NA` (the default), this is inherited from the coord (see [coord_sf_inset()]).
+#'   If `waiver()`, the default, this is inherited from the coord (see [coord_sf_inset()]).
 #' @param map_base Controls the layer with the base map. Possible values are
 #'   `"normal"` to create a layer as though the inset were not specified,
 #'   `"clip"` to create a layer with the inset viewport cut out, and

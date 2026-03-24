@@ -64,7 +64,7 @@ setting the position aesthetics to \code{after_stat(x_inset)} or \code{after_sta
 respectively, so will have no effect if these are specified in the mapping.}
 
 \item{inset}{Inset configuration; see \code{\link[=configure_inset]{configure_inset()}}.
-If \code{NA} (the default), this is inherited from the coord (see \code{\link[=coord_sf_inset]{coord_sf_inset()}}).}
+If \code{waiver()}, the default, this is inherited from the coord (see \code{\link[=coord_sf_inset]{coord_sf_inset()}}).}
 }
 \value{
 A plot layer
