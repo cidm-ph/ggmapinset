@@ -113,6 +113,14 @@ make_inset_config.NULL <- function(inset) {
 }
 
 #' @export
+make_inset_config.waiver <- function(inset) {
+  cli::cli_abort(c(
+    "!" = "{.arg inset} cannot be {.obj_type_friendly {inset}}",
+    "i" = "the geom developer likely forgot to call `get_inset_config()`"
+  ))
+}
+
+#' @export
 make_inset_config.list <- function(inset) {
   if (is.null(inset)) cli::cli_abort("Inset configuration must be provided")
   if (!is_shape(inset[["shape"]])) {

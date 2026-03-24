@@ -1,13 +1,25 @@
 #' Build layers to implement an inset-compatible geometry
 #'
-#' For plotting, use [geom_sf_inset()] instead. This helper is intended to be used when
+#' For plotting, use [geom_sf_inset()] instead. These helpers are intended to be used when
 #' implementing custom geometries based on [geom_sf_inset()] so that they can provide
 #' parameters to control the inset.
 #'
+#' `build_sf_inset_layers()` should be called from a geom constructor instead of
+#' `ggplot2::layer_sf()`. This allows an `inset` parameter to control the creation of two
+#' layers (base + inset) as needed.
+#'
+#' `get_inset_config()` should always be called early inside the draw function
+#' (usually `Geom$draw_panel()` or `Geom$draw_group()`).
+#' It takes the `inset` and the `coord` and returns the valid inset configuration after
+#' applying fallback to the coord if needed.
+#'
 #' @param data,mapping,stat,position,show.legend,inherit.aes,params  See [ggplot2::layer()].
 #' @inheritParams geom_sf_inset
+#' @param coord Coord object for the plot
 #'
-#' @returns A \code{ggplot} layer, or a pair of layers.
+#' @returns
+#'   - For `build_sf_inset_layers()`: a \code{ggplot} layer, or a pair of layers.
+#'   - For `get_inset_config()`: a valid inset config object or `NULL`.
 #' @importFrom utils modifyList
 #' @export
 #'
@@ -38,6 +50,19 @@
 #'     map_inset = map_inset
 #'   )
 #' }
+#'
+#' # defining a new geom deriving from geom_sf()
+#' GeomCustom <- ggplot2::ggproto("GeomCustom", ggplot2::GeomSf,
+#'   draw_panel = function(self, data, panel_params, coord, inset = ggplot2::waiver()) {
+#'     inset <- get_inset_config(inset, coord)
+#'
+#'     # do something with the inset ...
+#'
+#'     # note that this example doesn't pass on the remaining geom_sf params but
+#'     # in real usage you would probably want to do that
+#'     ggplot2::ggproto_parent(ggplot2::GeomSf, self)$draw_panel(data, panel_params, coord)
+#'   },
+#' )
 build_sf_inset_layers <- function(
   data,
   mapping,
@@ -111,32 +136,11 @@ build_sf_inset_layers <- function(
   c(base_layer, inset_layer, ggplot2::coord_sf(default = TRUE))
 }
 
-#' Get the inset configuration from the params or coord
-#'
-#' This is a helper for implementing inset-aware ggplot layers. If the `inset` is
-#' not specified then it is retrieved from the coord if present.
-#'
-#' @param inset Inset passed in as a param to the layer
-#' @param coord Coord object for the plot
-#'
-#' @returns Inset configuration or `NULL`
 #' @export
-#' @examples
-#' # defining a new geom deriving from geom_sf()
-#' GeomCustom <- ggplot2::ggproto("GeomCustom", ggplot2::GeomSf,
-#'   draw_panel = function(self, data, panel_params, coord, inset = ggplot2::waiver()) {
-#'     inset <- get_inset_config(inset, coord)
-#'
-#'     # do something with the inset ...
-#'
-#'     # note that this example doesn't pass on the remaining geom_sf params but
-#'     # in real usage you would probably want to do that
-#'     ggplot2::ggproto_parent(ggplot2::GeomSf, self)$draw_panel(data, panel_params, coord)
-#'   },
-#' )
+#' @rdname build_sf_inset_layers
 get_inset_config <- function(inset, coord) {
   if (is.null(inset)) {
-    return(NULL)
+    return(make_inset_config(NULL))
   }
 
   if (!rlang::is_empty(inset) && is.na(inset)) {
@@ -152,7 +156,7 @@ get_inset_config <- function(inset, coord) {
     if (inherits(coord, "CoordSfInset")) {
       make_inset_config(coord$inset)
     } else {
-      NULL
+      make_inset_config(NULL)
     }
   } else {
     make_inset_config(inset)
