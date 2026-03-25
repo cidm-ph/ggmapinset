@@ -54,7 +54,8 @@ stat_sf_inset(
 
   Inset configuration; see
   [`configure_inset()`](https://cidm-ph.github.io/ggmapinset/reference/configure_inset.md).
-  If `NA` (the default), this is inherited from the coord (see
+  If [`waiver()`](https://ggplot2.tidyverse.org/reference/waiver.html),
+  the default, this is inherited from the coord (see
   [`coord_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/coord_sf_inset.md)).
 
 - map_base:

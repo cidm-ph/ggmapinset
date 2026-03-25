@@ -158,9 +158,8 @@ different insets:
 ## Helpers for creating inset-aware ggplot2 extensions
 
 - [`build_sf_inset_layers()`](https://cidm-ph.github.io/ggmapinset/reference/build_sf_inset_layers.md)
+  [`get_inset_config()`](https://cidm-ph.github.io/ggmapinset/reference/build_sf_inset_layers.md)
   : Build layers to implement an inset-compatible geometry
-- [`get_inset_config()`](https://cidm-ph.github.io/ggmapinset/reference/get_inset_config.md)
-  : Get the inset configuration from the params or coord
 - [`transform_to_inset()`](https://cidm-ph.github.io/ggmapinset/reference/transform_to_inset.md)
   : Transform coordinates according to inset configuration
 

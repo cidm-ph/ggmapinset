@@ -2,7 +2,7 @@
 
 For plotting, use
 [`geom_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.md)
-instead. This helper is intended to be used when implementing custom
+instead. These helpers are intended to be used when implementing custom
 geometries based on
 [`geom_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.md)
 so that they can provide parameters to control the inset.
@@ -22,6 +22,8 @@ build_sf_inset_layers(
   map_base = "normal",
   map_inset = "auto"
 )
+
+get_inset_config(inset, coord)
 ```
 
 ## Arguments
@@ -35,7 +37,8 @@ build_sf_inset_layers(
 
   Inset configuration; see
   [`configure_inset()`](https://cidm-ph.github.io/ggmapinset/reference/configure_inset.md).
-  If `NA` (the default), this is inherited from the coord (see
+  If [`waiver()`](https://ggplot2.tidyverse.org/reference/waiver.html),
+  the default, this is inherited from the coord (see
   [`coord_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/coord_sf_inset.md)).
 
 - map_base:
@@ -52,9 +55,29 @@ build_sf_inset_layers(
   to create a layer with the viewport cut out and transformed, and
   `"none"` to prevent the insertion of a layer for the viewport map.
 
+- coord:
+
+  Coord object for the plot.
+
 ## Value
 
-A `ggplot` layer, or a pair of layers.
+- For `build_sf_inset_layers()`: a `ggplot` layer, or a pair of layers.
+
+- For `get_inset_config()`: a valid inset config object or `NULL`.
+
+## Details
+
+`build_sf_inset_layers()` should be called from a geom constructor
+instead of
+[`ggplot2::layer_sf()`](https://ggplot2.tidyverse.org/reference/layer_sf.html).
+This allows an `inset` parameter to control the creation of two layers
+(base + inset) as needed.
+
+`get_inset_config()` should always be called early inside the draw or
+compute function, e.g. `Geom$draw_panel()` or `Stat$compute_group()`
+whenever that function accepts an `inset` param. The helper validates
+the inset configuration after applying fallback to the coord's inset
+configuration if needed.
 
 ## Examples
 
@@ -85,4 +108,17 @@ my_custom_geom <- function(
     map_inset = map_inset
   )
 }
+
+# defining a new geom deriving from geom_sf()
+GeomCustom <- ggplot2::ggproto("GeomCustom", ggplot2::GeomSf,
+  draw_panel = function(self, data, panel_params, coord, inset = ggplot2::waiver()) {
+    inset <- get_inset_config(inset, coord)
+
+    # do something with the inset ...
+
+    # note that this example doesn't pass on the remaining geom_sf params but
+    # in real usage you would probably want to do that
+    ggplot2::ggproto_parent(ggplot2::GeomSf, self)$draw_panel(data, panel_params, coord)
+  },
+)
 ```
