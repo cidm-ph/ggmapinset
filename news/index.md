@@ -1,5 +1,7 @@
 # Changelog
 
+## ggmapinset (development version)
+
 ## ggmapinset 0.5.0
 
 CRAN release: 2026-03-25
