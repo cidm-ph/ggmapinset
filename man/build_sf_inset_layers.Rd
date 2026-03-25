@@ -54,10 +54,11 @@ parameters to control the inset.
 \code{ggplot2::layer_sf()}. This allows an \code{inset} parameter to control the creation of two
 layers (base + inset) as needed.
 
-\code{get_inset_config()} should always be called early inside the draw function,
-usually \code{Geom$draw_panel()} or \code{Geom$draw_group()}.
-It takes the \code{inset} and the \code{coord} and returns the valid inset configuration after
-applying fallback to the coord if needed.
+\code{get_inset_config()} should always be called early inside the draw or compute function,
+e.g. \code{Geom$draw_panel()} or \code{Stat$compute_group()} whenever that function accepts an
+\code{inset} param.
+The helper validates the inset configuration after applying fallback to the coord's
+inset configuration if needed.
 }
 \examples{
 my_custom_geom <- function(

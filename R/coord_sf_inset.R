@@ -24,10 +24,15 @@
 #'     centre = sf::st_sfc(sf::st_point(c(-80, 35.5)), crs = 4326),
 #'     scale = 1.5, translation = c(-50, -140), radius = 50, units = "mi"))
 coord_sf_inset <- function(inset, ...) {
+  if (is_waiver(inset)) {
+    cli::cli_warn(
+      "{.arg inset} should not be `waiver()` for {.fn coord_sf_inset}"
+    )
+    inset <- NULL
+  }
+
   inset <- make_inset_config(inset)
 
   parent <- ggplot2::coord_sf(...)
-  ggproto("CoordSfInset", parent,
-    inset = inset
-  )
+  ggproto("CoordSfInset", parent, inset = inset)
 }
