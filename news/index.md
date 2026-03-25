@@ -2,8 +2,8 @@
 
 ## ggmapinset (development version)
 
-- Housekeeping: correct minimum R version, suppress a spurious warning.
-- Expose a new extension point `coerce_centre` for {ggautomap}.
+- [`coerce_centre()`](https://cidm-ph.github.io/ggmapinset/reference/coerce_centre.md)
+  is a new extension point needed by {ggautomap}.
 - The `inset` param of layer helpers and
   [`geom_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.md)
   no longer accepts `NA`. Instead
@@ -14,6 +14,7 @@
 - [`geom_sf_inset()`](https://cidm-ph.github.io/ggmapinset/reference/geom_sf_inset.md)
   no longer draws the inset if `inset = waiver()` but there is no inset
   configured on the coord.
+- We now correctly declare the minimum supported R version.
 
 ## ggmapinset 0.4.0
 
