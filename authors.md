@@ -15,12 +15,12 @@ Source:
 [`DESCRIPTION`](https://github.com/cidm-ph/ggmapinset/blob/main/DESCRIPTION)
 
 Suster C (2026). *ggmapinset: Add Inset Panels to Maps*. R package
-version 0.4.0.9000, <https://github.com/cidm-ph/ggmapinset>.
+version 0.5.0, <https://github.com/cidm-ph/ggmapinset>.
 
     @Manual{,
       title = {ggmapinset: Add Inset Panels to Maps},
       author = {Carl Suster},
       year = {2026},
-      note = {R package version 0.4.0.9000},
+      note = {R package version 0.5.0},
       url = {https://github.com/cidm-ph/ggmapinset},
     }
