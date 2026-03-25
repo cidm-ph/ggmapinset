@@ -1,12 +1,12 @@
 # ggmapinset (development version)
 
-* Housekeeping: correct minimum R version, suppress a spurious warning.
-* Expose a new extension point `coerce_centre` for {ggautomap}.
+* `coerce_centre()` is a new extension point needed by {ggautomap}.
 * The `inset` param of layer helpers and `geom_sf_inset()` no longer accepts `NA`.
   Instead `waiver()` is used as the default, and `NULL` still disables the inset.
   This should be updated in any extensions using `build_sf_inset_layers()`.
 * `geom_sf_inset()` no longer draws the inset if `inset = waiver()` but there
   is no inset configured on the coord.
+* We now correctly declare the minimum supported R version.
 
 # ggmapinset 0.4.0
 

@@ -1,7 +1,6 @@
 # Submission
 
-Submission of new version v0.4.0. This has some new features and documentation
-but is backward-compatible.
+This has version addresses the CHECK note and fixes a bug.
 
 ## R CMD check results
 
