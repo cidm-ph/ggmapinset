@@ -1,4 +1,4 @@
-# ggmapinset (development version)
+# ggmapinset 0.5.0
 
 * `coerce_centre()` is a new extension point needed by {ggautomap}.
 * The `inset` param of layer helpers and `geom_sf_inset()` no longer accepts `NA`.
