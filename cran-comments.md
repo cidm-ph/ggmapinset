@@ -1,6 +1,7 @@
 # Submission
 
 This has version addresses the CHECK note and fixes a bug.
+My initial upload omitted an entry in .Rbuildignore which is now added.
 
 ## R CMD check results
 
